@@ -11,12 +11,12 @@ public interface UserDao {
 
     Optional<User> getByEmail(String email);
 
-    List<User> getAll();
+    Optional<List<User>> getAll();
 
     boolean createUser(User user);
 
-    void update(User user);
+    boolean update(User user);
 
-    void delete(User user);
+    boolean delete(int id);
 
 }

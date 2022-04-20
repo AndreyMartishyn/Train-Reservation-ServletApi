@@ -4,9 +4,9 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+
 </head>
 <body>
- <h1>User successfully logged in!</h1>
+ <h1>Error occurred while performing request</h1>
 </body>
 </html>

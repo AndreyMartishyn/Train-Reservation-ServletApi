@@ -15,8 +15,7 @@ public class PasswordEncoder {
     public static final int PBKDF2_ITERATIONS = 1000;
 
 
-    public static String makeHash(String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        return makeHash(password.toCharArray(), SALT.getBytes(StandardCharsets.UTF_8));
+    public static String makeHash(String password) throws NoSuchAlgorithmException, InvalidKeySpecException {return makeHash(password.toCharArray(), SALT.getBytes(StandardCharsets.UTF_8));
     }
 
     private static String makeHash(char[] password, byte[] salt) throws NoSuchAlgorithmException, InvalidKeySpecException {

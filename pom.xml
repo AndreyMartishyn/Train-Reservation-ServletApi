@@ -10,8 +10,7 @@
     <packaging>war</packaging>
 
     <name>train-reservation Maven Webapp</name>
-    <!-- FIXME change it to the project's website -->
-    <url>http://www.example.com</url>
+
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -80,6 +79,9 @@
                 <plugin>
                     <artifactId>maven-war-plugin</artifactId>
                     <version>3.2.2</version>
+                    <configuration>
+                        <outputDirectory>C:/Dev/apache-tomcat-8.5.72-windows-x64/apache-tomcat-8.5.72/webapps</outputDirectory>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <artifactId>maven-install-plugin</artifactId>

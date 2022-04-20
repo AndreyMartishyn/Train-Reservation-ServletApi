@@ -1,53 +1,47 @@
-package ua.martishyn.app.controller;
+package ua.martishyn.app.controller.commands;
 
 import ua.martishyn.app.data.dao.impl.UserDaoImpl;
 import ua.martishyn.app.data.dao.interfaces.UserDao;
 import ua.martishyn.app.data.entities.User;
-import ua.martishyn.app.data.entities.enums.Role;
+import ua.martishyn.app.data.utils.ViewPath;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Optional;
 
-@WebServlet("/login")
-public class LoginController extends HttpServlet {
-    private UserDao userDao;
+public class LoginCommand implements ICommand {
+    private final UserDao userDao = new UserDaoImpl();
 
     @Override
-    public void init() {
-        userDao = new UserDaoImpl();
-    }
-
-
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.sendRedirect("pages/user-login.jsp");
-
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession currentSession = request.getSession();
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         //  TODO : validation of password
-
         Optional<User> user = userDao.getByEmail(email);
-        if (checkUserPresenceInDB(email)) {
-            currentSession.setAttribute("user", user);
-            System.out.println("User " + user.get().getEmail() + " taken from db");
-            response.sendRedirect("pages/user-login-ok.jsp");
 
+        String redirect = ViewPath.LOGIN_PAGE;
+
+        if (checkUserPresenceInDB(email)) {
+            User userView = user.get();
+            currentSession.setAttribute("user", userView);
+            if (user.get().getRole().toString().equals("ADMIN")) {
+                redirect = "/admin-main.command";
+                System.out.println("Admin logged in");
+            } else {
+                System.out.println("Customer " + user.get().getEmail() + " logged in");
+                redirect = ViewPath.CUSTOMER_MAIN;
+            }
         } else {
             request.setAttribute("invalidData", "Invalid user credentials");
             System.out.println("Wrong user credentials");
-            request.getRequestDispatcher("pages/user-login.jsp").forward(request, response);
+
         }
+        response.sendRedirect(request.getContextPath() + redirect);
     }
 
     private boolean checkUserPresenceInDB(String email) {
@@ -58,6 +52,3 @@ public class LoginController extends HttpServlet {
         return user.get().getEmail().equals(email) && user.get().getId() > 0;
     }
 }
-
-
-
