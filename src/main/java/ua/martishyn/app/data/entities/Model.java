@@ -1,8 +1,9 @@
 package ua.martishyn.app.data.entities;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Model {
+public class Model implements Serializable {
     private int id;
     private String name;
 

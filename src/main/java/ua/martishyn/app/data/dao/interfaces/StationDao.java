@@ -9,6 +9,9 @@ import java.util.Optional;
 public interface StationDao {
     Optional<Station> getById(int id);
 
+    Optional<Station> getByName(String name);
+
+
     Optional<List<Station>> getAll();
 
     boolean createStation(Station station);

@@ -1,50 +1,32 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>Bookshop Website</title>
+<%@ include file="/view/static/meta.html"%>
 </head>
 <body>
-<div align="center">
-  <h1>User Login Form</h1>
-  <form action="login.command" method="post">
-   <table style="with: 80%">
-     <tr>
-     <td>Email</td>
-     <td><input type="text" name="email" /></td>
-    </tr>
-    <tr>
-     <td>Password</td>
-     <td><input type="password" name="password" /></td>
-    </tr>
-    </table>
-    <input type="submit" value="Submit" />
-  </form>
-  <span style ="text-align: center; color:red; font-family:courier; font-size:70%;">${invalidData}</span>
+<%@ include file="/view/static/header.jsp"%>
+<br>
+<div class="row justify-content-center">
+<div class="col-md-6 col-lg-4">
+<form action="login.command" method="post">
+<h3 class="mb-4 text-center">Login Form</h3>
+<div class="form-group">
+<input type="email" name="email" class="form-control" placeholder="Enter your email" required>
+</div>
+<div class="form-group">
+<input id="password" type="password" name="password" class="form-control" placeholder="Enter your password" required>
+<small id="passwordHelp" >We`ll never share your credentials with anyone else</small>
+</div>
+<div class="form-group">
+<button type="submit" class="form-control btn btn-primary submit px-3">Sign In</button>
+</div>
+</form>
+  <span style ="text-align: center; color:red; font-family:courier; font-size:70%;">${notValidInput}</span>
+  <span style ="text-align: center; color:red; font-family:courier; font-size:70%;">${notCorrectPass}</span>
+  <span style ="text-align: center; color:red; font-family:courier; font-size:70%;">${noSuchUser}</span>
+</div>
  </div>
-   </body>
-    <script type="text/javascript">
-          $(document).ready(function() {
-           $("#loginForm").validate({
-               rules: {
-                   email: {
-                       required: true,
-                       email: true
-                   },
-
-                   password: "required",
-               },
-
-               messages: {
-                   email: {
-                       required: "Please enter email",
-                       email: "Please enter a valid email address"
-                   },
-                  password: "Please enter password"
-               }
-           });
-
-       });
-   </script>
-</html>
+  </body>
+ </html>

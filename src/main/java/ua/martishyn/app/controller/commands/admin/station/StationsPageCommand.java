@@ -4,8 +4,7 @@ import ua.martishyn.app.controller.commands.ICommand;
 import ua.martishyn.app.data.dao.impl.StationDaoImpl;
 import ua.martishyn.app.data.dao.interfaces.StationDao;
 import ua.martishyn.app.data.entities.Station;
-import ua.martishyn.app.data.utils.DataBasePoolManager;
-import ua.martishyn.app.data.utils.ViewPath;
+import ua.martishyn.app.data.utils.Constants;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -26,7 +25,7 @@ public class StationsPageCommand implements ICommand {
             request.setAttribute("no-stations", "No stations found at the moment");
         }
 
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher(ViewPath.ADMIN_STATIONS);
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.ADMIN_STATIONS);
         requestDispatcher.forward(request,response);
 
     }

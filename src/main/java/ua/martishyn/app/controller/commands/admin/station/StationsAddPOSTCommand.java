@@ -4,7 +4,7 @@ import ua.martishyn.app.controller.commands.ICommand;
 import ua.martishyn.app.data.dao.impl.StationDaoImpl;
 import ua.martishyn.app.data.dao.interfaces.StationDao;
 import ua.martishyn.app.data.entities.Station;
-import ua.martishyn.app.data.utils.ViewPath;
+import ua.martishyn.app.data.utils.Constants;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,31 +12,27 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class StationEditPostCommand implements ICommand {
+public class StationsAddPOSTCommand implements ICommand {
     private static final StationDao stationDao = new StationDaoImpl();
-    //TODO VALIDATION OF DATA
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (updateStation(request)) {
-            response.sendRedirect("stations-page.command");
-            return;
+        if (!addStation(request)){
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.ADMIN_MAIN);
+            requestDispatcher.forward(request,response);
         }
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher(ViewPath.ADMIN_STATIONS);
-        requestDispatcher.forward(request, response);
+        System.out.println("Station added");
+        response.sendRedirect("stations-page.command");
     }
 
-    private boolean updateStation(HttpServletRequest request) {
-        int stationId = Integer.parseInt(request.getParameter("id"));
+    private boolean addStation(HttpServletRequest request) {
         String name = request.getParameter("name");
         String code = request.getParameter("code");
-
         Station newStation = Station.builder()
-                .id(stationId)
                 .name(name)
                 .code(code)
                 .build();
-        return stationDao.update(newStation);
 
+       return  stationDao.createStation(newStation);
     }
 }

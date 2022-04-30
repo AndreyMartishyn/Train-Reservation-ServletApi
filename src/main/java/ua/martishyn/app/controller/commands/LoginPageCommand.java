@@ -1,7 +1,6 @@
 package ua.martishyn.app.controller.commands;
 
-import ua.martishyn.app.data.dao.interfaces.StationDao;
-import ua.martishyn.app.data.utils.ViewPath;
+import ua.martishyn.app.data.utils.Constants;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -13,7 +12,7 @@ public class LoginPageCommand implements ICommand{
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher(ViewPath.LOGIN_PAGE);
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.LOGIN_PAGE);
         requestDispatcher.forward(request,response);
     }
 }

@@ -3,10 +3,9 @@ package ua.martishyn.app.controller.commands.admin.user;
 import ua.martishyn.app.controller.commands.ICommand;
 import ua.martishyn.app.data.dao.impl.UserDaoImpl;
 import ua.martishyn.app.data.dao.interfaces.UserDao;
-import ua.martishyn.app.data.entities.Station;
 import ua.martishyn.app.data.entities.User;
 import ua.martishyn.app.data.entities.enums.Role;
-import ua.martishyn.app.data.utils.ViewPath;
+import ua.martishyn.app.data.utils.Constants;
 import ua.martishyn.app.data.utils.password_encoding.PasswordEncodingService;
 
 import javax.servlet.RequestDispatcher;
@@ -15,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class UserEditPostCommand implements ICommand {
+public class AdminUserEditPostCommand implements ICommand {
     private static final UserDao userDao = new UserDaoImpl();
     //TODO VALIDATION OF DATA
 
@@ -25,7 +24,7 @@ public class UserEditPostCommand implements ICommand {
             response.sendRedirect("users-page.command");
             return;
         }
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher(ViewPath.ADMIN_USERS);
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.ADMIN_USERS);
         requestDispatcher.forward(request, response);
     }
 

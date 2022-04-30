@@ -12,6 +12,7 @@ import java.util.Optional;
 public class StationDaoImpl implements StationDao {
     private static final String CREATE_STATION = "INSERT INTO stations VALUES (DEFAULT, ?, ?);";
     private static final String GET_STATION_BY_ID = "SELECT * FROM stations WHERE id = ?;";
+    private static final String GET_STATION_BY_NAME = "SELECT * FROM stations WHERE name = ?;";
     private static final String GET_ALL_STATIONS = "SELECT * FROM stations;";
     private static final String UPDATE_STATION = "UPDATE stations SET name = ?, code = ? WHERE id = ?;";
     private static final String DELETE_STATION = "DELETE FROM stations WHERE id =?";
@@ -22,6 +23,22 @@ public class StationDaoImpl implements StationDao {
         try (Connection connection = DataBasePoolManager.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_STATION_BY_ID)) {
             preparedStatement.setInt(1, id);
+            ResultSet stationFromResultSet = preparedStatement.executeQuery();
+            while (stationFromResultSet.next()) {
+                stationFromDb = getStationFromResultSet(stationFromResultSet);
+            }
+        } catch (SQLException exception) {
+            System.out.println("Unable to get station from db" + exception);
+        }
+        return Optional.ofNullable(stationFromDb);
+    }
+
+    @Override
+    public Optional<Station> getByName(String name) {
+        Station stationFromDb = null;
+        try (Connection connection = DataBasePoolManager.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_STATION_BY_NAME)) {
+            preparedStatement.setString(1, name);
             ResultSet stationFromResultSet = preparedStatement.executeQuery();
             while (stationFromResultSet.next()) {
                 stationFromDb = getStationFromResultSet(stationFromResultSet);

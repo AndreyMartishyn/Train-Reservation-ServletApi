@@ -69,12 +69,12 @@ public class Station implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Station station = (Station) o;
-        return id == station.id && Objects.equals(name, station.name) && Objects.equals(code, station.code);
+        return id == station.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, code);
+        return Objects.hash(id);
     }
 
     @Override
