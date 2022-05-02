@@ -6,16 +6,19 @@ import="ua.martishyn.app.data.entities.Station"
 <!DOCTYPE html>
 <html>
 <head>
-<%@ include file="/view/static/meta.html" %>
+<%@ include file="/view/static/meta.jsp" %>
 </head>
 <body>
-<%@ include file="/view/static/header.html" %>
+<%@ include file="/view/static/header.jsp" %>
+<br><br>
  <div align="center">
-        <h1>Welcome to Train Reservation Website Admin Panel</h1>
-        <b>(${user.email})</b>
-        <br><br>
 
-        <table class="table table-hover" class="m-5">
+		<form>
+        <h2>Route-stations</h2>
+        <span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${noRoutes}</span>
+        <span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${success}</span>
+
+        <table class="table table-striped table-responsive-md btn-table" class="m-5">
         <thead>
                         <tr>
                           <th scope="col">Route id</th>
@@ -36,19 +39,17 @@ import="ua.martishyn.app.data.entities.Station"
         <td><c:out value="${route.arrival}"/> </td>
         <td><c:out value="${route.departure}"/> </td>
         <td>
-        <a href="route-edit.command?id=<c:out value='${route.id}' />">Edit route</a>
-        <a href="route-delete.command?id=<c:out value='${route.id}' />">Delete route</a>
+         <a href="route-edit.command?id=<c:out value='${route.id}'/>" class="btn btn-outline-primary btn-sm m-0 waves-effect">Edit route</a>
+         <a href="route-delete.command?id=<c:out value='${route.id}' />" class="btn btn-outline-primary btn-sm m-0 waves-effect">Delete route</a>
         </td>
         </tr>
         </c:forEach>
         </tbody>
+
         </table>
-        <br><br>
-        <a href="route-add.command">Add new route</a>
-        <br><br>
-        <a href="logout.command">Logout</a>
-    </div>
-</body>
+        </form>
+        <a href="route-add.command" class="btn btn-dark">Add route</a>
+ </body>
 </html>
 </body>
 </html>

@@ -66,7 +66,7 @@ public class RouteDaoImpl implements RouteDao {
     @Override
     public Optional<List<ComplexRoute>> getAllComplexRoutes() {
         List<ComplexRoute> complexRouteList = new ArrayList<>();
-        ComplexRoute complexRoute = null;
+        ComplexRoute complexRoute;
         int routeId;
         try (Connection connection = DataBasePoolManager.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_SINGLE_ROUTES);

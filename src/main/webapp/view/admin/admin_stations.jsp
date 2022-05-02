@@ -6,16 +6,15 @@ import="ua.martishyn.app.data.entities.Station"
 <!DOCTYPE html>
 <html>
 <head>
-<%@ include file="/view/static/meta.html" %>
+<%@ include file="/view/static/meta.jsp" %>
 </head>
 <body>
-<%@ include file="/view/static/header.html" %>
+<%@ include file="/view/static/header.jsp" %>
+<br><br>
  <div align="center">
-        <h1>Welcome to Train Reservation Website Admin Panel</h1>
-        <b>(${user.email})</b>
-        <br><br>
-
-        <table class="table table-hover" class="m-5">
+		<form>
+		 <h2>Stations</h2>
+        <table class="table table-striped table-responsive-md btn-table" >
         <thead>
                         <tr>
                           <th scope="col">Station number</th>
@@ -32,18 +31,15 @@ import="ua.martishyn.app.data.entities.Station"
         <td><c:out value="${station.name}"/> </td>
         <td><c:out value="${station.code}"/> </td>
         <td>
-        <a href="station-edit.command?id=<c:out value='${station.id}' />">Edit station</a>
-        <a href="station-delete.command?id=<c:out value='${station.id}' />">Delete station</a>
+           <a href="station-edit.command?id=<c:out value='${station.id}' />" class="btn btn-outline-primary btn-sm m-0 waves-effect">Edit station</a>
+           <a href="station-delete.command?id=<c:out value='${station.id}' />" class="btn btn-outline-primary btn-sm m-0 waves-effect">Delete station</a>
         </td>
         </tr>
         </c:forEach>
         </tbody>
         </table>
-        <br><br>
-        <a href="station-add.command">Add new station</a>
-        <br><br>
-        <a href="logout.command">Logout</a>
-    </div>
+        </form>
+        <a href="station-add.command" class="btn btn-dark">Add station</a>
 </body>
 </html>
 </body>

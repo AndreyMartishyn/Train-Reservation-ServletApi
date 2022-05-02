@@ -8,7 +8,7 @@
                 <a class="navbar-brand" href="index.command">Welcome, Guest</a>
             </c:when>
             <c:otherwise>
-                <a class="navbar-brand" href="index.command">Welcome, ${user.email}</a>
+                <a class="navbar-brand" href="index.command">Welcome, ${user.role}</a>
             </c:otherwise>
         </c:choose>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
@@ -24,9 +24,19 @@
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="about-us.command">About us</a>
                 </li>
-                <c:if test="${sessionScope.user.role == 'customer'}">
+                <c:if test="${sessionScope.user.role == 'CUSTOMER'}">
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="customer-booking.command">Book</a>
+                </li>
+                </c:if>
+                <c:if test="${sessionScope.user.role == 'ADMIN'}">
+                <li class="nav-item">
+				<a class="nav-link active" aria-current="page" href="routes-page.command">Routes</a>
+                </li>
+                <li class="nav-item"><a class="nav-link active" aria-current="page" href="stations-page.command">Stations</a>
+                </li>
+                </li>
+                <li class="nav-item"><a class="nav-link active" aria-current="page" href="users-page.command">Users</a>
                 </li>
                 </c:if>
                 </ul>

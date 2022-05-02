@@ -23,7 +23,7 @@ public class SingleRoutesPageCommand implements ICommand {
         if (routesFromDb.isPresent()) {
             request.setAttribute("routes", routesFromDb.get());
         } else {
-            request.setAttribute("no-routes", "No routes found at the moment");
+            request.setAttribute("noRoutes", "No routes found at the moment");
         }
         RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.ADMIN_ROUTES);
         requestDispatcher.forward(request, response);

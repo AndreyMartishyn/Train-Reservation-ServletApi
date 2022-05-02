@@ -8,7 +8,6 @@ public class Constants {
     public static final String LOGIN_PAGE = JSP_LOC + "login.jsp";
     public static final String REGISTER_PAGE = JSP_LOC + "register.jsp";
 
-    public static final String ADMIN_MAIN = JSP_LOC + "admin/admin_main.jsp";
     public static final String ADMIN_STATIONS = JSP_LOC + "admin/admin_stations.jsp";
     public static final String ADMIN_ADD_EDIT_STATIONS = JSP_LOC + "admin/admin_add_edit_station.jsp";
 
@@ -19,6 +18,9 @@ public class Constants {
     public static final String ADMIN_ROUTE_ADD_EDIT = JSP_LOC + "admin/admin_add_edit_single_route.jsp";
 
     public static final String CUSTOMER_BOOK_PAGE = JSP_LOC + "customer/customer_book.jsp";
+
+    ////////////////////////////////////////////////////////////////////////////////
+    public static final String ERROR_VALIDATION = "errorValidation";
 
 
 

@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<%@ include file="/view/static/meta.html"%>
+<%@ include file="/view/static/meta.jsp"%>
 </head>
 <body>
 <%@ include file="/view/static/header.jsp"%>
@@ -27,7 +27,7 @@
     <small id="passwordHelp" >We`ll never share your credentials with anyone else</small>
     </div>
     <div class="form-group">
-    <button type="submit" class="form-control btn btn-primary submit px-3">Register</button>
+    <button type="submit" class="btn btn-dark">Register</button>
     </div>
     </form>
   <span style ="text-align: center; color:red; font-family:courier; font-size:70%;">${notValidInput}</span>

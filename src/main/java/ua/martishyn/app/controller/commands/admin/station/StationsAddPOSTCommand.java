@@ -18,7 +18,7 @@ public class StationsAddPOSTCommand implements ICommand {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (!addStation(request)){
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.ADMIN_MAIN);
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.HOME_PAGE);
             requestDispatcher.forward(request,response);
         }
         System.out.println("Station added");

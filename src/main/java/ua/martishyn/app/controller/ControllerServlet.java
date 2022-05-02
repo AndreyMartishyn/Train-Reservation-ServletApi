@@ -3,7 +3,6 @@ package ua.martishyn.app.controller;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.martishyn.app.controller.commands.*;
-import ua.martishyn.app.controller.commands.admin.AdminMainCommand;
 import ua.martishyn.app.controller.commands.admin.route.*;
 import ua.martishyn.app.controller.commands.admin.station.*;
 import ua.martishyn.app.controller.commands.admin.user.AdminUserDeleteCommand;
@@ -28,14 +27,13 @@ public class ControllerServlet extends HttpServlet {
     static Map<String, ICommand> commandContainer = new HashMap<>();
 
     static {
-        commandContainer.put("/index.command", new HomePageCommand());
+        commandContainer.put("/index.command", new IndexPageCommand());
         commandContainer.put("/login-page.command", new LoginPageCommand());
         commandContainer.put("/login.command", new LoginCommand());
         commandContainer.put("/register-page.command", new RegisterPageCommand());
         commandContainer.put("/register.command", new RegisterCommand());
         commandContainer.put("/logout.command", new LogoutCommand());
 
-        commandContainer.put("/admin-main.command", new AdminMainCommand());
         //stations admin crud
         commandContainer.put("/stations-page.command", new StationsPageCommand());
         commandContainer.put("/station-add.command", new StationAddCommand());

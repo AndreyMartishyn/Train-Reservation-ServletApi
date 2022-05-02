@@ -9,14 +9,12 @@ import="ua.martishyn.app.data.entities.enums.Role"
 <!DOCTYPE html>
 <html>
 <head>
-<%@ include file="/view/static/meta.html" %>
+<%@ include file="/view/static/meta.jsp" %>
 </head>
 <body>
-<%@ include file="/view/static/header.html" %>
- <div align="center">
-        <h1>Welcome to Train Reservation Website Admin Panel</h1>
-         <br><br>
-        <div align="center">
+<%@ include file="/view/static/header.jsp" %>
+<br><br>
+<div align="center">
         <form action="user-edit-post.command" method="post">
         <table border="1" cellpadding="5">
         <c:if test="${user != null}">

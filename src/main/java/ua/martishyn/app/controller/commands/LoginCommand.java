@@ -6,10 +6,12 @@ import ua.martishyn.app.data.dao.impl.UserDaoImpl;
 import ua.martishyn.app.data.dao.interfaces.UserDao;
 import ua.martishyn.app.data.entities.User;
 import ua.martishyn.app.data.entities.enums.Role;
+import ua.martishyn.app.data.utils.Constants;
 import ua.martishyn.app.data.utils.password_encoding.PasswordEncodingService;
 import ua.martishyn.app.data.utils.validator.DataInputValidator;
 import ua.martishyn.app.data.utils.validator.DataInputValidatorImpl;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,7 +26,6 @@ public class LoginCommand implements ICommand {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        HttpSession currentSession = request.getSession();
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
@@ -32,26 +33,27 @@ public class LoginCommand implements ICommand {
         if (checkForValidDataInput(email, password)) {
             Optional<User> optionalUser = userDao.getByEmail(email);
             if (!checkUserPresenceInDB(email)) {
-                currentSession.setAttribute("noSuchUser", "No user found");
+                request.getSession().setAttribute("noSuchUser", "No user found");
                 log.error("No user found with email --> {}", optionalUser.get().getEmail());
             } else {
                 User loggedUser = optionalUser.get();
                 if (loggedUser.getPassword().equals(PasswordEncodingService.makeHash(password))) {
                     log.trace("Found user in DB --> {}", loggedUser.getEmail());
-                    currentSession.setAttribute("user", loggedUser);
+                    request.getSession().setAttribute("user", loggedUser);
                  //   roleRedirect = getRole(loggedUser);
                     log.trace("User ROLE  --> {}", loggedUser.getRole());
-                    response.sendRedirect("admin-main.command");
+                    response.sendRedirect("index.command");
                     return;
                 } else {
                     log.error("Wrong password for user in DB --> {}", loggedUser.getEmail());
-                    currentSession.setAttribute("notCorrectPass", "Enter correct password");
+                    request.setAttribute("notCorrectPass", "Enter correct password");
                 }
             }
         } else {
-            currentSession.setAttribute("notValidInput", "Enter valid input");
+            request.setAttribute("notValidInput", "Enter valid input");
         }
-        response.sendRedirect("login-page.command");
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.LOGIN_PAGE);
+        requestDispatcher.forward(request,response);
     }
 
     private boolean checkForValidDataInput(String email, String password) {

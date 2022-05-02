@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<%@ include file="/view/static/meta.html"%>
+<%@ include file="/view/static/meta.jsp"%>
 </head>
 <body>
 <%@ include file="/view/static/header.jsp"%>
@@ -12,6 +12,9 @@
 <div class="col-md-6 col-lg-4">
 <form action="login.command" method="post">
 <h3 class="mb-4 text-center">Login Form</h3>
+  <span style ="text-align: center; color:red; font-family:courier; font-size:70%;">${notValidInput}</span>
+  <span style ="text-align: center; color:red; font-family:courier; font-size:70%;">${notCorrectPass}</span>
+  <span style ="text-align: center; color:red; font-family:courier; font-size:70%;">${noSuchUser}</span>
 <div class="form-group">
 <input type="email" name="email" class="form-control" placeholder="Enter your email" required>
 </div>
@@ -23,9 +26,6 @@
 <button type="submit" class="form-control btn btn-primary submit px-3">Sign In</button>
 </div>
 </form>
-  <span style ="text-align: center; color:red; font-family:courier; font-size:70%;">${notValidInput}</span>
-  <span style ="text-align: center; color:red; font-family:courier; font-size:70%;">${notCorrectPass}</span>
-  <span style ="text-align: center; color:red; font-family:courier; font-size:70%;">${noSuchUser}</span>
 </div>
  </div>
   </body>

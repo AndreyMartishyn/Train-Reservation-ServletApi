@@ -6,6 +6,12 @@ import org.junit.Test;
 import ua.martishyn.app.data.utils.validator.DataInputValidator;
 import ua.martishyn.app.data.utils.validator.DataInputValidatorImpl;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+/**
+ * Unit testing for DataInputValidator API
+ */
+
 public class DataInputValidatorTest {
     private static DataInputValidator dataInputValidator;
 
@@ -56,7 +62,18 @@ public class DataInputValidatorTest {
         Assert.assertFalse(result);
     }
 
+    @Test
+    public void shouldReturnFalseWhenNotCorrectInputForNumber(){
+        String actual = "123*4";
+        boolean result =  dataInputValidator.isValidNumInput(actual);
+        Assert.assertFalse(result);
+    }
 
-
-
+    @Test
+    public void shouldReturnTrueWhenCorrectInputForDates(){
+        String actual1 = "2222-22-22 22:22";
+        String actual2 = "2223-33-44 10:22";
+        boolean result =  dataInputValidator.isValidDateInput(actual1, actual2);
+        Assert.assertFalse(result);
+    }
 }

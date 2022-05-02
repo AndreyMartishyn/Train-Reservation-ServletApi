@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<%@ include file="/view/static/meta.html"%>
+<%@ include file="/view/static/meta.jsp"%>
 </head>
 <body>
 <%@ include file="/view/static/header.jsp"%>
