@@ -9,6 +9,8 @@ public interface DataInputValidator {
 
     boolean isValidEmailField(String email);
 
+    boolean isValidStringInput(String data);
+
     boolean isValidNumInput(String number);
 
     boolean isValidDateInput(String departure, String arrival);

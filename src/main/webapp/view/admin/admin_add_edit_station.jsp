@@ -1,45 +1,39 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page language="java"
-import="ua.martishyn.app.data.entities.Station"
-%>
-<%@ page contentType="text/html;charset=UTF-8" %>
-<!DOCTYPE html>
-<html>
+<%@ include file="/view/static/basic_context.jsp" %>
 <head>
 <%@ include file="/view/static/meta.jsp" %>
 </head>
 <body>
 <%@ include file="/view/static/header.jsp" %>
-
 <br><br>
 <div align="center">
-    <form>
-         <caption>
-         <c:if test="${station != null}">
-         <h2>Edit station</h2>
-         </c:if>
-         <c:if test="${station == null}">
-         <h2>Add new station</h2>
-         </c:if>
-        </caption>
                 <c:if test="${station != null}">
-                    <form action="station-edit-post.command" method="post">
+                <form action="station-edit-post.command" method="post">
                 </c:if>
                 <c:if test="${station == null}">
                     <form action="station-add-post.command" method="post">
                 </c:if>
-                 <c:if test="${station != null}">
-                 <input type="hidden" name="id" value="<c:out value='${station.id}' />" />
-                 </c:if>
-                 <div class="input-group">
-                   <span class="input-group-text">Station name and code</span>
-                      <input type="text" class="form-control" name="name" value="<c:out value='${station.name}' />"/>
-                    <input type="text" class="form-control" name="code"  value="<c:out value='${station.code}' />"/>
-                 	</div>
-                  	<input type="submit" class="btn btn-dark" value="Save"/>
+                <c:if test="${station != null}">
+                <h2><fmt:message key="admin.page.station.edit"/></h2>
+                </c:if>
+                <c:if test="${station == null}">
+                <h2><fmt:message key="admin.page.station.add.form"/></h2>
+                </c:if>
+                <c:if test="${station != null}">
+                <input type="hidden" name="id" value="<c:out value='${station.id}' />" />
+                </c:if>
+                <div class="input-group">
+                <span class="input-group-text"><fmt:message key="admin.page.station.station-name-code"/></span>
+                <input type="text" class="form-control" name="name" value="<c:out value='${station.name}' />" required/>
+                <input type="text" class="form-control" name="code"  value="<c:out value='${station.code}' />"required />
+              	</div>
+               <span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${errorValidation}</span>
+               <span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${errorLogic}</span>
+                <br>
+               <div class="form-group">
+               <input type="submit" class="btn btn-dark" value="<fmt:message key="admin.page.action.save"/>"/>
+               </div>
+                </div>
+                </div>
                 </form>
-
-            </div>
-            </form>
 </body>
 </html>

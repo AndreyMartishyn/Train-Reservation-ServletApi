@@ -1,5 +1,7 @@
 package ua.martishyn.app.controller.commands.admin.station;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ua.martishyn.app.controller.commands.ICommand;
 import ua.martishyn.app.data.dao.impl.StationDaoImpl;
 import ua.martishyn.app.data.dao.interfaces.StationDao;
@@ -14,24 +16,26 @@ import java.io.IOException;
 import java.util.Optional;
 
 public class StationEditCommand implements ICommand {
-    private static final StationDao stationDao = new StationDaoImpl();
+    private static final Logger log = LogManager.getLogger(StationEditCommand.class);
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-         Optional<Station> stationFromDb = getStation(request);
+        RequestDispatcher requestDispatcher;
+        Optional<Station> stationFromDb = getStation(request);
         if (stationFromDb.isPresent()) {
-            System.out.println("Getting station from db");
+            log.info("Editing station with id {}", stationFromDb.get().getId());
             request.setAttribute("station", stationFromDb.get());
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.ADMIN_ADD_EDIT_STATIONS);
-            requestDispatcher.forward(request, response);
+            requestDispatcher = request.getRequestDispatcher(Constants.ADMIN_ADD_EDIT_STATIONS);
         } else {
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.ADMIN_STATIONS);
-            requestDispatcher.forward(request, response);
+            requestDispatcher = request.getRequestDispatcher(Constants.ADMIN_STATIONS);
         }
+        requestDispatcher.forward(request, response);
     }
 
-    private Optional<Station> getStation(HttpServletRequest request){
+    private Optional<Station> getStation(HttpServletRequest request) {
+        StationDao stationDao = new StationDaoImpl();
         int id = Integer.parseInt(request.getParameter("id"));
         return stationDao.getById(id);
-        }
     }
+}
 

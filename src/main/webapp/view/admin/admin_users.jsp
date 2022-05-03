@@ -1,9 +1,4 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page language="java"
-import="ua.martishyn.app.data.entities.User"
-%>
-<%@ page contentType="text/html;charset=UTF-8" %>
-<!DOCTYPE html>
+<%@ include file="/view/static/basic_context.jsp" %>
 <html>
 <head>
 <%@ include file="/view/static/meta.jsp" %>
@@ -13,16 +8,16 @@ import="ua.martishyn.app.data.entities.User"
 <br><br>
  <div align="center">
 		<form>
-		 <h2>Users</h2>
+		 <h2><fmt:message key="admin.page.users"/></h2>
         <table class="table table-striped table-responsive-md btn-table" >
         <thead>
                         <tr>
-                          <th scope="col">User_id</th>
-                          <th scope="col">User_first_name</th>
-                          <th scope="col">User_last_name</th>
-                          <th scope="col">Email</th>
-                          <th scope="col">Role</th>
-                          <th scope="col">Action</th>
+                          <th scope="col"><fmt:message key="admin.page.user.id"/></th>
+                          <th scope="col"><fmt:message key="admin.page.user.first.name"/></th>
+                          <th scope="col"><fmt:message key="admin.page.user.last.name"/></th>
+                          <th scope="col"><fmt:message key="admin.page.user.email"/></th>
+                          <th scope="col"><fmt:message key="admin.page.user.role"/></th>
+                          <th scope="col"><fmt:message key="admin.page.action"/></th>
                         </tr>
 
         </thead>
@@ -35,8 +30,8 @@ import="ua.martishyn.app.data.entities.User"
         <td><c:out value="${user.email}"/> </td>
         <td><c:out value="${user.role}"/> </td>
         <td>
-           <a href="user-edit.command?id=<c:out value='${user.id}' />" class="btn btn-outline-primary btn-sm m-0 waves-effect">Edit user</a>
-           <a href="user-delete.command?id=<c:out value='${user.id}' />" class="btn btn-outline-primary btn-sm m-0 waves-effect">Delete user</a>
+           <a href="user-edit.command?id=<c:out value='${user.id}' />" class="btn btn-dark"><fmt:message key="admin.page.edit"/></a>
+           <a href="user-delete.command?id=<c:out value='${user.id}' />" class="btn btn-dark"><fmt:message key="admin.page.delete"/></a>
         </td>
         </tr>
         </c:forEach>

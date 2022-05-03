@@ -12,7 +12,8 @@ import java.text.SimpleDateFormat;
  */
 
 public class DataInputValidatorImpl implements DataInputValidator {
-    private static final String NAME_REGEX = "^[A-Za-z\\u0400-\\u04ff]{1,16}&";
+    private static final String LOGIN_NAME_REGEX = "^[A-Za-z\\u0400-\\u04ff]{1,16}$";
+    private static final String STRING_REGEX = "^([\\p{L}-]*[\\s]*)$";
     private static final String NUM_REGEX = "^([0-9]+)$";
     private static final String PASSWORD_REGEX = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$";
     private static final String EMAIL_REGEX = "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$";
@@ -29,7 +30,7 @@ public class DataInputValidatorImpl implements DataInputValidator {
         if (isNullAndEmpty(name)) {
             return false;
         }
-        return name.matches(NAME_REGEX);
+        return name.matches(LOGIN_NAME_REGEX);
     }
 
     /**
@@ -63,6 +64,21 @@ public class DataInputValidatorImpl implements DataInputValidator {
         }
         return email.matches(EMAIL_REGEX);
     }
+    /**
+     * Checks user input in accordance
+     * with correct String form regex
+     *
+     * @param data
+     * @return true or false
+     */
+
+    @Override
+    public boolean isValidStringInput(String data) {
+        if (isNullAndEmpty(data)) {
+            return false;
+        }
+        return data.matches(STRING_REGEX);
+    }
 
     /**
      * Checks user input in accordance
@@ -95,7 +111,7 @@ public class DataInputValidatorImpl implements DataInputValidator {
             return false;
         }
         try {
-            DateFormat formatPattern = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            DateFormat formatPattern = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
             formatPattern.setLenient(false);
             formatPattern.parse(departure);
             formatPattern.parse(arrival);

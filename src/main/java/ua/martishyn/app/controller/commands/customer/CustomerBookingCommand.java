@@ -12,28 +12,30 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
 public class CustomerBookingCommand implements ICommand {
     private static final Logger log = LogManager.getLogger(CustomerBookingCommand.class);
-    private static final StationDao stationDao = new StationDaoImpl();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Optional<List<Station>> stations = stationDao.getAll();
-        HttpSession session  = request.getSession();
+        Optional<List<Station>> stations = getStations();
         if (stations.isPresent()){
-            session.setAttribute("stations", stations.get());
+            log.info("Loading stations from db. Stations quantity : {}", stations.get().size());
+            request.setAttribute("stations", stations.get());
         }
         else {
-            session.setAttribute("noStations", "No stations found");
+            request.setAttribute("noStations", "No stations found");
         }
-        log.info("Loading booking page");
         RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.CUSTOMER_BOOK_PAGE);
+        log.info("Redirect to view --> {}", Constants.CUSTOMER_BOOK_PAGE);
         requestDispatcher.forward(request, response);
     }
 
+    private Optional<List<Station>> getStations(){
+        StationDao stationDao = new StationDaoImpl();
+        return stationDao.getAll();
+    }
 }

@@ -1,38 +1,31 @@
-<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
-<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
-<!DOCTYPE html>
-<html>
+<%@ include file="/view/static/basic_context.jsp" %>
 <head>
-<%@ include file="/view/static/meta.html"%>
+<%@ include file="/view/static/meta.jsp"%>
 </head>
 <body>
 <%@ include file="/view/static/header.jsp"%>
 <br>
-<div class="row justify-content-center">
-<div class="col-md-6 col-lg-4">
+<div class="col-md-5 offset-4">
 <form action="customer-train-search.command" method="post">
-<h3 class="mb-4 text-center">Train Search</h3>
+<h3 class="mb-4 text-center"><fmt:message key="user.page.book.title"/></h3>
 		<div class="form-group">
-        <label>Station From</label>
+        <label><fmt:message key="user.page.book.departure"/></label>
         <select class="custom-select mr-sm-2" name="stationFrom">
         <c:forEach var="station" items="${stations}">
-        <option value="${station.id}">${station.name}</option>
+        <option value="${station.id}"><fmt:message key="${station.name}"/></option>
         </c:forEach>
         </select>
 
         </div>
 		<div class="form-group">
-        <label>Station To</label>
+        <label><fmt:message key="user.page.book.arrival"/></label>
         <select class="custom-select mr-sm-2" name="stationTo">
         <c:forEach var="station" items="${stations}">
-        <option value="${station.id}">${station.name}</option>
-
+        <option value="${station.id}"><fmt:message key="${station.name}"/></option>
         </c:forEach>
-
         </select>
         </div>
-
-            <button type="submit" class="btn btn-primary">Make search</button>
+            <button type="submit" class="btn btn-dark"><fmt:message key="user.page.book.search"/></button>
         </div>
         </div>
         </form>

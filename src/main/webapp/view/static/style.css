@@ -4,20 +4,20 @@ body
             background-size: cover;
             margin: 40px;
             padding: 20px;
-            opacity: 0.9;
+            opacity: 0.85;
         }
 
 form    {
-                background: #E0E0E0;
+                background: #C2C2D6;
                 border-radius: 15px;
                 text-align: center;
+                width: 70%
         }
 
 nav    {
-                background: #E0E0E0;
+                background: #C2C2D6;
                 border-radius: 15px;
                 text-align: center;
-
         }
 
 

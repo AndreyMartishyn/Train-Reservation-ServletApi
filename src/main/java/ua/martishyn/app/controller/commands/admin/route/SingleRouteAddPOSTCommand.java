@@ -1,5 +1,7 @@
 package ua.martishyn.app.controller.commands.admin.route;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ua.martishyn.app.controller.commands.ICommand;
 import ua.martishyn.app.data.dao.impl.RouteDaoImpl;
 import ua.martishyn.app.data.dao.impl.StationDaoImpl;
@@ -27,49 +29,47 @@ import java.util.Date;
 import java.util.Optional;
 
 public class SingleRouteAddPOSTCommand implements ICommand {
-    private static final RouteDao routeDao = new RouteDaoImpl();
-    private static final TrainAndModelDao trainAndModelDao = new TrainModelDaoImpl();
-    private static final StationDao stationDao = new StationDaoImpl();
-    private static final DataInputValidator dataValidator = new DataInputValidatorImpl();
-
+    private static final Logger log = LogManager.getLogger(SingleRouteAddPOSTCommand.class);
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (routeDataValidation(request)) {
             if (createSingleRoute(request)) {
-                request.getSession().setAttribute("success", "Route created");
+                log.info("Route added successfully");
                 response.sendRedirect("routes-page.command");
+                return;
             } else {
                 request.setAttribute("errorLogic", "Problems with creating route");
             }
         } else {
             request.setAttribute("errorLogic", "Problems with creating route");
         }
+        log.error("Unfortunately, route not added");
         RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.ADMIN_ROUTE_ADD_EDIT);
-        requestDispatcher.forward(request,response);
+        requestDispatcher.forward(request, response);
     }
 
     private boolean routeDataValidation(HttpServletRequest request) {
-        HttpSession session = request.getSession();
+        DataInputValidator dataValidator = new DataInputValidatorImpl();
         String id = request.getParameter("id").trim();
         if (!dataValidator.isValidNumInput(id)) {
-            session.setAttribute(Constants.ERROR_VALIDATION, "Wrong id number");
+            request.setAttribute(Constants.ERROR_VALIDATION, "Wrong id number");
             return false;
         }
         String trainId = request.getParameter("trainId").trim();
         if (!dataValidator.isValidNumInput(trainId)) {
-            session.setAttribute(Constants.ERROR_VALIDATION, "Wrong train number");
+            request.setAttribute(Constants.ERROR_VALIDATION, "Wrong train number");
             return false;
         }
         String stationId = request.getParameter("stationId").trim();
         if (!dataValidator.isValidNumInput(stationId)) {
-            session.setAttribute(Constants.ERROR_VALIDATION, "Wrong station number");
+            request.setAttribute(Constants.ERROR_VALIDATION, "Wrong station number");
             return false;
         }
         String departure = request.getParameter("departure").trim();
         String arrival = request.getParameter("arrival").trim();
         if (!dataValidator.isValidDateInput(departure, arrival)) {
-            session.setAttribute(Constants.ERROR_VALIDATION, "Wrong dates");
+            request.setAttribute(Constants.ERROR_VALIDATION, "Wrong dates");
             return false;
         }
         return true;
@@ -93,6 +93,7 @@ public class SingleRouteAddPOSTCommand implements ICommand {
             return false;
         }
 
+        RouteDao routeDao = new RouteDaoImpl();
         SingleRoute newSingleRoute = SingleRoute.builder()
                 .id(id)
                 .trainId(trainId)
@@ -103,8 +104,9 @@ public class SingleRouteAddPOSTCommand implements ICommand {
         return routeDao.createSingleRoute(newSingleRoute);
     }
 
-    private boolean checkInputIsValid(int trainId, int stationId,
-                                      Date departure, Date arrival) {
+    private boolean checkInputIsValid(int trainId, int stationId, Date departure, Date arrival) {
+        TrainAndModelDao trainAndModelDao = new TrainModelDaoImpl();
+        StationDao stationDao = new StationDaoImpl();
         Optional<Train> searchedTrain = trainAndModelDao.getTrain(trainId);
         Optional<Station> searchedStation = stationDao.getById(stationId);
         return searchedTrain.isPresent() && searchedStation.isPresent()

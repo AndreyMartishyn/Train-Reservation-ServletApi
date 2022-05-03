@@ -1,5 +1,7 @@
 package ua.martishyn.app.controller.commands.customer;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ua.martishyn.app.controller.commands.ICommand;
 import ua.martishyn.app.data.dao.impl.RouteDaoImpl;
 import ua.martishyn.app.data.dao.impl.StationDaoImpl;
@@ -20,19 +22,20 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class CustomerTrainSearchCommand implements ICommand {
-    private static final RouteDao routeDao = new RouteDaoImpl();
-    private static final StationDao stationDao = new StationDaoImpl();
-    private static final DateFormat formatPattern = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
+    private static final Logger log = LogManager.getLogger(CustomerTrainSearchCommand.class);
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession();
         int departureStationId = Integer.parseInt(request.getParameter("stationFrom"));
         int arrivalStationId = Integer.parseInt(request.getParameter("stationTo"));
         if (departureStationId == arrivalStationId) {
-            session.setAttribute("sameStations", "Departure and arrival stations are same");
+            log.error("Same stations chosen by user");
+            request.getSession().setAttribute("sameStations", "Departure and arrival stations are same");
         }
+        DateFormat formatPattern = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        StationDao stationDao = new StationDaoImpl();
+        RouteDao routeDao = new RouteDaoImpl();
 
         Optional<Station> fromStation = stationDao.getById(departureStationId);
         Optional<Station> toStation = stationDao.getById(arrivalStationId);
@@ -80,9 +83,8 @@ public class CustomerTrainSearchCommand implements ICommand {
                 }
             }
         }
-        System.out.println("stations search finished");
-        session.setAttribute("suitableRoutes", suitableRoutes);
-
+        log.error("Appropriate routes found. Size : {}", suitableRoutes.size());
+        request.getSession().setAttribute("suitableRoutes", suitableRoutes);
     }
 }
 

@@ -1,5 +1,7 @@
 package ua.martishyn.app.data.dao.impl;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ua.martishyn.app.data.dao.interfaces.UserDao;
 import ua.martishyn.app.data.entities.User;
 import ua.martishyn.app.data.entities.enums.Role;
@@ -14,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class UserDaoImpl implements UserDao {
+    private static final Logger log = LogManager.getLogger(UserDaoImpl.class);
     private static final String CREATE_USER = "INSERT INTO users VALUES (DEFAULT, ?, ?, ?, ?, ?);";
     private static final String GET_USER_BY_ID = "SELECT * FROM users WHERE id = ?;";
     private static final String GET_USER_BY_EMAIL = "SELECT * FROM users WHERE email = ?;";
@@ -26,14 +29,14 @@ public class UserDaoImpl implements UserDao {
     public Optional<User> getById(int id) {
         User userFromDb = null;
         try (Connection connection = DataBasePoolManager.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_BY_ID);) {
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_BY_ID)) {
             preparedStatement.setInt(1, id);
             ResultSet userResultSet = preparedStatement.executeQuery();
             while (userResultSet.next()) {
                 userFromDb = getUserFromResultSet(userResultSet);
             }
         } catch (SQLException exception) {
-            System.out.println("Unable to get user from db " + exception);
+            log.error("Problems with getting user by id {}", exception.toString());
         }
         return Optional.ofNullable(userFromDb);
     }
@@ -49,7 +52,7 @@ public class UserDaoImpl implements UserDao {
                 userFromDb = getUserFromResultSet(userResultSet);
             }
         } catch (SQLException exception) {
-            System.out.println("Unable to get user from db by email" + exception);
+            log.error("Problems with getting user by email {}", exception.toString());
         }
         return Optional.ofNullable(userFromDb);
     }
@@ -57,14 +60,14 @@ public class UserDaoImpl implements UserDao {
     @Override
     public Optional<List<User>> getAll() {
         List<User> usersList = new ArrayList<>();
-        try(Connection connection = DataBasePoolManager.getInstance().getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_USERS)){
+        try (Connection connection = DataBasePoolManager.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_USERS)) {
             ResultSet usersResultSet = preparedStatement.executeQuery();
-            while (usersResultSet.next()){
+            while (usersResultSet.next()) {
                 usersList.add(getUserFromResultSet(usersResultSet));
             }
         } catch (SQLException exception) {
-            System.out.println("Unable to get stations from db" + exception);
+            log.error("Problems with getting all users {}", exception.toString());
         }
         return Optional.of(usersList);
     }
@@ -77,7 +80,7 @@ public class UserDaoImpl implements UserDao {
             preparedStatement.executeUpdate();
             return true;
         } catch (SQLException exception) {
-            System.out.println("Something wrong with creating user " + exception);
+            log.error("Problems with creating user {}", exception.toString());
         }
         return false;
     }
@@ -103,20 +106,29 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public boolean update(User user) {
-        try (Connection connection = DataBasePoolManager.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_USER)) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = DataBasePoolManager.getInstance().getConnection();
+            preparedStatement = connection.prepareStatement(UPDATE_USER);
             connection.setAutoCommit(false);
             createUserStatement(preparedStatement, user);
             preparedStatement.setInt(6, user.getId());
-            if (preparedStatement.executeUpdate() > 0) {
-                connection.commit();
-                return true;
-            }
-            connection.rollback();
+            preparedStatement.executeUpdate();
+            connection.commit();
+
         } catch (SQLException exception) {
-            System.out.println("Unable to update user " + exception);
+            log.error("Problems with updating user by id {}", exception.toString());
+            try {
+                connection.rollback();
+            } catch (SQLException e) {
+                log.error("Problems with transaction {}", e.toString());
+            }
+        } finally {
+            close(connection);
+            close(preparedStatement);
         }
-        return false;
+        return true;
     }
 
     @Override
@@ -127,8 +139,18 @@ public class UserDaoImpl implements UserDao {
             preparedStatement.setInt(1, id);
             deleted = preparedStatement.executeUpdate() > 0;
         } catch (SQLException exception) {
-            System.out.println("Something wrong with deleting of user " + exception);
+            log.error("Problems with deleting user by id {}", exception.toString());
         }
         return deleted;
+    }
+
+    private static void close(AutoCloseable ac) {
+        if (ac != null) {
+            try {
+                ac.close();
+            } catch (Exception e) {
+                log.error("Failed closing resource {}", e.toString());
+            }
+        }
     }
 }
