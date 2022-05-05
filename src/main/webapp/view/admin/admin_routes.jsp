@@ -30,8 +30,8 @@
                         <td><c:out value="${route.arrival}"/> </td>
                         <td><c:out value="${route.departure}"/> </td>
                         <td>
-                        <a href="route-edit.command?id=<c:out value='${route.id}'/>" class="btn btn-dark"><fmt:message key="admin.page.edit"/></a>
-                        <a href="route-delete.command?id=<c:out value='${route.id}' />" class="btn btn-dark"><fmt:message key="admin.page.delete"/></a>
+                        <a href="route-edit.command?id=<c:out value='${route.id}'/>&stationId=<c:out value='${route.stationId}' />" class="btn btn-dark"><fmt:message key="admin.page.edit"/></a>
+                        <a href="route-delete.command?id=<c:out value='${route.id}'/>&stationId=<c:out value='${route.stationId}' />" class="btn btn-dark"><fmt:message key="admin.page.delete"/></a>
                         </td>
                         </tr>
                         </c:forEach>

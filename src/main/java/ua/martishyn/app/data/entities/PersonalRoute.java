@@ -11,7 +11,6 @@ public class PersonalRoute implements Serializable {
     private String arrivalStation;
     private String roadTime;
     private int price;
-    private String buyLink;
 
 
     public int getRouteId() {
@@ -32,10 +31,6 @@ public class PersonalRoute implements Serializable {
 
     public String getRoadTime() {
         return roadTime;
-    }
-
-    public String getBuyLink() {
-        return buyLink;
     }
 
     public int getPrice() {
@@ -74,7 +69,4 @@ public class PersonalRoute implements Serializable {
         this.price = price;
     }
 
-    public void setBuyLink(String buyLink) {
-        this.buyLink = buyLink;
-    }
 }

@@ -4,14 +4,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ComplexRoute implements Serializable {
     private int id;
     private Train train;
     private List<IntermediateStation> intermediateStations = new ArrayList<>();
 
-    public static class IntermediateStation implements Serializable{
+    public static class IntermediateStation implements Serializable {
         Station station;
         Date arrivalDate;
         Date departureDate;

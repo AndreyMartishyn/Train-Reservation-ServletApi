@@ -10,7 +10,7 @@ import ua.martishyn.app.controller.commands.admin.user.AdminUserEditCommand;
 import ua.martishyn.app.controller.commands.admin.user.AdminUserEditPostCommand;
 import ua.martishyn.app.controller.commands.admin.user.AdminUsersPageCommand;
 import ua.martishyn.app.controller.commands.customer.CustomerBookingCommand;
-import ua.martishyn.app.controller.commands.customer.CustomerTrainSearchCommand;
+import ua.martishyn.app.controller.commands.customer.CustomerSearchCommand;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -55,7 +55,7 @@ public class ControllerServlet extends HttpServlet {
         commandContainer.put("/route-add-post.command", new SingleRouteAddPOSTCommand());
         //users booking
         commandContainer.put("/customer-booking.command", new CustomerBookingCommand());
-        commandContainer.put("/customer-train-search.command", new CustomerTrainSearchCommand());
+        commandContainer.put("/customer-train-search.command", new CustomerSearchCommand());
     }
 
     @Override

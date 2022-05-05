@@ -8,11 +8,9 @@ import java.util.Optional;
 
 
 public interface RouteDao {
- //   Optional<List<ComplexRoute>> getAllRoutes();
-
     Optional<List<SingleRoute>> getAllIntermediateStationRoutes();
 
-    Optional<SingleRoute> getSingleRoute(int id);
+    Optional<SingleRoute> getSingleRoute(int id, int stationId);
 
     Optional<List<ComplexRoute>> getAllComplexRoutes();
 
@@ -20,5 +18,5 @@ public interface RouteDao {
 
     boolean updateSingleRoute(SingleRoute singleRoute);
 
-    boolean deleteSingleRoute(int id);
+    boolean deleteSingleRoute(int id, int stationId);
 }

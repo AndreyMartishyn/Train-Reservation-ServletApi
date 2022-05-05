@@ -31,6 +31,7 @@ public class SingleRouteDeleteCommand implements ICommand {
     private boolean deleteRoutePart(HttpServletRequest request) {
         RouteDao singleRouteDao = new RouteDaoImpl();
         int id = Integer.parseInt(request.getParameter("id"));
-        return singleRouteDao.deleteSingleRoute(id);
+        int stationId = Integer.parseInt(request.getParameter("stationId"));
+        return singleRouteDao.deleteSingleRoute(id,stationId);
     }
 }

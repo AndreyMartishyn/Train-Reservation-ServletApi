@@ -36,6 +36,7 @@ public class SingleRouteEditCommand implements ICommand {
     private Optional<SingleRoute> getSingleRoute(HttpServletRequest request) {
         RouteDao routeDao = new RouteDaoImpl();
         int id = Integer.parseInt(request.getParameter("id"));
-        return routeDao.getSingleRoute(id);
+        int stationId = Integer.parseInt(request.getParameter("stationId"));
+        return routeDao.getSingleRoute(id, stationId);
     }
 }

@@ -26,11 +26,11 @@ import java.util.Optional;
 public class RouteDaoImpl implements RouteDao {
     private static final Logger log = LogManager.getLogger(RouteDaoImpl.class);
     private static final String GET_ALL_SINGLE_ROUTES = "SELECT * FROM route_stations;";
-    private static final String GET_SINGLE_ROUTE_BY_ID = "SELECT * FROM route_stations where id = ?;";
+    private static final String GET_SINGLE_ROUTE = "SELECT * FROM route_stations where id = ? and station_id = ?;";
     private static final String ADD_SINGLE_ROUTE = "INSERT INTO route_stations VALUES (?, ?, ?, ? , ?);";
-    private static final String DELETE_SINGLE_ROUTE = "DELETE FROM route_stations WHERE id = ?;";
-    private static final String UPDATE_SINGLE_ROUTE = "UPDATE route_stations set id = ?, train_id = ?," +
-            "station_id = ?, arrival = ?, departure = ?;";
+    private static final String DELETE_SINGLE_ROUTE = "DELETE FROM route_stations WHERE id = ? AND station_id = ?;";
+    private static final String UPDATE_SINGLE_ROUTE = "UPDATE route_stations set train_id = ?," +
+            "station_id = ?, arrival = ?, departure = ? WHERE id= ? AND station_id =?;";
     private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
 
@@ -50,11 +50,12 @@ public class RouteDaoImpl implements RouteDao {
     }
 
     @Override
-    public Optional<SingleRoute> getSingleRoute(int id) {
+    public Optional<SingleRoute> getSingleRoute(int id, int stationId) {
         SingleRoute singleRoute = null;
         try (Connection connection = DataBasePoolManager.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_SINGLE_ROUTE_BY_ID)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_SINGLE_ROUTE)) {
             preparedStatement.setInt(1, id);
+            preparedStatement.setInt(2, stationId);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 singleRoute = getRoutePartFromResultSet(resultSet);
@@ -158,17 +159,20 @@ public class RouteDaoImpl implements RouteDao {
 
     private void createRouteStatement(PreparedStatement preparedStatement, SingleRoute singleRoute) throws SQLException {
         DateFormat formatPattern = new SimpleDateFormat(DATE_FORMAT);
-        preparedStatement.setInt(1, singleRoute.getId());
-        preparedStatement.setInt(2, singleRoute.getTrainId());
-        preparedStatement.setInt(3, singleRoute.getStationId());
-        preparedStatement.setString(4, formatPattern.format(singleRoute.getArrival()));
-        preparedStatement.setString(5, formatPattern.format(singleRoute.getDeparture()));
+        preparedStatement.setInt(1, singleRoute.getTrainId());
+        preparedStatement.setInt(2, singleRoute.getStationId());
+        preparedStatement.setString(3, formatPattern.format(singleRoute.getArrival()));
+        preparedStatement.setString(4, formatPattern.format(singleRoute.getDeparture()));
+        preparedStatement.setInt(5, singleRoute.getId());
+        preparedStatement.setInt(6, singleRoute.getStationId());
     }
 
     @Override
-    public boolean deleteSingleRoute(int id) {
+    public boolean deleteSingleRoute(int id, int stationId) {
         try (Connection connection = DataBasePoolManager.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_SINGLE_ROUTE)) {
+            preparedStatement.setInt(1, id);
+            preparedStatement.setInt(2, stationId);
             if (preparedStatement.executeUpdate() > 0) {
                 return true;
             }
