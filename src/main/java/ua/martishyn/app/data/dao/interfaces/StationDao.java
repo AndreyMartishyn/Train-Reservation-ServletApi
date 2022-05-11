@@ -11,7 +11,6 @@ public interface StationDao {
 
     Optional<Station> getByName(String name);
 
-
     Optional<List<Station>> getAll();
 
     boolean createStation(Station station);

@@ -1,11 +1,13 @@
 package ua.martishyn.app.data.entities;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 
 public class Train implements Serializable {
     private int id;
-    private Model model;
+    private TrainModel model;
+    private List<Wagon> trainCarriages;
 
     public static Builder builder() {
         return new Builder();
@@ -23,7 +25,7 @@ public class Train implements Serializable {
             return this;
         }
 
-        public Builder model(Model model) {
+        public Builder model(TrainModel model) {
             newTrain.model = model;
             return this;
         }
@@ -41,12 +43,20 @@ public class Train implements Serializable {
         this.id = id;
     }
 
-    public Model getModel() {
+    public TrainModel getModel() {
         return model;
     }
 
-    public void setModel(Model model) {
+    public void setModel(TrainModel model) {
         this.model = model;
+    }
+
+    public List<Wagon> getTrainCarriages() {
+        return trainCarriages;
+    }
+
+    public void setTrainCarriages(List<Wagon> trainCarriages) {
+        this.trainCarriages = trainCarriages;
     }
 
     @Override

@@ -27,7 +27,7 @@ public class StationDaoImpl implements StationDao {
              PreparedStatement preparedStatement = connection.prepareStatement(GET_STATION_BY_ID)) {
             preparedStatement.setInt(1, id);
             ResultSet stationFromResultSet = preparedStatement.executeQuery();
-            while (stationFromResultSet.next()) {
+            if (stationFromResultSet.next()) {
                 stationFromDb = getStationFromResultSet(stationFromResultSet);
             }
         } catch (SQLException e) {

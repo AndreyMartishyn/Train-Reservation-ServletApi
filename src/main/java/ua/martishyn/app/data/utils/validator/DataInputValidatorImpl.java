@@ -75,9 +75,9 @@ public class DataInputValidatorImpl implements DataInputValidator {
     @Override
     public boolean isValidStringInput(String data) {
         if (isNullAndEmpty(data)) {
-            return false;
+            return true;
         }
-        return data.matches(STRING_REGEX);
+        return !data.matches(STRING_REGEX);
     }
 
     /**

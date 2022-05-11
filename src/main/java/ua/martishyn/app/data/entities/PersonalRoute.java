@@ -4,21 +4,27 @@ import java.io.Serializable;
 
 public class PersonalRoute implements Serializable {
     private int routeId;
-    private String trainModel;
+    private Train train;
     private String departure;
     private String departureStation;
     private String arrival;
     private String arrivalStation;
     private String roadTime;
-    private int price;
+    private int firstClassSeats;
+    private int secondClassSeats;
+    private StringBuilder redirectLink;
 
 
     public int getRouteId() {
         return routeId;
     }
 
-    public String getTrainModel() {
-        return trainModel;
+    public Train getTrain() {
+        return train;
+    }
+
+    public void setTrain(Train train) {
+        this.train = train;
     }
 
     public String getDeparture() {
@@ -33,17 +39,10 @@ public class PersonalRoute implements Serializable {
         return roadTime;
     }
 
-    public int getPrice() {
-        return price;
-    }
-
     public void setRouteId(int routeId) {
         this.routeId = routeId;
     }
 
-    public void setTrainModel(String trainModel) {
-        this.trainModel = trainModel;
-    }
 
     public void setDeparture(String departure) {
         this.departure = departure;
@@ -65,8 +64,35 @@ public class PersonalRoute implements Serializable {
         this.roadTime = roadTime;
     }
 
-    public void setPrice(int price) {
-        this.price = price;
+    public String getDepartureStation() {
+        return departureStation;
     }
 
+    public String getArrivalStation() {
+        return arrivalStation;
+    }
+
+    public int getFirstClassSeats() {
+        return firstClassSeats;
+    }
+
+    public void setFirstClassSeats(int firstClassSeats) {
+        this.firstClassSeats = firstClassSeats;
+    }
+
+    public int getSecondClassSeats() {
+        return secondClassSeats;
+    }
+
+    public void setSecondClassSeats(int secondClassSeats) {
+        this.secondClassSeats = secondClassSeats;
+    }
+
+    public StringBuilder getRedirectLink() {
+        return redirectLink;
+    }
+
+    public void setRedirectLink(StringBuilder redirectLink) {
+        this.redirectLink = redirectLink;
+    }
 }

@@ -1,6 +1,5 @@
 package ua.martishyn.app.data.utils.validator;
 
-import java.util.Date;
 
 public interface DataInputValidator {
     boolean isValidNameField(String name);

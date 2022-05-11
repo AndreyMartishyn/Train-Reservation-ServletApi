@@ -3,7 +3,6 @@ package ua.martishyn.app.controller.commands.admin.station;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.martishyn.app.controller.commands.ICommand;
-import ua.martishyn.app.controller.commands.admin.route.SingleRouteAddPOSTCommand;
 import ua.martishyn.app.data.dao.impl.StationDaoImpl;
 import ua.martishyn.app.data.dao.interfaces.StationDao;
 import ua.martishyn.app.data.entities.Station;
@@ -15,7 +14,6 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class StationEditPOSTCommand implements ICommand {
@@ -42,12 +40,12 @@ public class StationEditPOSTCommand implements ICommand {
     private boolean routeDataValidation(HttpServletRequest request) {
         DataInputValidator dataValidator = new DataInputValidatorImpl();
         String name = request.getParameter("name").trim();
-        if (!dataValidator.isValidStringInput(name)) {
+        if (dataValidator.isValidStringInput(name)) {
             request.setAttribute(Constants.ERROR_VALIDATION, "Wrong name input");
             return false;
         }
         String code = request.getParameter("code").trim();
-        if (!dataValidator.isValidStringInput(code)) {
+        if (dataValidator.isValidStringInput(code)) {
             request.setAttribute(Constants.ERROR_VALIDATION, "Wrong code input");
             return false;
         }

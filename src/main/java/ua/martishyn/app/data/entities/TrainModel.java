@@ -3,7 +3,7 @@ package ua.martishyn.app.data.entities;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class Model implements Serializable {
+public class TrainModel implements Serializable {
     private int id;
     private String name;
 
@@ -12,10 +12,10 @@ public class Model implements Serializable {
     }
 
     private static class Builder {
-        private Model newModel;
+        private TrainModel newModel;
 
         public Builder() {
-            newModel = new Model();
+            newModel = new TrainModel();
 
         }
 
@@ -29,7 +29,7 @@ public class Model implements Serializable {
             return this;
         }
 
-        public Model build() {
+        public TrainModel build() {
             return newModel;
         }
     }
@@ -54,7 +54,7 @@ public class Model implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Model model = (Model) o;
+        TrainModel model = (TrainModel) o;
         return id == model.id && Objects.equals(name, model.name);
     }
 

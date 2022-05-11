@@ -34,7 +34,7 @@ public class AdminUserEditPostCommand implements ICommand {
         } else {
             request.setAttribute("errorLogic", "Problems with updating route");
         }
-        log.info("Unfortunately, гыук not updated. Redirect to view --> {}", Constants.ADMIN_USERS);
+        log.info("Unfortunately, user not updated. Redirect to view --> {}", Constants.ADMIN_USERS);
         RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.ADMIN_USERS);
         requestDispatcher.forward(request, response);
     }
@@ -80,7 +80,7 @@ public class AdminUserEditPostCommand implements ICommand {
         try {
             hashPass = PasswordEncodingService.makeHash(password);
         } catch (Exception e) {
-            System.out.println("Something wrong with password hashing " + e);
+            log.error("Something wrong with password hashing {}" , e.getMessage());
         }
         Role role = Role.valueOf(request.getParameter("role"));
 

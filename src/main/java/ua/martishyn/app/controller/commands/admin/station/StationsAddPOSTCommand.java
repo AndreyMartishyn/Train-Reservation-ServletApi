@@ -3,7 +3,6 @@ package ua.martishyn.app.controller.commands.admin.station;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.martishyn.app.controller.commands.ICommand;
-import ua.martishyn.app.controller.commands.admin.route.SingleRouteDeleteCommand;
 import ua.martishyn.app.data.dao.impl.StationDaoImpl;
 import ua.martishyn.app.data.dao.interfaces.StationDao;
 import ua.martishyn.app.data.entities.Station;
@@ -43,12 +42,12 @@ public class StationsAddPOSTCommand implements ICommand {
         DataInputValidator dataValidator = new DataInputValidatorImpl();
         HttpSession session = request.getSession();
         String name = request.getParameter("name").trim();
-        if (!dataValidator.isValidStringInput(name)) {
+        if (dataValidator.isValidStringInput(name)) {
             session.setAttribute(Constants.ERROR_VALIDATION, "Wrong name input");
             return false;
         }
         String code = request.getParameter("code").trim();
-        if (!dataValidator.isValidStringInput(code)) {
+        if (dataValidator.isValidStringInput(code)) {
             session.setAttribute(Constants.ERROR_VALIDATION, "Wrong code input");
             return false;
         }

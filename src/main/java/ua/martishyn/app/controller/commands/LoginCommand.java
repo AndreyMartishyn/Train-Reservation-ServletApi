@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Logger;
 import ua.martishyn.app.data.dao.impl.UserDaoImpl;
 import ua.martishyn.app.data.dao.interfaces.UserDao;
 import ua.martishyn.app.data.entities.User;
-import ua.martishyn.app.data.entities.enums.Role;
 import ua.martishyn.app.data.utils.Constants;
 import ua.martishyn.app.data.utils.password_encoding.PasswordEncodingService;
 import ua.martishyn.app.data.utils.validator.DataInputValidator;
@@ -15,7 +14,6 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -40,7 +38,6 @@ public class LoginCommand implements ICommand {
                 if (loggedUser.getPassword().equals(PasswordEncodingService.makeHash(password))) {
                     log.trace("Found user in DB --> {}", loggedUser.getEmail());
                     request.getSession().setAttribute("user", loggedUser);
-                 //   roleRedirect = getRole(loggedUser);
                     log.trace("User ROLE  --> {}", loggedUser.getRole());
                     response.sendRedirect("index.command");
                     return;
@@ -53,7 +50,7 @@ public class LoginCommand implements ICommand {
             request.setAttribute("notValidInput", "Enter valid input");
         }
         RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.LOGIN_PAGE);
-        requestDispatcher.forward(request,response);
+        requestDispatcher.forward(request, response);
     }
 
     private boolean checkForValidDataInput(String email, String password) {
@@ -61,12 +58,6 @@ public class LoginCommand implements ICommand {
                 validator.isValidPasswordField(password);
     }
 
-    private String getRole(User user) {
-        if (user.getRole().equals(Role.ADMIN)) {
-            return "admin-main.command";
-        }
-        return "user-main.command";
-    }
 
     private boolean checkUserPresenceInDB(String email) {
         Optional<User> user = userDao.getByEmail(email);

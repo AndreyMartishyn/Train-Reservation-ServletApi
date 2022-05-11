@@ -9,8 +9,7 @@ import ua.martishyn.app.controller.commands.admin.user.AdminUserDeleteCommand;
 import ua.martishyn.app.controller.commands.admin.user.AdminUserEditCommand;
 import ua.martishyn.app.controller.commands.admin.user.AdminUserEditPostCommand;
 import ua.martishyn.app.controller.commands.admin.user.AdminUsersPageCommand;
-import ua.martishyn.app.controller.commands.customer.CustomerBookingCommand;
-import ua.martishyn.app.controller.commands.customer.CustomerSearchCommand;
+import ua.martishyn.app.controller.commands.customer.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -55,7 +54,12 @@ public class ControllerServlet extends HttpServlet {
         commandContainer.put("/route-add-post.command", new SingleRouteAddPOSTCommand());
         //users booking
         commandContainer.put("/customer-booking.command", new CustomerBookingCommand());
-        commandContainer.put("/customer-train-search.command", new CustomerSearchCommand());
+        commandContainer.put("/customer-search-tickets.command", new CustomerSearchTicketsCommand());
+        commandContainer.put("/customer-ticket-form.command", new CustomerTicketFormCommand());
+        commandContainer.put("/customer-buy-ticket.command", new CustomerBuyTicketCommand());
+        commandContainer.put("/customer-tickets-page.command", new CustomerTicketsPageCommand());
+        commandContainer.put("/customer-ticket-pay.command", new CustomerTicketPayCommand());
+
     }
 
     @Override

@@ -3,12 +3,8 @@ package ua.martishyn.app.controller.commands.admin.station;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.martishyn.app.controller.commands.ICommand;
-import ua.martishyn.app.controller.commands.admin.route.SingleRoutesPageCommand;
-import ua.martishyn.app.data.dao.impl.RouteDaoImpl;
 import ua.martishyn.app.data.dao.impl.StationDaoImpl;
-import ua.martishyn.app.data.dao.interfaces.RouteDao;
 import ua.martishyn.app.data.dao.interfaces.StationDao;
-import ua.martishyn.app.data.entities.SingleRoute;
 import ua.martishyn.app.data.entities.Station;
 import ua.martishyn.app.data.utils.Constants;
 
