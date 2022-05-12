@@ -3,6 +3,7 @@ package ua.martishyn.app.controller.commands.admin.route;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.martishyn.app.controller.commands.ICommand;
+import ua.martishyn.app.controller.filters.HasRole;
 import ua.martishyn.app.data.dao.impl.RouteDaoImpl;
 import ua.martishyn.app.data.dao.impl.StationDaoImpl;
 import ua.martishyn.app.data.dao.impl.TrainModelDaoImpl;
@@ -12,6 +13,7 @@ import ua.martishyn.app.data.dao.interfaces.TrainAndModelDao;
 import ua.martishyn.app.data.entities.SingleRoute;
 import ua.martishyn.app.data.entities.Station;
 import ua.martishyn.app.data.entities.Train;
+import ua.martishyn.app.data.entities.enums.Role;
 import ua.martishyn.app.data.utils.Constants;
 import ua.martishyn.app.data.utils.validator.DataInputValidator;
 import ua.martishyn.app.data.utils.validator.DataInputValidatorImpl;
@@ -20,7 +22,6 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -28,6 +29,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
 
+@HasRole(role = Role.ADMIN)
 public class SingleRouteEditPOSTCommand implements ICommand {
     private static final Logger log = LogManager.getLogger(SingleRouteEditPOSTCommand.class);
 

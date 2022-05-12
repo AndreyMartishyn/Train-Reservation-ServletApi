@@ -3,10 +3,12 @@ package ua.martishyn.app.controller.commands.customer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.martishyn.app.controller.commands.ICommand;
+import ua.martishyn.app.controller.filters.HasRole;
 import ua.martishyn.app.data.dao.impl.TrainModelDaoImpl;
 import ua.martishyn.app.data.dao.interfaces.TrainAndModelDao;
-import ua.martishyn.app.data.entities.Wagon;
 import ua.martishyn.app.data.entities.BookingDTO;
+import ua.martishyn.app.data.entities.Wagon;
+import ua.martishyn.app.data.entities.enums.Role;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -17,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@HasRole(role = Role.CUSTOMER)
 public class CustomerTicketFormCommand implements ICommand {
     private static final Logger log = LogManager.getLogger(CustomerTicketFormCommand.class);
     private final BookingDTO bookingDTO = new BookingDTO();
@@ -64,7 +67,7 @@ public class CustomerTicketFormCommand implements ICommand {
 
     private List<Integer> getCoachesNumbers(List<Wagon> coachesByClass) {
         return coachesByClass.stream()
-                .filter(wagon -> wagon.getNumOfSeats()!=0)
+                .filter(wagon -> wagon.getNumOfSeats() != 0)
                 .map(Wagon::getId)
                 .collect(Collectors.toList());
     }

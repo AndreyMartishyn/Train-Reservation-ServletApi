@@ -3,7 +3,7 @@ package ua.martishyn.app.data.utils;
 public class Constants {
     private static final String JSP_LOC = "/view/";
 
-    public static final String ERROR_PAGE =JSP_LOC +  "error_page.jsp";
+    public static final String ABOUT_PAGE = JSP_LOC + "about_us.jsp";
     public static final String HOME_PAGE = "index.jsp";
     public static final String LOGIN_PAGE = JSP_LOC + "login.jsp";
     public static final String REGISTER_PAGE = JSP_LOC + "register.jsp";
@@ -21,10 +21,6 @@ public class Constants {
 
     ////////////////////////////////////////////////////////////////////////////////
     public static final String ERROR_VALIDATION = "errorValidation";
-
-
-
-
 
 
 }

@@ -38,6 +38,7 @@ public class LoginCommand implements ICommand {
                 if (loggedUser.getPassword().equals(PasswordEncodingService.makeHash(password))) {
                     log.trace("Found user in DB --> {}", loggedUser.getEmail());
                     request.getSession().setAttribute("user", loggedUser);
+                    request.getSession().setAttribute("role", loggedUser.getRole());
                     log.trace("User ROLE  --> {}", loggedUser.getRole());
                     response.sendRedirect("index.command");
                     return;

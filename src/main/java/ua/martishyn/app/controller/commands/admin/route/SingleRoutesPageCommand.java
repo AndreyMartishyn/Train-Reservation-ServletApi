@@ -3,9 +3,11 @@ package ua.martishyn.app.controller.commands.admin.route;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.martishyn.app.controller.commands.ICommand;
+import ua.martishyn.app.controller.filters.HasRole;
 import ua.martishyn.app.data.dao.impl.RouteDaoImpl;
 import ua.martishyn.app.data.dao.interfaces.RouteDao;
 import ua.martishyn.app.data.entities.SingleRoute;
+import ua.martishyn.app.data.entities.enums.Role;
 import ua.martishyn.app.data.utils.Constants;
 
 import javax.servlet.RequestDispatcher;
@@ -16,6 +18,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+@HasRole(role = Role.ADMIN)
 public class SingleRoutesPageCommand implements ICommand {
     private static final Logger log = LogManager.getLogger(SingleRoutesPageCommand.class);
 
@@ -33,7 +36,7 @@ public class SingleRoutesPageCommand implements ICommand {
         requestDispatcher.forward(request, response);
     }
 
-    private Optional<List<SingleRoute>> getSingleRoutes(){
+    private Optional<List<SingleRoute>> getSingleRoutes() {
         RouteDao routeDao = new RouteDaoImpl();
         return routeDao.getAllIntermediateStationRoutes();
     }

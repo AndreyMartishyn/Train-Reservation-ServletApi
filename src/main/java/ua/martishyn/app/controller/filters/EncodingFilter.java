@@ -1,4 +1,4 @@
-package ua.martishyn.app.filters;
+package ua.martishyn.app.controller.filters;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

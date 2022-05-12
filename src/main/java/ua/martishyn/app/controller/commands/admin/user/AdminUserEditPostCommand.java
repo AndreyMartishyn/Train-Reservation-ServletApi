@@ -3,6 +3,7 @@ package ua.martishyn.app.controller.commands.admin.user;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.martishyn.app.controller.commands.ICommand;
+import ua.martishyn.app.controller.filters.HasRole;
 import ua.martishyn.app.data.dao.impl.UserDaoImpl;
 import ua.martishyn.app.data.dao.interfaces.UserDao;
 import ua.martishyn.app.data.entities.User;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@HasRole(role = Role.ADMIN)
 public class AdminUserEditPostCommand implements ICommand {
     private static final Logger log = LogManager.getLogger(AdminUserEditPostCommand.class);
 

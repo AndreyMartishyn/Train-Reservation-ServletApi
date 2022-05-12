@@ -1,14 +1,16 @@
 package ua.martishyn.app.controller.commands.customer;
 
 import ua.martishyn.app.controller.commands.ICommand;
+import ua.martishyn.app.controller.filters.HasRole;
 import ua.martishyn.app.data.dao.impl.TicketDaoImpl;
 import ua.martishyn.app.data.dao.impl.TrainModelDaoImpl;
 import ua.martishyn.app.data.dao.interfaces.TicketDao;
 import ua.martishyn.app.data.dao.interfaces.TrainAndModelDao;
 import ua.martishyn.app.data.entities.Ticket;
 import ua.martishyn.app.data.entities.Train;
-import ua.martishyn.app.data.entities.Wagon;
 import ua.martishyn.app.data.entities.User;
+import ua.martishyn.app.data.entities.Wagon;
+import ua.martishyn.app.data.entities.enums.Role;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -18,6 +20,7 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.Random;
 
+@HasRole(role = Role.CUSTOMER)
 public class CustomerBuyTicketCommand implements ICommand {
     private static final Random random = new Random();
     TrainAndModelDao trainAndModelDao = new TrainModelDaoImpl();

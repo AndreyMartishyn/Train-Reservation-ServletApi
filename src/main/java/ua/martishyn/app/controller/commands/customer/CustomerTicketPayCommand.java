@@ -3,8 +3,10 @@ package ua.martishyn.app.controller.commands.customer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.martishyn.app.controller.commands.ICommand;
+import ua.martishyn.app.controller.filters.HasRole;
 import ua.martishyn.app.data.dao.impl.TicketDaoImpl;
 import ua.martishyn.app.data.dao.interfaces.TicketDao;
+import ua.martishyn.app.data.entities.enums.Role;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@HasRole(role = Role.CUSTOMER)
 public class CustomerTicketPayCommand implements ICommand {
     private static final Logger log = LogManager.getLogger(CustomerTicketPayCommand.class);
 

@@ -9,7 +9,10 @@ import ua.martishyn.app.controller.commands.admin.user.AdminUserDeleteCommand;
 import ua.martishyn.app.controller.commands.admin.user.AdminUserEditCommand;
 import ua.martishyn.app.controller.commands.admin.user.AdminUserEditPostCommand;
 import ua.martishyn.app.controller.commands.admin.user.AdminUsersPageCommand;
+import ua.martishyn.app.controller.commands.common.AboutUsCommand;
 import ua.martishyn.app.controller.commands.customer.*;
+import ua.martishyn.app.controller.filters.HasRole;
+import ua.martishyn.app.data.entities.enums.Role;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,6 +20,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.rmi.ServerError;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,6 +34,7 @@ public class ControllerServlet extends HttpServlet {
 
     static {
         commandContainer.put("/index.command", new IndexPageCommand());
+        commandContainer.put("/about-us.command", new AboutUsCommand());
         commandContainer.put("/login-page.command", new LoginPageCommand());
         commandContainer.put("/login.command", new LoginCommand());
         commandContainer.put("/register-page.command", new RegisterPageCommand());
@@ -63,19 +71,19 @@ public class ControllerServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         log.info("doGet working");
         processRequest(request, response);
     }
 
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)  {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         log.info("doPost working");
         processRequest(request, response);
     }
 
-    protected void processRequest(HttpServletRequest req, HttpServletResponse resp)  {
+    protected void processRequest(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String actionCommand = req.getRequestURI().substring(req.getContextPath().length());
         if (actionCommand.equals("/") || actionCommand.isEmpty()) {
             actionCommand = "/index.command";
@@ -85,7 +93,18 @@ public class ControllerServlet extends HttpServlet {
         if (commandContainer.containsKey(actionCommand)) {
             ICommand command = commandContainer.get(actionCommand);
             log.trace("Active command name --> {}", actionCommand);
-
+            Annotation[] annotations = command.getClass().getDeclaredAnnotations();
+            for (Annotation annotation : annotations) {
+                if (annotation instanceof HasRole) {
+                    Role requiredRole = ((HasRole) annotation).role();
+                    Role currentRole = (Role) req.getSession().getAttribute("role");
+                    if (requiredRole!=currentRole){
+                        resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        resp.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+                        return;
+                    }
+                }
+            }
             try {
                 command.execute(req, resp);
             } catch (ServletException | IOException exception) {
