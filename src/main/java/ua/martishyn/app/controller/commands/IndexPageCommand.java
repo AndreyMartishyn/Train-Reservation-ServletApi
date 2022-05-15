@@ -15,5 +15,4 @@ public class IndexPageCommand implements ICommand {
         RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.HOME_PAGE);
         requestDispatcher.forward(request, response);
     }
-
 }

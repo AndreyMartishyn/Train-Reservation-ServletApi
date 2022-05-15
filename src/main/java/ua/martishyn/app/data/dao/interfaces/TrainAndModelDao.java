@@ -12,11 +12,11 @@ public interface TrainAndModelDao {
 
     Optional<TrainModel> getTrainModel(int id);
 
-    Optional<List<Wagon>> getCoachesForTrain(int id);
+    Optional<List<Wagon>> getWagonsForTrain(int id);
 
-    Optional<List<Wagon>> getCoachesByClass(String comfortClass);
+    Optional<List<Wagon>> getWagonsByClass(String comfortClass);
 
-    Optional<Wagon> getCoachById(int id);
+    Optional<Wagon> getWagonById(int id);
 
     boolean updateCoach(Wagon wagon);
 }

@@ -3,8 +3,8 @@ package ua.martishyn.app.controller.commands;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.martishyn.app.data.dao.impl.UserDaoImpl;
-import ua.martishyn.app.data.dao.interfaces.UserDao;
 import ua.martishyn.app.data.entities.User;
+import ua.martishyn.app.data.service.UserService;
 import ua.martishyn.app.data.utils.Constants;
 import ua.martishyn.app.data.utils.password_encoding.PasswordEncodingService;
 import ua.martishyn.app.data.utils.validator.DataInputValidator;
@@ -17,21 +17,19 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
+
 public class LoginCommand implements ICommand {
     private static final Logger log = LogManager.getLogger(LoginCommand.class);
-    private final UserDao userDao = new UserDaoImpl();
-    private final DataInputValidator validator = new DataInputValidatorImpl();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-
         if (checkForValidDataInput(email, password)) {
-            Optional<User> optionalUser = userDao.getByEmail(email);
+            Optional<User> optionalUser = getUserByEmail(email);
             if (!checkUserPresenceInDB(email)) {
-                request.getSession().setAttribute("noSuchUser", "No user found");
+                request.setAttribute("noSuchUser", "No user found");
                 log.error("No user found with email --> {}", optionalUser.get().getEmail());
             } else {
                 User loggedUser = optionalUser.get();
@@ -54,17 +52,24 @@ public class LoginCommand implements ICommand {
         requestDispatcher.forward(request, response);
     }
 
+    public Optional<User> getUserByEmail(String email){
+        UserService userService = new UserService(new UserDaoImpl());
+        return userService.authenticate(email);
+    }
+
     private boolean checkForValidDataInput(String email, String password) {
+        DataInputValidator validator = new DataInputValidatorImpl();
         return validator.isValidEmailField(email) &&
                 validator.isValidPasswordField(password);
     }
 
-
     private boolean checkUserPresenceInDB(String email) {
-        Optional<User> user = userDao.getByEmail(email);
+        Optional<User> user = getUserByEmail(email);
         if (!user.isPresent() || user.get().getEmail() == null) {
             return false;
         }
         return user.get().getEmail().equals(email) && user.get().getId() > 0;
     }
+
+
 }

@@ -75,7 +75,7 @@ public class TrainModelDaoImpl implements TrainAndModelDao {
     }
 
     @Override
-    public Optional<List<Wagon>> getCoachesForTrain(int trainId) {
+    public Optional<List<Wagon>> getWagonsForTrain(int trainId) {
         List<Wagon> wagons = new ArrayList<>();
         try (Connection connection = DataBasePoolManager.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_COACHES_BY_ROUTE_ID)) {
@@ -92,7 +92,7 @@ public class TrainModelDaoImpl implements TrainAndModelDao {
 
 
     @Override
-    public Optional<List<Wagon>> getCoachesByClass(String comfortClass) {
+    public Optional<List<Wagon>> getWagonsByClass(String comfortClass) {
         List<Wagon> wagons = new ArrayList<>();
         try (Connection connection = DataBasePoolManager.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_COACHES_BY_CLASS)) {
@@ -108,7 +108,7 @@ public class TrainModelDaoImpl implements TrainAndModelDao {
     }
 
     @Override
-    public Optional<Wagon> getCoachById(int id) {
+    public Optional<Wagon> getWagonById(int id) {
         Wagon wagon = null;
         try (Connection connection = DataBasePoolManager.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_COACH_BY_ID)) {

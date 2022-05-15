@@ -41,7 +41,7 @@ public class TicketDaoImpl implements TicketDao {
     }
 
     @Override
-    public boolean isPlaceOccupied(int wagon, int place) {
+    public boolean getByPlaceAndWagon(int wagon, int place) {
         int quantity = 0;
         try (Connection connection = DataBasePoolManager.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_TICKETS_COUNT_BY_PLACE_AND_WAGON)) {

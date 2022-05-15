@@ -28,7 +28,9 @@
          <span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${noPlaceInCoach}</span>
          <span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${busyPlace}</span>
          <span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${noRoutes}</span>
-        </div>
+         <span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${errorValidation}</span>
+         <span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${sameStations}</span>
+       </div>
             <button type="submit" class="btn btn-dark" value="Search">Search</button>
         </div>
         </div>

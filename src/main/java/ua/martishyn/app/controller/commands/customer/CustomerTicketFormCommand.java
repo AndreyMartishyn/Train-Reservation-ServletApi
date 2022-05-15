@@ -22,33 +22,30 @@ import java.util.stream.Collectors;
 @HasRole(role = Role.CUSTOMER)
 public class CustomerTicketFormCommand implements ICommand {
     private static final Logger log = LogManager.getLogger(CustomerTicketFormCommand.class);
-    private final BookingDTO bookingDTO = new BookingDTO();
-    private final TrainAndModelDao trainAndModelDao = new TrainModelDaoImpl();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        fillObjectWithData(request);
-
-        Optional<List<Wagon>> coachesByClass = getCoachesByClass();
-
-        if (!coachesByClass.isPresent()) {
+        BookingDTO bookingDTO = makeDTOObject(request);
+        Optional<List<Wagon>> coachesByClass = getCoachesByClass(bookingDTO);
+        if (coachesByClass.isPresent()) {
+            bookingDTO.setCoachesNumbers(getCoachesNumbers(coachesByClass.get()));
+            request.setAttribute("bookingDTO", bookingDTO);
+        } else {
             log.info("No coaches found");
             response.sendRedirect("customer-booking.command");
             return;
-        } else {
-            bookingDTO.setCoachesNumbers(getCoachesNumbers(coachesByClass.get()));
-            request.setAttribute("bookingDTO", bookingDTO);
         }
         log.info("DTO object is transferred to the jsp form");
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("/view/customer/customer_ticket_buy.jsp");
         requestDispatcher.forward(request, response);
     }
 
-    private Optional<List<Wagon>> getCoachesByClass() {
-        return trainAndModelDao.getCoachesByClass(bookingDTO.getComfortClass());
+    private Optional<List<Wagon>> getCoachesByClass(BookingDTO bookingDTO) {
+        TrainAndModelDao trainAndModelDao = new TrainModelDaoImpl();
+        return trainAndModelDao.getWagonsByClass(bookingDTO.getComfortClass());
     }
 
-    private void fillObjectWithData(HttpServletRequest request) {
+    private BookingDTO makeDTOObject(HttpServletRequest request) {
         String train = request.getParameter("train");
         String fromStation = request.getParameter("fromStation");
         String toStation = request.getParameter("toStation");
@@ -57,12 +54,14 @@ public class CustomerTicketFormCommand implements ICommand {
         String comfortClass = request.getParameter("class");
 
         //creating bookingDTO object to transfer data from link to the form. Allows auto-fil of info
+        BookingDTO bookingDTO = new BookingDTO();
         bookingDTO.setTrainId(Integer.parseInt(train));
         bookingDTO.setDepartureStation(fromStation);
         bookingDTO.setArrivalStation(toStation);
         bookingDTO.setDepartureTime(departure);
         bookingDTO.setArrivalTime(arrival);
         bookingDTO.setComfortClass(comfortClass);
+        return bookingDTO;
     }
 
     private List<Integer> getCoachesNumbers(List<Wagon> coachesByClass) {

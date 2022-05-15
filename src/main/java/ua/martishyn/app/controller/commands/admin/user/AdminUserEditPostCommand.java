@@ -8,6 +8,7 @@ import ua.martishyn.app.data.dao.impl.UserDaoImpl;
 import ua.martishyn.app.data.dao.interfaces.UserDao;
 import ua.martishyn.app.data.entities.User;
 import ua.martishyn.app.data.entities.enums.Role;
+import ua.martishyn.app.data.service.UserService;
 import ua.martishyn.app.data.utils.Constants;
 import ua.martishyn.app.data.utils.password_encoding.PasswordEncodingService;
 import ua.martishyn.app.data.utils.validator.DataInputValidator;
@@ -71,7 +72,6 @@ public class AdminUserEditPostCommand implements ICommand {
         return true;
     }
 
-
     private boolean updateUser(HttpServletRequest request) {
         int userId = Integer.parseInt(request.getParameter("id"));
         String firstName = request.getParameter("firstName");
@@ -86,7 +86,7 @@ public class AdminUserEditPostCommand implements ICommand {
         }
         Role role = Role.valueOf(request.getParameter("role"));
 
-        UserDao userDao = new UserDaoImpl();
+        UserService userService = new UserService(new UserDaoImpl());
         User updatedUser = User.builder()
                 .id(userId)
                 .firstName(firstName)
@@ -95,6 +95,6 @@ public class AdminUserEditPostCommand implements ICommand {
                 .password(hashPass)
                 .role(role)
                 .build();
-        return userDao.update(updatedUser);
+        return userService.update(updatedUser);
     }
 }

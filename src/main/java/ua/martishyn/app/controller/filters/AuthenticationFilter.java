@@ -17,7 +17,7 @@ public class AuthenticationFilter implements Filter {
     private static final Logger log = LogManager.getLogger(AuthenticationFilter.class);
     private static final List<String> commonPages = Arrays.asList("/login-page.command",
             "/login.command", "/register.command", "/register-page.command", "/about-us.command",
-            "/index.command", "/view/static");
+            "/index.command", "/view");
 
     @Override
     public void init(FilterConfig filterConfig) {

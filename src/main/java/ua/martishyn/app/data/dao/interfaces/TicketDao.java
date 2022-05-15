@@ -11,7 +11,7 @@ public interface TicketDao {
 
     Optional<List<Ticket>> getAllTicketsById(int id);
 
-    boolean isPlaceOccupied(int wagon, int place);
+    boolean getByPlaceAndWagon(int wagon, int place);
 
     boolean updateTicketToPaid(int ticketId);
 }

@@ -8,6 +8,7 @@ import ua.martishyn.app.data.dao.impl.UserDaoImpl;
 import ua.martishyn.app.data.dao.interfaces.UserDao;
 import ua.martishyn.app.data.entities.User;
 import ua.martishyn.app.data.entities.enums.Role;
+import ua.martishyn.app.data.service.UserService;
 import ua.martishyn.app.data.utils.Constants;
 
 import javax.servlet.RequestDispatcher;
@@ -36,9 +37,9 @@ public class AdminUserEditCommand implements ICommand {
     }
 
     private Optional<User> getUser(HttpServletRequest request) {
-        UserDao userDao = new UserDaoImpl();
+        UserService userService = new UserService(new UserDaoImpl());
         int id = Integer.parseInt(request.getParameter("id"));
-        return userDao.getById(id);
+        return userService.getById(id);
     }
 }
 

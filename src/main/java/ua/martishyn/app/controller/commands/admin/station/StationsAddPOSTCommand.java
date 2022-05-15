@@ -25,7 +25,7 @@ public class StationsAddPOSTCommand implements ICommand {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (routeDataValidation(request)) {
+        if (isStationDataValid(request)) {
             if (addStation(request)) {
                 log.info("Route updated successfully");
                 response.sendRedirect("stations-page.command");
@@ -41,7 +41,7 @@ public class StationsAddPOSTCommand implements ICommand {
         requestDispatcher.forward(request, response);
     }
 
-    private boolean routeDataValidation(HttpServletRequest request) {
+    private boolean isStationDataValid(HttpServletRequest request) {
         DataInputValidator dataValidator = new DataInputValidatorImpl();
         HttpSession session = request.getSession();
         String name = request.getParameter("name").trim();

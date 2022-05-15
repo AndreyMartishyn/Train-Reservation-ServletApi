@@ -18,11 +18,10 @@ public class LogoutCommand implements ICommand {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         if (session != null) {
-            session.removeAttribute("user");
+            session.invalidate();
         }
-        String redirect = Constants.HOME_PAGE;
         log.info("User logged out");
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher(redirect);
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.HOME_PAGE);
         requestDispatcher.forward(request, response);
     }
 }

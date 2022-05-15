@@ -9,6 +9,7 @@ import ua.martishyn.app.data.dao.interfaces.TicketDao;
 import ua.martishyn.app.data.entities.Ticket;
 import ua.martishyn.app.data.entities.User;
 import ua.martishyn.app.data.entities.enums.Role;
+import ua.martishyn.app.data.utils.Constants;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -40,7 +41,8 @@ public class CustomerTicketsPageCommand implements ICommand {
             response.sendRedirect("index.command");
             return;
         }
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("/view/customer/customer_ticket_page.jsp");
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.CUSTOMER_TICKETS_PAGE);
+        log.info("Redirect to view --> {}", Constants.CUSTOMER_TICKETS_PAGE);
         requestDispatcher.forward(request, response);
     }
 
