@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
-public class SingleRoute implements Serializable {
+public class SingleRoute implements Entity {
     private int id;
     private int trainId;
     private int stationId;

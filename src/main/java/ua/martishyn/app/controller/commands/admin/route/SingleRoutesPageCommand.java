@@ -2,6 +2,7 @@ package ua.martishyn.app.controller.commands.admin.route;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.taglibs.standard.lang.jstl.test.PageContextImpl;
 import ua.martishyn.app.controller.commands.ICommand;
 import ua.martishyn.app.controller.filters.HasRole;
 import ua.martishyn.app.data.dao.impl.RouteDaoImpl;
@@ -9,6 +10,8 @@ import ua.martishyn.app.data.dao.interfaces.RouteDao;
 import ua.martishyn.app.data.entities.SingleRoute;
 import ua.martishyn.app.data.entities.enums.Role;
 import ua.martishyn.app.data.utils.Constants;
+import ua.martishyn.app.data.utils.paginator.RequestPaginationHelper;
+import ua.martishyn.app.data.utils.paginator.RequestPaginationImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -21,13 +24,14 @@ import java.util.Optional;
 @HasRole(role = Role.ADMIN)
 public class SingleRoutesPageCommand implements ICommand {
     private static final Logger log = LogManager.getLogger(SingleRoutesPageCommand.class);
+    RequestPaginationHelper paginationHelper = new RequestPaginationImpl();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Optional<List<SingleRoute>> routesFromDb = getSingleRoutes();
         if (routesFromDb.isPresent()) {
             log.info("Loading routes from db. Routes quantity : {}", routesFromDb.get().size());
-            request.setAttribute("routes", routesFromDb.get());
+            paginationHelper.paginate(request, routesFromDb.get());
         } else {
             request.setAttribute("noRoutes", "No routes found at the moment");
         }

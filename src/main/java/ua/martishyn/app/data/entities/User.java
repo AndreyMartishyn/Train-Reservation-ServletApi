@@ -5,7 +5,7 @@ import ua.martishyn.app.data.entities.enums.Role;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class User implements Serializable {
+public class User implements Entity {
     private int id;
     private String firstName;
     private String lastName;

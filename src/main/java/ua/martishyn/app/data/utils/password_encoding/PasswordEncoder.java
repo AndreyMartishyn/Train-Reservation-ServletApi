@@ -9,13 +9,17 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 
 public class PasswordEncoder {
-    public static final String PBKDF2_ALGORITHM = "PBKDF2WithHmacSHA1";
+    private static String algorithm = "PBKDF2WithHmacSHA1";
     public static final String SALT = "m6bv8*1fa";
     public static final int HASH_BYTES = 32;
     public static final int PBKDF2_ITERATIONS = 1000;
 
 
-    public static String makeHash(String password) throws NoSuchAlgorithmException, InvalidKeySpecException {return makeHash(password.toCharArray(), SALT.getBytes(StandardCharsets.UTF_8));
+    private PasswordEncoder() {
+    }
+
+    public static String makeHash(String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        return makeHash(password.toCharArray(), SALT.getBytes(StandardCharsets.UTF_8));
     }
 
     private static String makeHash(char[] password, byte[] salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
@@ -36,10 +40,10 @@ public class PasswordEncoder {
             throws NoSuchAlgorithmException, InvalidKeySpecException {
         KeySpec spec = new PBEKeySpec(password, salt, iterations, bytes * 8);
         try {
-            SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance(PBKDF2_ALGORITHM);
+            SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance(algorithm);
             return secretKeyFactory.generateSecret(spec).getEncoded();
         } catch (NoSuchAlgorithmException ex) {
-            System.out.println("Missing algorithm: " + PBKDF2_ALGORITHM + ex);
+            System.out.println("Missing algorithm: " + algorithm + ex);
             throw new NoSuchAlgorithmException();
         } catch (InvalidKeySpecException ex) {
             System.out.println("Invalid SecretKeyFactory " + ex);
@@ -62,5 +66,9 @@ public class PasswordEncoder {
         } else {
             return hex;
         }
+    }
+
+    public static void setAlgorithm(String algorithm) {
+        PasswordEncoder.algorithm = algorithm;
     }
 }

@@ -2,21 +2,21 @@ body
         {
             background:url("../images/background.jpg") no-repeat center center fixed;
             background-size: cover;
-            margin: 40px;
+            margin: 20px;
             padding: 20px;
-            opacity: 0.9;
+            opacity: 0.85;
         }
 
 form    {
                 background: #C2C2D6;
-                border-radius: 15px;
+                border-radius: 10px;
                 text-align: center;
-                width: 70%
+                width: 75%
         }
 
 nav    {
                 background: #C2C2D6;
-                border-radius: 15px;
+                border-radius: 10px;
                 text-align: center;
         }
 

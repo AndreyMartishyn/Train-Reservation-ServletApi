@@ -22,7 +22,7 @@
                         </tr>
         </thead>
         <tbody>
-        <c:forEach items="${routes}" var="route" >
+        <c:forEach items="${paginatedEntries}" var="route" >
                         <tr>
                         <td><c:out value="${route.id}"/> </td>
                         <td><c:out value="${route.trainId}"/> </td>
@@ -37,9 +37,36 @@
                         </c:forEach>
         </tbody>
         </table>
-        </form>
+
                         <a href="route-add.command" class="btn btn-dark"><fmt:message key="admin.page.route.add"/></a>
+<br><br>
+<%--For displaying Previous link except for the 1st page --%>
+  <c:if test="${currentPage != 1}">
+      <td><a href="routes-page.command?page=${currentPage - 1}">Previous</a></td>
+  </c:if>
+             <table style = "border:1px solid black;margin-left:auto;margin-right:auto;" cellpadding="5" cellspacing="5" >
+             <tr>
+              <c:forEach begin="1" end="${noOfPages}" var="i">
+              <c:choose>
+              <c:when test="${currentPage eq i}">
+              <td>${i}</td>
+                                          </c:when>
+                                          <c:otherwise>
+                                              <td><a href="routes-page.command?page=${i}">${i}</a></td>
+                                          </c:otherwise>
+                                      </c:choose>
+                                  </c:forEach>
+                              </tr>
+                          </table>
+
+                          <%--For displaying Next link --%>
+
+                          <c:if test="${currentPage lt noOfPages}">
+                              <td><a href="routes-page.command?page=${currentPage + 1}">Next</a></td>
+                          </c:if>
  </body>
+  </form>
+  </div>
 </html>
 </body>
 </html>

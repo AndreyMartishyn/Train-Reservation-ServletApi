@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 public class Wagon implements Serializable {
     private int id;
+    private int routeId;
     private ComfortClass comfortClass;
     private int numOfSeats;
     private int priceForSeat;
@@ -19,6 +20,14 @@ public class Wagon implements Serializable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getRouteId() {
+        return routeId;
+    }
+
+    public void setRouteId(int routeId) {
+        this.routeId = routeId;
     }
 
     public ComfortClass getComfortClass() {

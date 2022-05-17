@@ -15,16 +15,15 @@ import ua.martishyn.app.data.entities.PersonalRoute;
 import ua.martishyn.app.data.entities.Station;
 import ua.martishyn.app.data.entities.Wagon;
 import ua.martishyn.app.data.entities.enums.Role;
-import ua.martishyn.app.data.utils.TrainSearcher;
+import ua.martishyn.app.data.service.TrainSearcher;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 @HasRole(role = Role.CUSTOMER)
 public class CustomerSearchTicketsCommand implements ICommand {
@@ -39,12 +38,16 @@ public class CustomerSearchTicketsCommand implements ICommand {
             Station fromStation = getStation(request, "stationFrom");
             Station toStation = getStation(request, "stationTo");
             RouteDao routeDao = new RouteDaoImpl();
-            Optional<List<ComplexRoute>> routeList = routeDao.getAllComplexRoutes();
+            Optional<List<ComplexRoute>> routeList = getComplexRoutes(routeDao);
             if (routeList.isPresent()) {
-                TrainSearcher trainSearcher = new TrainSearcher(routeList.get(), fromStation, toStation);
+                TrainAndModelDao trainAndModelDao = new TrainModelDaoImpl();
+                List<Wagon> wagons =  trainAndModelDao.getAllWagons();
+                TrainSearcher trainSearcher = new TrainSearcher(routeList.get(), fromStation, toStation, wagons);
                 List<PersonalRoute> suitableRoutes = trainSearcher.getSuitableRoutes();
-                log.info("Appropriate routes found. Size : {}", suitableRoutes.size());
-                request.setAttribute("suitableRoutes", suitableRoutes);
+                if (!suitableRoutes.isEmpty()) {
+                    log.info("Appropriate routes found. Size : {}", suitableRoutes.size());
+                    request.setAttribute("suitableRoutes", suitableRoutes);
+                }
             } else {
                 log.error("Unfortunately, routes not found");
                 request.setAttribute("noRoutes", "There are no routes with such destination and departure");
@@ -52,6 +55,10 @@ public class CustomerSearchTicketsCommand implements ICommand {
         }
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("customer-booking.command");
         requestDispatcher.forward(request, response);
+    }
+
+    private Optional<List<ComplexRoute>> getComplexRoutes(RouteDao routeDao) {
+        return routeDao.getAllComplexRoutes();
     }
 
     private boolean ifSameStations(HttpServletRequest request) {

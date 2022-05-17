@@ -21,9 +21,10 @@ public class TrainModelDaoImpl implements TrainAndModelDao {
     private static final Logger log = LogManager.getLogger(TrainModelDaoImpl.class);
     private static final String GET_TRAIN_MODEL_BY_ID = "SELECT * FROM train_models WHERE id = ?;";
     private static final String GET_TRAIN_BY_ID = "SELECT * FROM trains WHERE id = ?;";
-    private static final String GET_COACHES_BY_ROUTE_ID = "SELECT * FROM train_coaches WHERE route_id = ?;";
-    private static final String GET_COACHES_BY_CLASS = "SELECT * FROM train_coaches WHERE comfort_class = ?;";
-    private static final String GET_COACH_BY_ID = "SELECT * FROM train_coaches WHERE coach_id = ?;";
+    private static final String GET_WAGONS_BY_ROUTE = "SELECT * FROM train_coaches WHERE route_id = ?;";
+    private static final String GET_WAGONS_BY_CLASS = "SELECT * FROM train_coaches WHERE comfort_class = ?;";
+    private static final String GET_WAGON_BY_ID = "SELECT * FROM train_coaches WHERE coach_id = ?;";
+    private static final String GET_ALL_WAGONS = "SELECT * FROM train_coaches;";
     private static final String UPDATE_COACH_SEATS = "UPDATE train_coaches SET seats = ? WHERE coach_id = ?";
 
     @Override
@@ -78,16 +79,31 @@ public class TrainModelDaoImpl implements TrainAndModelDao {
     public Optional<List<Wagon>> getWagonsForTrain(int trainId) {
         List<Wagon> wagons = new ArrayList<>();
         try (Connection connection = DataBasePoolManager.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_COACHES_BY_ROUTE_ID)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_WAGONS_BY_ROUTE)) {
             preparedStatement.setInt(1, trainId);
             ResultSet coachesFromResultSet = preparedStatement.executeQuery();
             while (coachesFromResultSet.next()) {
                 wagons.add(getCoachesFromResultSet(coachesFromResultSet));
             }
         } catch (SQLException e) {
-            log.error("Problems with getting all train-coaches {}", e.toString());
+            log.error("Problems with getting all train-wagons for certain train {}", e.toString());
         }
         return Optional.of(wagons);
+    }
+
+    @Override
+    public List<Wagon>getAllWagons() {
+        List<Wagon> wagons = new ArrayList<>();
+        try (Connection connection = DataBasePoolManager.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_WAGONS)) {
+            ResultSet coachesFromResultSet = preparedStatement.executeQuery();
+            while (coachesFromResultSet.next()) {
+                wagons.add(getCoachesFromResultSet(coachesFromResultSet));
+            }
+        } catch (SQLException e) {
+            log.error("Problems with getting all train-wagons {}", e.toString());
+        }
+        return wagons;
     }
 
 
@@ -95,7 +111,7 @@ public class TrainModelDaoImpl implements TrainAndModelDao {
     public Optional<List<Wagon>> getWagonsByClass(String comfortClass) {
         List<Wagon> wagons = new ArrayList<>();
         try (Connection connection = DataBasePoolManager.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_COACHES_BY_CLASS)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_WAGONS_BY_CLASS)) {
             preparedStatement.setString(1, comfortClass);
             ResultSet coachesFromResultSet = preparedStatement.executeQuery();
             while (coachesFromResultSet.next()) {
@@ -111,7 +127,7 @@ public class TrainModelDaoImpl implements TrainAndModelDao {
     public Optional<Wagon> getWagonById(int id) {
         Wagon wagon = null;
         try (Connection connection = DataBasePoolManager.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_COACH_BY_ID)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_WAGON_BY_ID)) {
             preparedStatement.setInt(1, id);
             ResultSet coachesFromResultSet = preparedStatement.executeQuery();
             if (coachesFromResultSet.next()) {
@@ -156,6 +172,7 @@ public class TrainModelDaoImpl implements TrainAndModelDao {
     private Wagon getCoachesFromResultSet(ResultSet resultSet) throws SQLException {
         Wagon wagon = new Wagon();
         wagon.setId(resultSet.getInt("coach_id"));
+        wagon.setRouteId(resultSet.getInt("route_id"));
         wagon.setComfortClass(ComfortClass.valueOf(resultSet.getString("comfort_class")));
         wagon.setNumOfSeats(resultSet.getInt("seats"));
         wagon.setPriceForSeat(resultSet.getInt("price"));

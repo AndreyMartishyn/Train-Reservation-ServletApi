@@ -14,6 +14,8 @@ public interface TrainAndModelDao {
 
     Optional<List<Wagon>> getWagonsForTrain(int id);
 
+    List<Wagon> getAllWagons();
+
     Optional<List<Wagon>> getWagonsByClass(String comfortClass);
 
     Optional<Wagon> getWagonById(int id);

@@ -1,29 +1,33 @@
-package ua.martishyn.app.data.utils;
+package ua.martishyn.app.data.service;
 
-import ua.martishyn.app.data.dao.impl.TrainModelDaoImpl;
-import ua.martishyn.app.data.dao.interfaces.TrainAndModelDao;
 import ua.martishyn.app.data.entities.ComplexRoute;
 import ua.martishyn.app.data.entities.PersonalRoute;
 import ua.martishyn.app.data.entities.Station;
 import ua.martishyn.app.data.entities.Wagon;
+import ua.martishyn.app.data.entities.enums.ComfortClass;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class TrainSearcher {
     private final List<PersonalRoute> suitableRoutes;
     private final List<ComplexRoute> routeList;
     private final Station fromStation;
     private final Station toStation;
-    private final TrainAndModelDao trainAndModelDao = new TrainModelDaoImpl();
+    private final List<Wagon> wagons;
 
     public TrainSearcher(List<ComplexRoute> routeList, Station fromStation,
-                         Station toStation) {
+                         Station toStation, List<Wagon> wagons) {
         this.suitableRoutes = new ArrayList<>();
         this.routeList = routeList;
         this.fromStation = fromStation;
         this.toStation = toStation;
+        this.wagons = wagons;
         findSuitableRoots();
     }
 
@@ -33,7 +37,7 @@ public class TrainSearcher {
 
         for (ComplexRoute complexRoute : routeList) {
             List<ComplexRoute.IntermediateStation> stations = complexRoute.getIntermediateStations();
-            //checks if arrival and departure station are in route
+            //checks if arrival and departure stations are in route
             if (stationsExistInRoute(stations)) {
                 PersonalRoute personalRoute = new PersonalRoute();
                 personalRoute.setRouteId(complexRoute.getId());
@@ -74,31 +78,30 @@ public class TrainSearcher {
                 if (fromId < toId) {
                     long routeDuration = Objects.requireNonNull(arrDate).getTime() - Objects.requireNonNull(depDate).getTime();
                     personalRoute.setRoadTime(routePattern.format(new Date(routeDuration)));
-                    Optional<List<Wagon>> trainCoaches = trainAndModelDao.getWagonsForTrain(complexRoute.getId());
-                    if (trainCoaches.isPresent()) {
-                        int firstClassPlaces = getClassPlaces(trainCoaches.get(), "FIRST");
-                        personalRoute.setFirstClassSeats(firstClassPlaces);
-                        int secondClassPlaces = getClassPlaces(trainCoaches.get(), "SECOND");
-                        personalRoute.setSecondClassSeats(secondClassPlaces);
-                    }
+                    List<Wagon> trainWagons = wagons.stream()
+                            .filter(wagon -> wagon.getRouteId() == complexRoute.getId())
+                            .collect(Collectors.toList());
+                    int firstClassPlaces = getClassPlaces(trainWagons, ComfortClass.FIRST);
+                    personalRoute.setFirstClassSeats(firstClassPlaces);
+                    int secondClassPlaces = getClassPlaces(trainWagons, ComfortClass.SECOND);
+                    personalRoute.setSecondClassSeats(secondClassPlaces);
                     personalRoute.setRedirectLink(redirectLink);
                     addRoute(personalRoute);
-
                 }
             }
         }
     }
 
-    public boolean stationsExistInRoute(List<ComplexRoute.IntermediateStation> stations) {
+    private boolean stationsExistInRoute(List<ComplexRoute.IntermediateStation> stations) {
         return (stations.stream().anyMatch(st -> st.getStation().equals(fromStation))
                 &&
                 stations.stream().anyMatch(st1 -> st1.getStation().equals(toStation)));
     }
 
     //gets train_coaches objects and makes stream with check if class is appropriate and sums seats for same class
-    private int getClassPlaces(List<Wagon> wagons, String type) {
+    private int getClassPlaces(List<Wagon> wagons, ComfortClass type) {
         return wagons.stream()
-                .filter(trainCoach -> trainCoach.getComfortClass().name().equals(type))
+                .filter(wagon -> wagon.getComfortClass().name().equals(type.name()))
                 .mapToInt(Wagon::getNumOfSeats)
                 .reduce(0, Integer::sum);
     }

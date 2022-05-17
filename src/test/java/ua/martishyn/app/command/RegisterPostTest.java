@@ -2,6 +2,7 @@ package ua.martishyn.app.command;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import ua.martishyn.app.controller.commands.RegisterCommand;
@@ -29,7 +30,7 @@ public class RegisterPostTest {
     @Mock
     RequestDispatcher mockDispatcher;
 
-
+    @InjectMocks
     RegisterCommand registerCommand;
     User user;
 

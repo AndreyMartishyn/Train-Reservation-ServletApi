@@ -4,6 +4,5 @@
 </head>
 <body>
 <%@ include file="/view/static/header.jsp"%>
-
 </body>
 </html>
