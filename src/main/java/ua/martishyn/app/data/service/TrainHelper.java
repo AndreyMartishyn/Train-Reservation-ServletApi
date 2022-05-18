@@ -14,15 +14,15 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class TrainSearcher {
+public class TrainHelper {
     private final List<PersonalRoute> suitableRoutes;
     private final List<ComplexRoute> routeList;
     private final Station fromStation;
     private final Station toStation;
     private final List<Wagon> wagons;
 
-    public TrainSearcher(List<ComplexRoute> routeList, Station fromStation,
-                         Station toStation, List<Wagon> wagons) {
+    public TrainHelper(List<ComplexRoute> routeList, Station fromStation,
+                       Station toStation, List<Wagon> wagons) {
         this.suitableRoutes = new ArrayList<>();
         this.routeList = routeList;
         this.fromStation = fromStation;

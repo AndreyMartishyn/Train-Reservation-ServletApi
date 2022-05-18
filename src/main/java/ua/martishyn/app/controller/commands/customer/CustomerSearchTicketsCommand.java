@@ -15,7 +15,7 @@ import ua.martishyn.app.data.entities.PersonalRoute;
 import ua.martishyn.app.data.entities.Station;
 import ua.martishyn.app.data.entities.Wagon;
 import ua.martishyn.app.data.entities.enums.Role;
-import ua.martishyn.app.data.service.TrainSearcher;
+import ua.martishyn.app.data.service.TrainHelper;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -42,7 +42,7 @@ public class CustomerSearchTicketsCommand implements ICommand {
             if (routeList.isPresent()) {
                 TrainAndModelDao trainAndModelDao = new TrainModelDaoImpl();
                 List<Wagon> wagons =  trainAndModelDao.getAllWagons();
-                TrainSearcher trainSearcher = new TrainSearcher(routeList.get(), fromStation, toStation, wagons);
+                TrainHelper trainSearcher = new TrainHelper(routeList.get(), fromStation, toStation, wagons);
                 List<PersonalRoute> suitableRoutes = trainSearcher.getSuitableRoutes();
                 if (!suitableRoutes.isEmpty()) {
                     log.info("Appropriate routes found. Size : {}", suitableRoutes.size());

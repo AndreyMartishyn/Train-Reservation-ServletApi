@@ -1,9 +1,9 @@
 package ua.martishyn.app.data.entities;
 
-import java.io.Serializable;
+
 import java.util.List;
 
-public class BookingDTO implements Serializable {
+public class BookingDTO implements Entity {
     private int trainId;
     private String departureStation;
     private String arrivalStation;

@@ -3,8 +3,8 @@ package ua.martishyn.app.data.dao.impl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.martishyn.app.data.dao.interfaces.TrainAndModelDao;
-import ua.martishyn.app.data.entities.TrainModel;
 import ua.martishyn.app.data.entities.Train;
+import ua.martishyn.app.data.entities.TrainModel;
 import ua.martishyn.app.data.entities.Wagon;
 import ua.martishyn.app.data.entities.enums.ComfortClass;
 import ua.martishyn.app.data.utils.DataBasePoolManager;
@@ -21,7 +21,6 @@ public class TrainModelDaoImpl implements TrainAndModelDao {
     private static final Logger log = LogManager.getLogger(TrainModelDaoImpl.class);
     private static final String GET_TRAIN_MODEL_BY_ID = "SELECT * FROM train_models WHERE id = ?;";
     private static final String GET_TRAIN_BY_ID = "SELECT * FROM trains WHERE id = ?;";
-    private static final String GET_WAGONS_BY_ROUTE = "SELECT * FROM train_coaches WHERE route_id = ?;";
     private static final String GET_WAGONS_BY_CLASS = "SELECT * FROM train_coaches WHERE comfort_class = ?;";
     private static final String GET_WAGON_BY_ID = "SELECT * FROM train_coaches WHERE coach_id = ?;";
     private static final String GET_ALL_WAGONS = "SELECT * FROM train_coaches;";
@@ -76,23 +75,7 @@ public class TrainModelDaoImpl implements TrainAndModelDao {
     }
 
     @Override
-    public Optional<List<Wagon>> getWagonsForTrain(int trainId) {
-        List<Wagon> wagons = new ArrayList<>();
-        try (Connection connection = DataBasePoolManager.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_WAGONS_BY_ROUTE)) {
-            preparedStatement.setInt(1, trainId);
-            ResultSet coachesFromResultSet = preparedStatement.executeQuery();
-            while (coachesFromResultSet.next()) {
-                wagons.add(getCoachesFromResultSet(coachesFromResultSet));
-            }
-        } catch (SQLException e) {
-            log.error("Problems with getting all train-wagons for certain train {}", e.toString());
-        }
-        return Optional.of(wagons);
-    }
-
-    @Override
-    public List<Wagon>getAllWagons() {
+    public List<Wagon> getAllWagons() {
         List<Wagon> wagons = new ArrayList<>();
         try (Connection connection = DataBasePoolManager.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_WAGONS)) {
@@ -105,7 +88,6 @@ public class TrainModelDaoImpl implements TrainAndModelDao {
         }
         return wagons;
     }
-
 
     @Override
     public Optional<List<Wagon>> getWagonsByClass(String comfortClass) {

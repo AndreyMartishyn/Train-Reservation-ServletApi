@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ComplexRoute implements Serializable {
+public class ComplexRoute implements Entity {
     private int id;
     private Train train;
     private List<IntermediateStation> intermediateStations = new ArrayList<>();

@@ -21,21 +21,26 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
 @HasRole(role = Role.CUSTOMER)
 public class CustomerBuyTicketCommand implements ICommand {
     private static final Logger log = LogManager.getLogger(CustomerBuyTicketCommand.class);
+    private TicketDao ticketDao;
+    private TrainAndModelDao trainAndModelDao;
+    private List<Ticket> tickets;
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (isTickerDataValid(request) && !isPlaceOccupied(request)) {
+        ticketAndTrainDaoInit();
+        if (isTickerDataValid(request) && !isPlaceOccupied(request, tickets)) {
             if (createTicket(request)) {
                 log.info("Ticket created successfully");
                 response.sendRedirect("customer-tickets-page.command");
+                return;
             } else {
                 log.info("Ticket not created");
             }
@@ -47,23 +52,36 @@ public class CustomerBuyTicketCommand implements ICommand {
 
     private boolean isTickerDataValid(HttpServletRequest request) {
         DataInputValidator dataValidator = new DataInputValidatorImpl();
-        HttpSession session = request.getSession();
         String firstName = request.getParameter("firstName").trim();
-        if (dataValidator.isValidStringInput(firstName)) {
-            session.setAttribute(Constants.ERROR_VALIDATION, "Wrong first name input");
+        if (!dataValidator.isValidStringInput(firstName)) {
+            request.setAttribute(Constants.ERROR_VALIDATION, "Wrong first name input");
             return false;
         }
         String lastName = request.getParameter("lastName").trim();
-        if (dataValidator.isValidStringInput(lastName)) {
-            session.setAttribute(Constants.ERROR_VALIDATION, "Wrong last name input");
+        if (!dataValidator.isValidStringInput(lastName)) {
+            request.setAttribute(Constants.ERROR_VALIDATION, "Wrong last name input");
             return false;
         }
         String place = request.getParameter("place").trim();
-        if (dataValidator.isValidNumInput(place)) {
-            session.setAttribute(Constants.ERROR_VALIDATION, "Enter valid place");
+        if (!dataValidator.isValidNumInput(place)) {
+            request.setAttribute(Constants.ERROR_VALIDATION, "Enter valid place");
             return false;
         }
-        return true;
+        String wagon = request.getParameter("wagon").trim();
+        return isAvailablePlace(request, wagon, place);
+    }
+
+    private boolean isAvailablePlace(HttpServletRequest request, String wagon, String place) {
+        int selectedWagon = Integer.parseInt(wagon);
+        int selectedPlace = Integer.parseInt(place);
+        Optional<Wagon> wagonBooked = trainAndModelDao.getWagonById(selectedWagon);
+        int numOfPlaces = wagonBooked.get().getNumOfSeats();
+        if (selectedPlace <= numOfPlaces && selectedPlace > 0) {
+            return true;
+        }
+        String result = "Enter valid place between 1 and " + numOfPlaces;
+        request.setAttribute(Constants.ERROR_VALIDATION, result);
+        return false;
     }
 
     private boolean createTicket(HttpServletRequest request) {
@@ -80,8 +98,7 @@ public class CustomerBuyTicketCommand implements ICommand {
 
         Random random = new Random();
         Ticket userTicket = new Ticket();
-        TicketDao ticketDao = new TicketDaoImpl();
-        TrainAndModelDao trainAndModelDao = new TrainModelDaoImpl();
+
         Optional<Train> trainFromBooking = trainAndModelDao.getTrain(Integer.parseInt(trainId));
         Optional<Wagon> wagonBooked = trainAndModelDao.getWagonById(wagon);
         User currentUser = (User) request.getSession().getAttribute("user");
@@ -110,11 +127,19 @@ public class CustomerBuyTicketCommand implements ICommand {
         return ticketDao.createTicket(userTicket);
     }
 
-    private boolean isPlaceOccupied(HttpServletRequest request) {
+    private void ticketAndTrainDaoInit() {
+        ticketDao = new TicketDaoImpl();
+        trainAndModelDao = new TrainModelDaoImpl();
+        Optional<List<Ticket>> allTickets = ticketDao.getAllTickets();
+        allTickets.ifPresent(ticketList -> tickets = ticketList);
+    }
+
+    private boolean isPlaceOccupied(HttpServletRequest request, List<Ticket> ticketList) {
         int wagonNum = Integer.parseInt(request.getParameter("wagon"));
         int placeNum = Integer.parseInt(request.getParameter("place"));
-        TicketDao ticketDao = new TicketDaoImpl();
-        return ticketDao.getByPlaceAndWagon(wagonNum, placeNum);
+        return ticketList.stream()
+                .anyMatch(ticket -> ticket.getWagon() == wagonNum
+                        && ticket.getPlace() == placeNum);
     }
 
     private void updateCoach(TrainAndModelDao trainAndModelDao, Wagon bookedWagon) {

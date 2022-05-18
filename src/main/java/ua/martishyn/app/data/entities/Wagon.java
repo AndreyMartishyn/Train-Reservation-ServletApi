@@ -4,7 +4,7 @@ import ua.martishyn.app.data.entities.enums.ComfortClass;
 
 import java.io.Serializable;
 
-public class Wagon implements Serializable {
+public class Wagon implements Entity {
     private int id;
     private int routeId;
     private ComfortClass comfortClass;

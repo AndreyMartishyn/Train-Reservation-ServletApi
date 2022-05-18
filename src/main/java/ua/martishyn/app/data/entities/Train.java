@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
-public class Train implements Serializable {
+public class Train implements Entity {
     private int id;
     private TrainModel model;
     private List<Wagon> trainCarriages;

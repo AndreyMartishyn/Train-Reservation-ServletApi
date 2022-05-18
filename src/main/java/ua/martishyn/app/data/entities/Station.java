@@ -3,7 +3,7 @@ package ua.martishyn.app.data.entities;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class Station implements Serializable {
+public class Station implements Entity {
     private int id;
     private String name;
     private String code;

@@ -1,6 +1,6 @@
 package ua.martishyn.app.data.entities;
 
-public class Ticket {
+public class Ticket implements Entity{
     private int id;
     private Train train;
     private int userId;

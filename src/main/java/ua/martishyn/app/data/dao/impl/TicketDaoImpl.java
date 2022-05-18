@@ -4,14 +4,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.martishyn.app.data.dao.interfaces.TicketDao;
 import ua.martishyn.app.data.dao.interfaces.TrainAndModelDao;
+import ua.martishyn.app.data.entities.Station;
 import ua.martishyn.app.data.entities.Ticket;
 import ua.martishyn.app.data.entities.Train;
 import ua.martishyn.app.data.utils.DataBasePoolManager;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -22,7 +20,7 @@ public class TicketDaoImpl implements TicketDao {
             "departure_station, departure_time, arrival_station, arrival_time, place, wagon, comfort_class, price, isPaid) " +
             "VALUES (?, ?, ?, ?, ?, ? , ?, ?, ? , ?, ? , ?, ?, ?);";
     private static final String GET_TICKETS_BY_USER_ID = "SELECT * FROM tickets WHERE user_id = ?;";
-    private static final String GET_TICKETS_COUNT_BY_PLACE_AND_WAGON = "SELECT COUNT(*) as quantity FROM tickets WHERE wagon = ? AND place = ?;";
+    private static final String GET_ALL_TICKETS = "SELECT * FROM tickets;";
     private static final String UPDATE_TICKET_PAID_STATUS = "UPDATE tickets SET isPaid = ? WHERE id = ?;";
 
     @Override
@@ -41,23 +39,19 @@ public class TicketDaoImpl implements TicketDao {
     }
 
     @Override
-    public boolean getByPlaceAndWagon(int wagon, int place) {
-        int quantity = 0;
+    public Optional<List<Ticket>> getAllTickets() {
+        List<Ticket> tickets = new ArrayList<>();
         try (Connection connection = DataBasePoolManager.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_TICKETS_COUNT_BY_PLACE_AND_WAGON)) {
-            preparedStatement.setInt(1, wagon);
-            preparedStatement.setInt(2, place);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                quantity = resultSet.getInt("quantity");
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_TICKETS)){
+            ResultSet ticketFromResultSet = preparedStatement.executeQuery();
+            while (ticketFromResultSet.next()) {
+                tickets.add(getTicketFromResultSet(ticketFromResultSet));
             }
         } catch (SQLException e) {
-            log.error("Problems with getting count for place/wagon {}", e.toString());
-            return false;
+            log.error("Problems with getting all tickets {}", e.toString());
         }
-        return quantity > 0;
+        return Optional.of(tickets);
     }
-
 
     @Override
     public Optional<List<Ticket>> getAllTicketsById(int id) {

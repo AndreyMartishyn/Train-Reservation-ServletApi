@@ -1,9 +1,8 @@
 package ua.martishyn.app.data.entities;
 
-import java.io.Serializable;
 import java.util.Objects;
 
-public class TrainModel implements Serializable {
+public class TrainModel implements Entity {
     private int id;
     private String name;
 
