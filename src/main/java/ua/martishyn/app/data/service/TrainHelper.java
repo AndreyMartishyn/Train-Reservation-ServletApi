@@ -8,6 +8,9 @@ import ua.martishyn.app.data.entities.enums.ComfortClass;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -32,7 +35,7 @@ public class TrainHelper {
     }
 
     private void findSuitableRoots() {
-        DateFormat formatPattern = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        DateTimeFormatter formatPattern = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
         DateFormat routePattern = new SimpleDateFormat("HH:mm");
 
         for (ComplexRoute complexRoute : routeList) {
@@ -44,12 +47,12 @@ public class TrainHelper {
                 personalRoute.setTrain(complexRoute.getTrain());
                 StringBuilder redirectLink = new StringBuilder();
                 redirectLink.append("?train=")
-                        .append(complexRoute.getTrain().getId());
+                        .append(personalRoute.getTrain().getId());
                 int numOfStationsPassed = 0;
                 int fromId = 0;
                 int toId = 0;
-                Date depDate = null;
-                Date arrDate = null;
+                LocalDateTime depDate = null;
+                LocalDateTime arrDate = null;
 
                 for (ComplexRoute.IntermediateStation stationObject : stations) {
                     Station station = stationObject.getStation();
@@ -76,8 +79,8 @@ public class TrainHelper {
                     numOfStationsPassed++;
                 }
                 if (fromId < toId) {
-                    long routeDuration = Objects.requireNonNull(arrDate).getTime() - Objects.requireNonNull(depDate).getTime();
-                    personalRoute.setRoadTime(routePattern.format(new Date(routeDuration)));
+                    long duration = Duration.between(Objects.requireNonNull(depDate), arrDate).toMillis();
+                    personalRoute.setRoadTime(routePattern.format(new Date(duration)));
                     List<Wagon> trainWagons = wagons.stream()
                             .filter(wagon -> wagon.getRouteId() == complexRoute.getId())
                             .collect(Collectors.toList());

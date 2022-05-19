@@ -15,11 +15,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,8 +29,6 @@ public class RouteDaoImpl implements RouteDao {
     private static final String DELETE_SINGLE_ROUTE = "DELETE FROM route_stations WHERE id = ? AND station_id = ?;";
     private static final String UPDATE_SINGLE_ROUTE = "UPDATE route_stations set train_id = ?," +
             "station_id = ?, arrival = ?, departure = ? WHERE id= ? AND station_id =?;";
-    private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
-
 
     @Override
     public Optional<List<SingleRoute>> getAllIntermediateStationRoutes() {
@@ -89,18 +85,17 @@ public class RouteDaoImpl implements RouteDao {
                 }
                 addIntermediateStations(complexRoute, routeResultSet);
             }
-        } catch (SQLException | ParseException e) {
+        } catch (SQLException  e) {
             log.error("Problems with getting list of routes {}", e.toString());
         }
         return Optional.of(complexRouteList);
     }
 
-    private void addIntermediateStations(ComplexRoute complexRoute, ResultSet routeResultSet) throws SQLException, ParseException {
-        DateFormat formatPattern = new SimpleDateFormat(DATE_FORMAT);
+    private void addIntermediateStations(ComplexRoute complexRoute, ResultSet routeResultSet) throws SQLException {
         StationDao stationDao = new StationDaoImpl();
         Optional<Station> station = stationDao.getById(routeResultSet.getInt("station_id"));
-        Date arrivalDate = formatPattern.parse(routeResultSet.getString("arrival"));
-        Date departureDate = formatPattern.parse(routeResultSet.getString("departure"));
+        LocalDateTime arrivalDate = routeResultSet.getObject("arrival", LocalDateTime.class);
+        LocalDateTime departureDate = routeResultSet.getObject("departure", LocalDateTime.class);
         station.ifPresent(value -> complexRoute.addIntermediateStation(value, arrivalDate, departureDate));
 
     }
@@ -158,11 +153,10 @@ public class RouteDaoImpl implements RouteDao {
     }
 
     private void createRouteStatement(PreparedStatement preparedStatement, SingleRoute singleRoute) throws SQLException {
-        DateFormat formatPattern = new SimpleDateFormat(DATE_FORMAT);
         preparedStatement.setInt(1, singleRoute.getTrainId());
         preparedStatement.setInt(2, singleRoute.getStationId());
-        preparedStatement.setString(3, formatPattern.format(singleRoute.getArrival()));
-        preparedStatement.setString(4, formatPattern.format(singleRoute.getDeparture()));
+        preparedStatement.setObject(3, singleRoute.getArrival());
+        preparedStatement.setObject(4, singleRoute.getDeparture());
         preparedStatement.setInt(5, singleRoute.getId());
         preparedStatement.setInt(6, singleRoute.getStationId());
     }
@@ -183,13 +177,12 @@ public class RouteDaoImpl implements RouteDao {
     }
 
     private SingleRoute getRoutePartFromResultSet(ResultSet resultSet) throws SQLException, ParseException {
-        DateFormat formatPattern = new SimpleDateFormat(DATE_FORMAT);
         return SingleRoute.builder()
                 .id(resultSet.getInt("id"))
                 .trainId(resultSet.getInt("train_id"))
                 .stationId(resultSet.getInt("station_id"))
-                .arrivalDate(formatPattern.parse(resultSet.getString(4)))
-                .departureDate(formatPattern.parse(String.valueOf(resultSet.getString(5))))
+                .arrivalDate(resultSet.getObject(4, LocalDateTime.class))
+                .departureDate(resultSet.getObject(5, LocalDateTime.class))
                 .build();
     }
 

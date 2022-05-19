@@ -6,26 +6,25 @@
 <%@ include file="/view/static/header.jsp"%>
 <br><br>
  		<div align="center">
- 		<form>
+ 		<div class="bg-white text-dark">
  		<span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${noTickets}</span>
  		<c:if test="${requestScope.userTickets != null}">
- 		<table class="table table-striped table-responsive-md btn-table" >
+ 		<table class="table table-striped table-bordered" >
                 <thead>
                                   <tr>
-                                  <th scope="col">TicketId</th>
-                                  <th scope="col">TrainId</th>
+                                  <th scope="col">Ticket#</th>
+                                  <th scope="col">Train#</th>
                                   <th scope="col">First name</th>
                                   <th scope="col">Last name</th>
-                                  <th scope="col">From Station</th>
-                                  <th scope="col">Departure Time</th>
-                                  <th scope="col">To Station</th>
-                                  <th scope="col">Arrival Time</th>
-                                  <th scope="col">Wagon</th>
-                                  <th scope="col">Place</th>
+                                  <th scope="col">From</th>
+                                  <th scope="col">Departure</th>
+                                  <th scope="col">To</th>
+                                  <th scope="col">Arrival</th>
+                                  <th scope="col">Wagon#</th>
+                                  <th scope="col">Place#</th>
                                   <th scope="col">Class</th>
                                   <th scope="col">Price</th>
                                   <th scope="col">Status</th>
-
                                   </tr>
                 </thead>
                 <tbody>
@@ -40,6 +39,7 @@
                                 <td style="text-align:center">
                                 <strong>
                                 <c:out value="${ticket.train.id}"/>K
+                                <br>
                                 <c:out value="${ticket.train.model.name}"/>
                                 </strong>
                                 </td>
@@ -100,7 +100,7 @@
 							  <c:choose>
                              <c:when test = "${ticket.paid == false}">
                               <a href="customer-ticket-pay.command?ticketId=<c:out value="${ticket.id}"/>"
-                              input type="submit" class="btn btn-light" >MAKE PAYMENT</a>
+                              input type="submit" class="btn btn-dark" >MAKE PAYMENT</a>
                              </c:when>
                              <c:otherwise>
                               Paid
@@ -112,7 +112,7 @@
                 </tbody>
                 </table>
                 </c:if>
-                </form>
+                </div>
                 </div>
         </body>
 </html>

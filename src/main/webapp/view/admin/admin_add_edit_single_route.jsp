@@ -15,6 +15,7 @@
                 <caption>
                <c:if test="${singleRoute != null}">
               <h2><fmt:message key="admin.page.route.edit.form"/></h2>
+               <small>*route id field is immutable</small>
               </c:if>
               <c:if test="${singleRoute == null}">
                <h2><fmt:message key="admin.page.route.add.form"/></h2>
@@ -24,8 +25,14 @@
             <tr>
                 <th><fmt:message key="admin.page.route.id"/>:</th>
                 <td>
+                    <c:if test="${singleRoute != null}">
                     <input type="text" name="id" size="30"
-                           value="<c:out value='${singleRoute.id}' />" required/>
+                    value="<c:out value='${singleRoute.id}' />" readonly="readonly"/>
+                    </c:if>
+                    <c:if test="${singleRoute == null}">
+                    <input type="text" name="id" size="30"
+                    value="<c:out value='${singleRoute.id}' />" />
+                    </c:if>
                 </td>
             <tr>
                 <th><fmt:message key="admin.page.train.id"/>:</th>
@@ -57,8 +64,7 @@
             </tr>
 
              </table>
-                <span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${errorValidation}</span>
-             	<span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${errorLogic}</span>
+              <span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${errorValidation}</span>
               <br>
              <div class="form-group">
                  	<input type="submit" class="btn btn-dark" value="<fmt:message key="admin.page.action.save"/>"/>

@@ -25,7 +25,6 @@
         <option value="${station.id}"><fmt:message key="${station.name}"/></option>
         </c:forEach>
         </select>
-         <span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${noPlaceInCoach}</span>
          <span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${busyPlace}</span>
          <span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${noRoutes}</span>
          <span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${errorValidation}</span>
@@ -35,7 +34,6 @@
         </div>
         </div>
         </form>
-
 
  		<c:if test="${requestScope.suitableRoutes != null}">
  		<br><br>
@@ -60,6 +58,8 @@
                                 <c:out value="${route.train.id}"/>K
                                 <c:out value="${route.train.model.name}"/>
                                 </strong>
+                                <br>
+                                <a href="customer-show-route.command?route=<c:out value="${route.routeId}"/>">Route</a>
                                 </td>
 
                                 <td>

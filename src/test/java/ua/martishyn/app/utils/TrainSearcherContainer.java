@@ -3,9 +3,9 @@ package ua.martishyn.app.utils;
 import ua.martishyn.app.data.entities.*;
 import ua.martishyn.app.data.entities.enums.ComfortClass;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,7 +53,7 @@ public class TrainSearcherContainer {
                 .name("Third")
                 .code("THRD")
                 .build();
-        DateFormat formatPattern = new SimpleDateFormat(DATE_FORMAT);
+        DateTimeFormatter formatPattern = DateTimeFormatter.ofPattern(DATE_FORMAT);
         ComplexRoute firstRoute = new ComplexRoute();
         firstRoute.setId(111);
         Train train = new Train();
@@ -63,12 +63,12 @@ public class TrainSearcherContainer {
         train.setId(666);
         train.setModel(trainModel);
         firstRoute.setTrain(train);
-        firstRoute.addIntermediateStation(stationFirst, formatPattern.parse("2022-10-24 15:30:00"),
-                formatPattern.parse("2022-10-24 16:30:00"));
-        firstRoute.addIntermediateStation(stationSecond, formatPattern.parse("2022-10-24 16:40:00"),
-                formatPattern.parse("2022-10-24 17:40:00"));
-        firstRoute.addIntermediateStation(stationThird, formatPattern.parse("2022-10-24 17:50:00"),
-                formatPattern.parse("2022-10-24 18:50:00"));
+        firstRoute.addIntermediateStation(stationFirst, LocalDateTime.parse("2022-10-24 15:30:00", formatPattern),
+                LocalDateTime.parse("2022-10-24 16:30:00", formatPattern));
+        firstRoute.addIntermediateStation(stationSecond, LocalDateTime.parse("2022-10-24 16:40:00", formatPattern),
+                LocalDateTime.parse("2022-10-24 17:40:00", formatPattern));
+        firstRoute.addIntermediateStation(stationThird, LocalDateTime.parse("2022-10-24 17:50:00", formatPattern),
+                LocalDateTime.parse("2022-10-24 18:50:00", formatPattern));
         ComplexRoute secondRoute = new ComplexRoute();
         secondRoute.setId(222);
         Train train1 = new Train();
@@ -78,10 +78,10 @@ public class TrainSearcherContainer {
         train1.setId(999);
         train1.setModel(trainModel1);
         secondRoute.setTrain(train1);
-        secondRoute.addIntermediateStation(stationSecond, formatPattern.parse("2022-10-25 16:40:00"),
-                formatPattern.parse("2022-10-25 17:40:00"));
-        secondRoute.addIntermediateStation(stationThird, formatPattern.parse("2022-10-25 17:50:00"),
-                formatPattern.parse("2022-10-25 18:50:00"));
+        secondRoute.addIntermediateStation(stationSecond, LocalDateTime.parse("2022-10-25 16:40:00", formatPattern),
+                LocalDateTime.parse("2022-10-25 17:40:00", formatPattern));
+        secondRoute.addIntermediateStation(stationThird, LocalDateTime.parse("2022-10-25 17:50:00", formatPattern),
+                LocalDateTime.parse("2022-10-25 18:50:00", formatPattern));
         complexRoutes.add(firstRoute);
         complexRoutes.add(secondRoute);
     }

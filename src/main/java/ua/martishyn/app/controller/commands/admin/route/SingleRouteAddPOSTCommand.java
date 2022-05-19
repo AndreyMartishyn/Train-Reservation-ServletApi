@@ -23,28 +23,21 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 @HasRole(role = Role.ADMIN)
 public class SingleRouteAddPOSTCommand implements ICommand {
     private static final Logger log = LogManager.getLogger(SingleRouteAddPOSTCommand.class);
+    DateTimeFormatter formatPattern = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (routeDataValidation(request)) {
-            if (createSingleRoute(request)) {
-                log.info("Route added successfully");
-                response.sendRedirect("routes-page.command");
-                return;
-            } else {
-                request.setAttribute("errorLogic", "Problems with creating route");
-            }
-        } else {
-            request.setAttribute("errorLogic", "Problems with creating route");
+        if (routeDataValidation(request) && createSingleRoute(request)) {
+            log.info("Route added successfully");
+            response.sendRedirect("routes-page.command");
+            return;
         }
         log.error("Unfortunately, route not added");
         RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.ADMIN_ROUTE_ADD_EDIT);
@@ -74,6 +67,12 @@ public class SingleRouteAddPOSTCommand implements ICommand {
             request.setAttribute(Constants.ERROR_VALIDATION, "Wrong dates");
             return false;
         }
+        LocalDateTime arrivalDate = LocalDateTime.parse(arrival, formatPattern);
+        LocalDateTime departureDate = LocalDateTime.parse(departure, formatPattern);
+        if (departureDate.isBefore(arrivalDate) || arrivalDate.isBefore(LocalDateTime.now()) || departureDate.isEqual(LocalDateTime.now())) {
+            request.setAttribute(Constants.ERROR_VALIDATION, "Wrong dates range");
+            return false;
+        }
         return true;
     }
 
@@ -81,17 +80,12 @@ public class SingleRouteAddPOSTCommand implements ICommand {
         int id = Integer.parseInt(request.getParameter("id"));
         int trainId = Integer.parseInt(request.getParameter("trainId"));
         int stationId = Integer.parseInt(request.getParameter("stationId"));
-        Date arrival;
-        Date departure;
-        DateFormat formatPattern = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-        try {
-            arrival = formatPattern.parse(request.getParameter("arrival"));
-            departure = formatPattern.parse(request.getParameter("departure"));
-        } catch (ParseException e) {
-            return false;
-        }
-
-        if (!checkInputIsValid(trainId, stationId, departure, arrival)) {
+        LocalDateTime arrival;
+        LocalDateTime departure;
+        arrival = LocalDateTime.parse(request.getParameter("arrival"), formatPattern);
+        departure = LocalDateTime.parse(request.getParameter("departure"), formatPattern);
+        if (!trainAndStationExist(trainId, stationId)) {
+            request.setAttribute(Constants.ERROR_VALIDATION, "Train/Station does`t exist even");
             return false;
         }
 
@@ -106,13 +100,12 @@ public class SingleRouteAddPOSTCommand implements ICommand {
         return routeDao.createSingleRoute(newSingleRoute);
     }
 
-    private boolean checkInputIsValid(int trainId, int stationId, Date departure, Date arrival) {
+    private boolean trainAndStationExist(int trainId, int stationId) {
         TrainAndModelDao trainAndModelDao = new TrainModelDaoImpl();
         StationDao stationDao = new StationDaoImpl();
         Optional<Train> searchedTrain = trainAndModelDao.getTrain(trainId);
         Optional<Station> searchedStation = stationDao.getById(stationId);
-        return searchedTrain.isPresent() && searchedStation.isPresent()
-                && arrival.getTime() < departure.getTime();
+        return searchedTrain.isPresent() && searchedStation.isPresent();
     }
 }
 

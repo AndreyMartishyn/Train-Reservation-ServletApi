@@ -1,7 +1,5 @@
 package ua.martishyn.app.data.entities;
 
-import java.io.Serializable;
-
 public class PersonalRoute implements Entity {
     private int routeId;
     private Train train;

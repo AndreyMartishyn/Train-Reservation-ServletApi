@@ -21,10 +21,10 @@ public class TrainModelDaoImpl implements TrainAndModelDao {
     private static final Logger log = LogManager.getLogger(TrainModelDaoImpl.class);
     private static final String GET_TRAIN_MODEL_BY_ID = "SELECT * FROM train_models WHERE id = ?;";
     private static final String GET_TRAIN_BY_ID = "SELECT * FROM trains WHERE id = ?;";
-    private static final String GET_WAGONS_BY_CLASS = "SELECT * FROM train_coaches WHERE comfort_class = ?;";
-    private static final String GET_WAGON_BY_ID = "SELECT * FROM train_coaches WHERE coach_id = ?;";
-    private static final String GET_ALL_WAGONS = "SELECT * FROM train_coaches;";
-    private static final String UPDATE_COACH_SEATS = "UPDATE train_coaches SET seats = ? WHERE coach_id = ?";
+    private static final String GET_WAGONS_BY_CLASS = "SELECT * FROM train_wagons WHERE comfort_class = ?;";
+    private static final String GET_WAGON_BY_ID = "SELECT * FROM train_wagons WHERE wagon_id = ?;";
+    private static final String GET_ALL_WAGONS = "SELECT * FROM train_wagons;";
+    private static final String UPDATE_COACH_SEATS = "UPDATE train_wagons SET seats = ? WHERE wagon_id = ?";
 
     @Override
     public Optional<Train> getTrain(int id) {
@@ -58,22 +58,6 @@ public class TrainModelDaoImpl implements TrainAndModelDao {
         return Optional.ofNullable(trainModelFromDb);
     }
 
-    private TrainModel getTrainModelFromResultSet(ResultSet trainModelRs) throws SQLException {
-        TrainModel model = new TrainModel();
-        model.setId(trainModelRs.getInt(1));
-        model.setName(trainModelRs.getString(2));
-        return model;
-    }
-
-
-    private Train getTrainFromResultSet(ResultSet trainFromResultSet) throws SQLException {
-        Train train = new Train();
-        train.setId(trainFromResultSet.getInt(1));
-        Optional<TrainModel> model = getTrainModel(trainFromResultSet.getInt("model_id"));
-        model.ifPresent(train::setModel);
-        return train;
-    }
-
     @Override
     public List<Wagon> getAllWagons() {
         List<Wagon> wagons = new ArrayList<>();
@@ -84,7 +68,7 @@ public class TrainModelDaoImpl implements TrainAndModelDao {
                 wagons.add(getCoachesFromResultSet(coachesFromResultSet));
             }
         } catch (SQLException e) {
-            log.error("Problems with getting all train-wagons {}", e.toString());
+            log.error("Problems with getting all train_wagons {}", e.toString());
         }
         return wagons;
     }
@@ -100,7 +84,7 @@ public class TrainModelDaoImpl implements TrainAndModelDao {
                 wagons.add(getCoachesFromResultSet(coachesFromResultSet));
             }
         } catch (SQLException e) {
-            log.error("Problems with getting all train-coaches by class {}", e.toString());
+            log.error("Problems with getting all train_wagons by class {}", e.toString());
         }
         return Optional.of(wagons);
     }
@@ -116,7 +100,7 @@ public class TrainModelDaoImpl implements TrainAndModelDao {
                 wagon = getCoachesFromResultSet(coachesFromResultSet);
             }
         } catch (SQLException e) {
-            log.error("Problems with getting all train-coaches {}", e.toString());
+            log.error("Problems with getting wagon by id {}", e.toString());
         }
         return Optional.ofNullable(wagon);
     }
@@ -134,7 +118,7 @@ public class TrainModelDaoImpl implements TrainAndModelDao {
             preparedStatement.executeUpdate();
             connection.commit();
         } catch (SQLException e) {
-            log.error("Problems with updating train-coach {}", e.toString());
+            log.error("Problems with updating train_wagons {}", e.toString());
             if (connection != null) {
                 try {
                     connection.rollback();
@@ -150,10 +134,24 @@ public class TrainModelDaoImpl implements TrainAndModelDao {
         return true;
     }
 
+    private TrainModel getTrainModelFromResultSet(ResultSet trainModelRs) throws SQLException {
+        TrainModel model = new TrainModel();
+        model.setId(trainModelRs.getInt(1));
+        model.setName(trainModelRs.getString(2));
+        return model;
+    }
+
+    private Train getTrainFromResultSet(ResultSet trainFromResultSet) throws SQLException {
+        Train train = new Train();
+        train.setId(trainFromResultSet.getInt(1));
+        Optional<TrainModel> model = getTrainModel(trainFromResultSet.getInt("model_id"));
+        model.ifPresent(train::setModel);
+        return train;
+    }
 
     private Wagon getCoachesFromResultSet(ResultSet resultSet) throws SQLException {
         Wagon wagon = new Wagon();
-        wagon.setId(resultSet.getInt("coach_id"));
+        wagon.setId(resultSet.getInt("wagon_id"));
         wagon.setRouteId(resultSet.getInt("route_id"));
         wagon.setComfortClass(ComfortClass.valueOf(resultSet.getString("comfort_class")));
         wagon.setNumOfSeats(resultSet.getInt("seats"));

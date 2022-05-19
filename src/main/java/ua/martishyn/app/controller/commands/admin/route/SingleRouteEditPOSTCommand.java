@@ -23,32 +23,57 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 @HasRole(role = Role.ADMIN)
 public class SingleRouteEditPOSTCommand implements ICommand {
     private static final Logger log = LogManager.getLogger(SingleRouteEditPOSTCommand.class);
+    DateTimeFormatter formatPattern = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (routeDataValidation(request)) {
-            if (updateSingleRoute(request)) {
+        if (routeDataValidation(request) && updateSingleRoute(request)){
                 log.info("Route updated successfully");
                 response.sendRedirect("routes-page.command");
                 return;
-            } else {
-                request.setAttribute("errorLogic", "Problems with updating route");
             }
-        } else {
-            request.setAttribute("errorLogic", "Problems with updating route");
-        }
         log.info("Unfortunately, route not updated. Redirect to view --> {}", Constants.ADMIN_ROUTE_ADD_EDIT);
         RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.ADMIN_ROUTE_ADD_EDIT);
         requestDispatcher.forward(request, response);
+    }
+
+    private boolean updateSingleRoute(HttpServletRequest request) {
+        int id = Integer.parseInt(request.getParameter("id"));
+        int trainId = Integer.parseInt(request.getParameter("trainId"));
+        int stationId = Integer.parseInt(request.getParameter("stationId"));
+
+        LocalDateTime arrival;
+        LocalDateTime departure;
+        arrival = LocalDateTime.parse(request.getParameter("arrival"), formatPattern);
+        departure = LocalDateTime.parse(request.getParameter("departure"), formatPattern);
+        if (!trainAndStationExist(trainId, stationId)) {
+            request.setAttribute(Constants.ERROR_VALIDATION, "Train/Station does`t exist even");
+            return false;
+        }
+        RouteDao routeDao = new RouteDaoImpl();
+        SingleRoute newSingleRoute = SingleRoute.builder()
+                .id(id)
+                .trainId(trainId)
+                .stationId(stationId)
+                .arrivalDate(arrival)
+                .departureDate(departure)
+                .build();
+        return routeDao.updateSingleRoute(newSingleRoute);
+    }
+
+    private boolean trainAndStationExist(int trainId, int stationId) {
+        TrainAndModelDao trainAndModelDao = new TrainModelDaoImpl();
+        StationDao stationDao = new StationDaoImpl();
+        Optional<Train> searchedTrain = trainAndModelDao.getTrain(trainId);
+        Optional<Station> searchedStation = stationDao.getById(stationId);
+        return searchedTrain.isPresent() && searchedStation.isPresent();
     }
 
     private boolean routeDataValidation(HttpServletRequest request) {
@@ -74,43 +99,12 @@ public class SingleRouteEditPOSTCommand implements ICommand {
             request.setAttribute(Constants.ERROR_VALIDATION, "Wrong dates");
             return false;
         }
+        LocalDateTime arrivalDate = LocalDateTime.parse(arrival, formatPattern);
+        LocalDateTime departureDate = LocalDateTime.parse(departure, formatPattern);
+        if (departureDate.isBefore(arrivalDate) || arrivalDate.isBefore(LocalDateTime.now()) || departureDate.isEqual(LocalDateTime.now())) {
+            request.setAttribute(Constants.ERROR_VALIDATION, "Wrong dates range ");
+            return false;
+        }
         return true;
-    }
-
-    private boolean updateSingleRoute(HttpServletRequest request) {
-        int id = Integer.parseInt(request.getParameter("id"));
-        int trainId = Integer.parseInt(request.getParameter("trainId"));
-        int stationId = Integer.parseInt(request.getParameter("stationId"));
-
-        DateFormat formatPattern = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-        Date arrival;
-        Date departure;
-        try {
-            arrival = formatPattern.parse(request.getParameter("arrival"));
-            departure = formatPattern.parse(request.getParameter("departure"));
-        } catch (ParseException e) {
-            return false;
-        }
-        if (!checkInputIsValid(trainId, stationId, departure, arrival)) {
-            return false;
-        }
-        RouteDao routeDao = new RouteDaoImpl();
-        SingleRoute newSingleRoute = SingleRoute.builder()
-                .id(id)
-                .trainId(trainId)
-                .stationId(stationId)
-                .arrivalDate(arrival)
-                .departureDate(departure)
-                .build();
-        return routeDao.updateSingleRoute(newSingleRoute);
-    }
-
-    private boolean checkInputIsValid(int trainId, int stationId, Date departure, Date arrival) {
-        TrainAndModelDao trainAndModelDao = new TrainModelDaoImpl();
-        StationDao stationDao = new StationDaoImpl();
-        Optional<Train> searchedTrain = trainAndModelDao.getTrain(trainId);
-        Optional<Station> searchedStation = stationDao.getById(stationId);
-        return searchedTrain.isPresent() && searchedStation.isPresent()
-                && arrival.getTime() < departure.getTime();
     }
 }

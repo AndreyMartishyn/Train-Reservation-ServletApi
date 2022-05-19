@@ -4,12 +4,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.martishyn.app.data.dao.interfaces.TicketDao;
 import ua.martishyn.app.data.dao.interfaces.TrainAndModelDao;
-import ua.martishyn.app.data.entities.Station;
 import ua.martishyn.app.data.entities.Ticket;
 import ua.martishyn.app.data.entities.Train;
 import ua.martishyn.app.data.utils.DataBasePoolManager;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -42,7 +44,7 @@ public class TicketDaoImpl implements TicketDao {
     public Optional<List<Ticket>> getAllTickets() {
         List<Ticket> tickets = new ArrayList<>();
         try (Connection connection = DataBasePoolManager.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_TICKETS)){
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_TICKETS)) {
             ResultSet ticketFromResultSet = preparedStatement.executeQuery();
             while (ticketFromResultSet.next()) {
                 tickets.add(getTicketFromResultSet(ticketFromResultSet));

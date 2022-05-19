@@ -64,7 +64,7 @@ public class StationDaoImpl implements StationDao {
     public Optional<List<Station>> getAll() {
         List<Station> stations = new ArrayList<>();
         try (Connection connection = DataBasePoolManager.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_STATIONS, Statement.RETURN_GENERATED_KEYS)){
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_STATIONS)){
              ResultSet stationFromResultSet = preparedStatement.executeQuery();
             while (stationFromResultSet.next()) {
                 stations.add(getStationFromResultSet(stationFromResultSet));

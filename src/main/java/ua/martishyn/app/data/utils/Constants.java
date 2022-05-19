@@ -19,6 +19,7 @@ public class Constants {
 
     public static final String CUSTOMER_BOOK_PAGE = JSP_LOC + "customer/customer_search_tickets.jsp";
     public static final String CUSTOMER_TICKETS_PAGE = JSP_LOC + "customer/customer_tickets_page.jsp";
+    public static final String CUSTOMER_ROUTE_VIEW = JSP_LOC + "customer/customer_route_view.jsp";
 
     ////////////////////////////////////////////////////////////////////////////////
     public static final String ERROR_VALIDATION = "errorValidation";

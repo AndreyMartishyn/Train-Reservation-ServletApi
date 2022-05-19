@@ -52,6 +52,7 @@ public class CommandContainer {
         commands.put("/customer-buy-ticket.command", new CustomerBuyTicketCommand());
         commands.put("/customer-tickets-page.command", new CustomerTicketsPageCommand());
         commands.put("/customer-ticket-pay.command", new CustomerTicketPayCommand());
+        commands.put("/customer-show-route.command", new CustomerShowRouteCommand());
 
     }
 

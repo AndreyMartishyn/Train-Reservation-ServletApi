@@ -1,4 +1,5 @@
 <%@ include file="/view/static/basic_context.jsp" %>
+<%@ taglib prefix="datef" uri="/WEB-INF/tlds/dateFunction.tld"  %>
 <head>
 <%@ include file="/view/static/meta.jsp" %>
 </head>
@@ -27,8 +28,8 @@
                         <td><c:out value="${route.id}"/> </td>
                         <td><c:out value="${route.trainId}"/> </td>
                         <td><c:out value="${route.stationId}"/> </td>
-                        <td><c:out value="${route.arrival}"/> </td>
-                        <td><c:out value="${route.departure}"/> </td>
+                        <td><c:out value="${datef:formatLocalDateTime(route.arrival, 'dd.MM.yyyy HH:mm')}"/> </td>
+                        <td><c:out value="${datef:formatLocalDateTime(route.departure, 'dd.MM.yyyy HH:mm')}"/> </td>
                         <td>
                         <a href="route-edit.command?id=<c:out value='${route.id}'/>&stationId=<c:out value='${route.stationId}' />" class="btn btn-dark"><fmt:message key="admin.page.edit"/></a>
                         <a href="route-delete.command?id=<c:out value='${route.id}'/>&stationId=<c:out value='${route.stationId}' />" class="btn btn-dark"><fmt:message key="admin.page.delete"/></a>

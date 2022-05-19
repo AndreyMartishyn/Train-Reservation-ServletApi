@@ -1,47 +1,53 @@
 package ua.martishyn.app.data.entities;
 
-import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class SingleRoute implements Entity {
     private int id;
     private int trainId;
     private int stationId;
-    private Date arrival;
-    private Date departure;
+    private LocalDateTime arrival;
+    private LocalDateTime departure;
 
     public static Builder builder() {
         return new Builder();
     }
 
     public static class Builder {
-        private SingleRoute intermediateStationRoute;
+        private final SingleRoute intermediateStationRoute;
 
         public Builder() {
             intermediateStationRoute = new SingleRoute();
         }
-        public Builder id(int id){
+
+        public Builder id(int id) {
             intermediateStationRoute.id = id;
             return this;
         }
-        public Builder trainId(int id){
+
+        public Builder trainId(int id) {
             intermediateStationRoute.trainId = id;
             return this;
         }
-        public Builder stationId(int id){
+
+        public Builder stationId(int id) {
             intermediateStationRoute.stationId = id;
             return this;
         }
-        public Builder arrivalDate(Date arrivalDate){
+
+        public Builder arrivalDate(LocalDateTime arrivalDate) {
             intermediateStationRoute.arrival = arrivalDate;
             return this;
         }
-        public Builder departureDate(Date departureDate){
+
+        public Builder departureDate(LocalDateTime departureDate) {
             intermediateStationRoute.departure = departureDate;
             return this;
         }
-        public SingleRoute build(){
+
+        public SingleRoute build() {
             return intermediateStationRoute;
         }
     }
@@ -58,11 +64,11 @@ public class SingleRoute implements Entity {
         return stationId;
     }
 
-    public Date getArrival() {
+    public LocalDateTime getArrival() {
         return arrival;
     }
 
-    public Date getDeparture() {
+    public LocalDateTime getDeparture() {
         return departure;
     }
 

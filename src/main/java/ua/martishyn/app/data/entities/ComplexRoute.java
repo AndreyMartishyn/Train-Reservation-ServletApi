@@ -1,6 +1,7 @@
 package ua.martishyn.app.data.entities;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -12,10 +13,10 @@ public class ComplexRoute implements Entity {
 
     public static class IntermediateStation implements Serializable {
         Station station;
-        Date arrivalDate;
-        Date departureDate;
+        LocalDateTime arrivalDate;
+        LocalDateTime departureDate;
 
-        public IntermediateStation(Station station, Date arrivalDate, Date departureDate) {
+        public IntermediateStation(Station station, LocalDateTime arrivalDate, LocalDateTime departureDate) {
             this.station = station;
             this.arrivalDate = arrivalDate;
             this.departureDate = departureDate;
@@ -25,11 +26,11 @@ public class ComplexRoute implements Entity {
             return station;
         }
 
-        public Date getArrivalDate() {
+        public LocalDateTime getArrivalDate() {
             return arrivalDate;
         }
 
-        public Date getDepartureDate() {
+        public LocalDateTime getDepartureDate() {
             return departureDate;
         }
     }
@@ -50,7 +51,7 @@ public class ComplexRoute implements Entity {
         this.train = train;
     }
 
-    public void addIntermediateStation(Station station, Date arrival, Date departure) {
+    public void addIntermediateStation(Station station, LocalDateTime arrival, LocalDateTime departure) {
         intermediateStations.add(new IntermediateStation(station, arrival, departure));
     }
 
