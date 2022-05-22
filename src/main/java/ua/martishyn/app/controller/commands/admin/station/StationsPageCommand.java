@@ -32,7 +32,6 @@ public class StationsPageCommand implements ICommand {
             request.setAttribute("no-stations", "No stations found at the moment");
         }
         RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.ADMIN_STATIONS);
-        log.info("Redirect to view --> {}", Constants.ADMIN_STATIONS);
         requestDispatcher.forward(request, response);
 
     }

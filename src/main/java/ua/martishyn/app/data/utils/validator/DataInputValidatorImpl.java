@@ -16,7 +16,7 @@ public class DataInputValidatorImpl implements DataInputValidator {
     private static final String STRING_REGEX = "^([\\p{L}-]*[\\s]*)$";
     private static final String NUM_REGEX = "^\\d{1,10}$";
     private static final String PASSWORD_REGEX = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$";
-    private static final String EMAIL_REGEX = "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$";
+    private static final String EMAIL_REGEX = "^[a-zA-Z0-9_.+-]+@[a-zA-Z-]+\\.[a-zA-Z.]+$";
 
     /**
      * Checks input for correct

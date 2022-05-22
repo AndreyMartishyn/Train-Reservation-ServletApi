@@ -1,10 +1,9 @@
-package ua.martishyn.app.controller.commands.customer;
+package ua.martishyn.app.controller.commands.common;
 
 import ua.martishyn.app.controller.commands.ICommand;
 import ua.martishyn.app.data.dao.impl.RouteDaoImpl;
 import ua.martishyn.app.data.dao.interfaces.RouteDao;
 import ua.martishyn.app.data.entities.ComplexRoute;
-import ua.martishyn.app.data.entities.SingleRoute;
 import ua.martishyn.app.data.utils.Constants;
 
 import javax.servlet.RequestDispatcher;
@@ -12,12 +11,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class CustomerShowRouteCommand implements ICommand {
+public class ShowRouteCommand implements ICommand {
     private static final RouteDao routeDao = new RouteDaoImpl();
 
     @Override

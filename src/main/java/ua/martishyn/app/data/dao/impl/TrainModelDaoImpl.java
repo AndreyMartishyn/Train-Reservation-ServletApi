@@ -135,10 +135,10 @@ public class TrainModelDaoImpl implements TrainAndModelDao {
     }
 
     private TrainModel getTrainModelFromResultSet(ResultSet trainModelRs) throws SQLException {
-        TrainModel model = new TrainModel();
-        model.setId(trainModelRs.getInt(1));
-        model.setName(trainModelRs.getString(2));
-        return model;
+        return TrainModel.builder()
+                .id(trainModelRs.getInt(1))
+                .name(trainModelRs.getString(2))
+                .build();
     }
 
     private Train getTrainFromResultSet(ResultSet trainFromResultSet) throws SQLException {
@@ -150,13 +150,13 @@ public class TrainModelDaoImpl implements TrainAndModelDao {
     }
 
     private Wagon getCoachesFromResultSet(ResultSet resultSet) throws SQLException {
-        Wagon wagon = new Wagon();
-        wagon.setId(resultSet.getInt("wagon_id"));
-        wagon.setRouteId(resultSet.getInt("route_id"));
-        wagon.setComfortClass(ComfortClass.valueOf(resultSet.getString("comfort_class")));
-        wagon.setNumOfSeats(resultSet.getInt("seats"));
-        wagon.setPriceForSeat(resultSet.getInt("price"));
-        return wagon;
+        return Wagon.builder()
+                .id(resultSet.getInt("wagon_id"))
+                .routeId(resultSet.getInt("route_id"))
+                .type(ComfortClass.valueOf(resultSet.getString("comfort_class")))
+                .numOfSeats(resultSet.getInt("seats"))
+                .priceForSeat(resultSet.getInt("price"))
+                .build();
     }
 
     private static void close(AutoCloseable ac) {

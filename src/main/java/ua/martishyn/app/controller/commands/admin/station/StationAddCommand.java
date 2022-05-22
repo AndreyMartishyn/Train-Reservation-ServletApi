@@ -15,12 +15,10 @@ import java.io.IOException;
 
 @HasRole(role = Role.ADMIN)
 public class StationAddCommand implements ICommand {
-    private static final Logger log = LogManager.getLogger(StationAddCommand.class);
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.ADMIN_ADD_EDIT_STATIONS);
-        log.info("Redirecting to view --> {}", Constants.ADMIN_ADD_EDIT_STATIONS);
         requestDispatcher.forward(request, response);
     }
 }

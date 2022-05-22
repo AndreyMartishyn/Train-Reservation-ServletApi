@@ -11,11 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class RegisterPageCommand implements ICommand {
-    private static final Logger log = LogManager.getLogger(RegisterPageCommand.class);
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        log.info("Redirecting to registration form");
         RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.REGISTER_PAGE);
         requestDispatcher.forward(request, response);
     }

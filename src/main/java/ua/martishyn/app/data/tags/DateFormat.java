@@ -1,4 +1,4 @@
-package ua.martishyn.app.data.tag;
+package ua.martishyn.app.data.tags;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

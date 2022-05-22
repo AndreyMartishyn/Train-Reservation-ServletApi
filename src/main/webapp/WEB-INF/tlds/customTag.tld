@@ -9,7 +9,7 @@
     <uri>/WEB-INF/tlds/customTag</uri>
     <tag>
         <name>custom</name>
-        <tag-class>ua.martishyn.app.data.tag.CustomDataTag</tag-class>
+        <tag-class>ua.martishyn.app.data.tags.CustomDataTag</tag-class>
         <body-content>empty</body-content>
     </tag>
 </taglib>

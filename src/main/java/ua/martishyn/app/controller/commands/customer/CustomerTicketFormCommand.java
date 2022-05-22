@@ -9,11 +9,13 @@ import ua.martishyn.app.data.dao.interfaces.TrainAndModelDao;
 import ua.martishyn.app.data.entities.BookingDTO;
 import ua.martishyn.app.data.entities.Wagon;
 import ua.martishyn.app.data.entities.enums.Role;
+import ua.martishyn.app.data.utils.Constants;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -36,7 +38,7 @@ public class CustomerTicketFormCommand implements ICommand {
             return;
         }
         log.info("DTO object is transferred to the jsp form");
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("/view/customer/customer_ticket_buy.jsp");
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.CUSTOMER_TICKETS_FORM);
         requestDispatcher.forward(request, response);
     }
 

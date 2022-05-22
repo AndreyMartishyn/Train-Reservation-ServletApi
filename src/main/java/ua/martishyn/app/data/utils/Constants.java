@@ -17,8 +17,8 @@ public class Constants {
     public static final String ADMIN_ROUTES = JSP_LOC + "admin/admin_routes.jsp";
     public static final String ADMIN_ROUTE_ADD_EDIT = JSP_LOC + "admin/admin_add_edit_single_route.jsp";
 
-    public static final String CUSTOMER_BOOK_PAGE = JSP_LOC + "customer/customer_search_tickets.jsp";
     public static final String CUSTOMER_TICKETS_PAGE = JSP_LOC + "customer/customer_tickets_page.jsp";
+    public static final String CUSTOMER_TICKETS_FORM = JSP_LOC + "customer/customer_ticket_buy.jsp";
     public static final String CUSTOMER_ROUTE_VIEW = JSP_LOC + "customer/customer_route_view.jsp";
 
     ////////////////////////////////////////////////////////////////////////////////

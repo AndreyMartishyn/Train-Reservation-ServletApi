@@ -17,7 +17,7 @@ public class AuthenticationFilter implements Filter {
     private static final Logger log = LogManager.getLogger(AuthenticationFilter.class);
     private static final List<String> commonPages = Arrays.asList("/login-page.command",
             "/login.command", "/register.command", "/register-page.command", "/about-us.command",
-            "/index.command", "/view");
+            "/index.command", "/view", "/search-tickets.command", "/show-route.command");
 
     @Override
     public void init(FilterConfig filterConfig) {
@@ -42,7 +42,7 @@ public class AuthenticationFilter implements Filter {
         User user = (User) req.getSession().getAttribute("user");
         if (user == null) {
             log.info("Authentication check in progress. User not found. Redirecting to login page");
-            resp.sendRedirect(req.getContextPath() + "/index.command");
+            resp.sendRedirect(req.getContextPath() + "/login-page.command");
             return;
         }
         chain.doFilter(request, response);

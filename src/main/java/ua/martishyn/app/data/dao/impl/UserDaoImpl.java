@@ -119,10 +119,12 @@ public class UserDaoImpl implements UserDao {
 
         } catch (SQLException exception) {
             log.error("Problems with updating user by id {}", exception.toString());
-            try {
-                connection.rollback();
-            } catch (SQLException e) {
-                log.error("Problems with transaction {}", e.toString());
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException e) {
+                    log.error("Problems with transaction {}", e.toString());
+                }
             }
         } finally {
             close(connection);

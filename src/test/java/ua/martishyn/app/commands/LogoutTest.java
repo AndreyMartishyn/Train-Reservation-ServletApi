@@ -1,4 +1,4 @@
-package ua.martishyn.app.command;
+package ua.martishyn.app.commands;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import java.io.IOException;
-import java.util.concurrent.ConcurrentSkipListMap;
 
 import static org.mockito.Mockito.*;
 
@@ -38,12 +37,12 @@ public class LogoutTest {
 
     @Test
     public void shouldInvalidateNotNullSessionWhenLogout() throws ServletException, IOException {
-        when(mockRequest.getRequestDispatcher(Constants.HOME_PAGE)).thenReturn(mockDispatcher);
+        when(mockRequest.getRequestDispatcher("index.command")).thenReturn(mockDispatcher);
         when(mockRequest.getSession(false)).thenReturn(mockSession);
 
         logoutCommand.execute(mockRequest,mockResponse);
         verify(mockSession).invalidate();
-        verify(mockRequest, times(1)).getRequestDispatcher(Constants.HOME_PAGE);
+        verify(mockRequest, times(1)).getRequestDispatcher("index.command");
         verify(mockDispatcher).forward(mockRequest,mockResponse);
     }
 }

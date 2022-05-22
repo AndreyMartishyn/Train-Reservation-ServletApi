@@ -15,12 +15,10 @@ import java.io.IOException;
 
 @HasRole(role = Role.ADMIN)
 public class SingleRouteAddCommand implements ICommand {
-    private static final Logger log = LogManager.getLogger(SingleRouteAddCommand.class);
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.ADMIN_ROUTE_ADD_EDIT);
-        log.info("Redirecting to view --> {}", Constants.ADMIN_ROUTE_ADD_EDIT);
         requestDispatcher.forward(request, response);
     }
 }

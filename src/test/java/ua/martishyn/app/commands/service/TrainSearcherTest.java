@@ -1,24 +1,56 @@
-package ua.martishyn.app.utils;
+package ua.martishyn.app.commands.service;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import ua.martishyn.app.controller.commands.common.SearchTicketsCommand;
 import ua.martishyn.app.data.entities.*;
-import ua.martishyn.app.data.service.TrainHelper;
+import ua.martishyn.app.controller.commands.customer.TrainHelper;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
+
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
 
 public class TrainSearcherTest {
     private TrainHelper trainSearcher;
     private List<ComplexRoute> routeList;
     private List<Wagon> wagons;
+    private SearchTicketsCommand customerSearchTicketsCommand;
+
+    @Mock
+    HttpServletRequest mockRequest;
+    @Mock
+    HttpServletResponse mockResponse;
+    @Mock
+    RequestDispatcher mockDispatcher;
 
 
     @Before
     public void setUp() {
+        MockitoAnnotations.initMocks(this);
         TrainSearcherContainer trainSearcherContainer = new TrainSearcherContainer();
         routeList = trainSearcherContainer.getComplexRoutes();
         wagons = trainSearcherContainer.getWagons();
+        customerSearchTicketsCommand = new SearchTicketsCommand();
+    }
+
+    @Test
+    public void shouldRedirectToMainPageIfSameStations() throws ServletException, IOException {
+        when(mockRequest.getRequestDispatcher("index.command")).thenReturn(mockDispatcher);
+        when(mockRequest.getParameter("stationFrom")).thenReturn(String.valueOf(1));
+        when(mockRequest.getParameter("stationTo")).thenReturn(String.valueOf(1));
+        customerSearchTicketsCommand.execute(mockRequest, mockResponse);
+        verify(mockRequest).setAttribute("sameStations", "Departure and arrival stations are same");
+        verify(mockRequest, times(1)).getRequestDispatcher("index.command");
+        verify(mockDispatcher).forward(mockRequest, mockResponse);
     }
 
     @Test

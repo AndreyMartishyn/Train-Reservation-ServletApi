@@ -2,7 +2,6 @@ package ua.martishyn.app.controller.commands.admin.route;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.taglibs.standard.lang.jstl.test.PageContextImpl;
 import ua.martishyn.app.controller.commands.ICommand;
 import ua.martishyn.app.controller.filters.HasRole;
 import ua.martishyn.app.data.dao.impl.RouteDaoImpl;
@@ -24,7 +23,7 @@ import java.util.Optional;
 @HasRole(role = Role.ADMIN)
 public class SingleRoutesPageCommand implements ICommand {
     private static final Logger log = LogManager.getLogger(SingleRoutesPageCommand.class);
-    RequestPaginationHelper paginationHelper = new RequestPaginationImpl();
+    private static final RequestPaginationHelper paginationHelper = new RequestPaginationImpl();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

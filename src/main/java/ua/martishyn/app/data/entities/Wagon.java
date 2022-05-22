@@ -2,16 +2,52 @@ package ua.martishyn.app.data.entities;
 
 import ua.martishyn.app.data.entities.enums.ComfortClass;
 
-import java.io.Serializable;
-
 public class Wagon implements Entity {
     private int id;
     private int routeId;
-    private ComfortClass comfortClass;
+    private ComfortClass type;
     private int numOfSeats;
     private int priceForSeat;
 
-    public Wagon() {
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+        private final Wagon newWagon;
+
+        public Builder() {
+            newWagon = new Wagon();
+        }
+
+        public Builder id(int id) {
+            newWagon.id = id;
+            return this;
+        }
+
+        public Builder routeId(int id) {
+            newWagon.routeId = id;
+            return this;
+        }
+
+        public Builder type(ComfortClass type) {
+            newWagon.type = type;
+            return this;
+        }
+
+        public Builder numOfSeats(int seats) {
+            newWagon.numOfSeats = seats;
+            return this;
+        }
+
+        public Builder priceForSeat(int price) {
+            newWagon.priceForSeat = price;
+            return this;
+        }
+
+        public Wagon build() {
+            return newWagon;
+        }
     }
 
     public int getId() {
@@ -30,12 +66,12 @@ public class Wagon implements Entity {
         this.routeId = routeId;
     }
 
-    public ComfortClass getComfortClass() {
-        return comfortClass;
+    public ComfortClass getType() {
+        return type;
     }
 
-    public void setComfortClass(ComfortClass comfortClass) {
-        this.comfortClass = comfortClass;
+    public void setType(ComfortClass type) {
+        this.type = type;
     }
 
     public int getNumOfSeats() {
@@ -44,10 +80,6 @@ public class Wagon implements Entity {
 
     public void setNumOfSeats(int numOfSeats) {
         this.numOfSeats = numOfSeats;
-    }
-
-    public int getPriceForSeat() {
-        return priceForSeat;
     }
 
     public void setPriceForSeat(int priceForSeat) {

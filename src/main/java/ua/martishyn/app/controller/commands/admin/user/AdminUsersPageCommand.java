@@ -33,7 +33,6 @@ public class AdminUsersPageCommand implements ICommand {
             request.setAttribute("no-users", "No users found at the moment");
         }
         RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.ADMIN_USERS);
-        log.info("Redirect to view --> {}", Constants.ADMIN_USERS);
         requestDispatcher.forward(request, response);
     }
 

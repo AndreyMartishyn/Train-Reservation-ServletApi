@@ -18,7 +18,7 @@ public class User implements Entity {
     }
 
     public static class Builder {
-        private User newUser;
+        private final User newUser;
 
         public Builder() {
             newUser = new User();

@@ -6,7 +6,10 @@ import ua.martishyn.app.data.dao.interfaces.StationDao;
 import ua.martishyn.app.data.entities.Station;
 import ua.martishyn.app.data.utils.DataBasePoolManager;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -36,22 +39,6 @@ public class StationDaoImpl implements StationDao {
         return Optional.ofNullable(stationFromDb);
     }
 
-    @Override
-    public Optional<Station> getByName(String name) {
-        Station stationFromDb = null;
-        try (Connection connection = DataBasePoolManager.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_STATION_BY_NAME)) {
-            preparedStatement.setString(1, name);
-            ResultSet stationFromResultSet = preparedStatement.executeQuery();
-            while (stationFromResultSet.next()) {
-                stationFromDb = getStationFromResultSet(stationFromResultSet);
-            }
-        } catch (SQLException e) {
-            log.error("Problems with getting station by name {}", e.toString());
-        }
-        return Optional.ofNullable(stationFromDb);
-    }
-
     private Station getStationFromResultSet(ResultSet resultSet) throws SQLException {
         return Station.builder()
                 .id(resultSet.getInt(1))
@@ -64,8 +51,8 @@ public class StationDaoImpl implements StationDao {
     public Optional<List<Station>> getAll() {
         List<Station> stations = new ArrayList<>();
         try (Connection connection = DataBasePoolManager.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_STATIONS)){
-             ResultSet stationFromResultSet = preparedStatement.executeQuery();
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_STATIONS)) {
+            ResultSet stationFromResultSet = preparedStatement.executeQuery();
             while (stationFromResultSet.next()) {
                 stations.add(getStationFromResultSet(stationFromResultSet));
             }

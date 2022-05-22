@@ -10,12 +10,11 @@ public class TrainModel implements Entity {
         return new Builder();
     }
 
-    private static class Builder {
-        private TrainModel newModel;
+    public static class Builder {
+        private final TrainModel newModel;
 
         public Builder() {
             newModel = new TrainModel();
-
         }
 
         public Builder id(int id) {

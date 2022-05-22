@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Logger;
 import ua.martishyn.app.controller.commands.ICommand;
 import ua.martishyn.app.controller.filters.HasRole;
 import ua.martishyn.app.data.dao.impl.UserDaoImpl;
-import ua.martishyn.app.data.dao.interfaces.UserDao;
 import ua.martishyn.app.data.entities.User;
 import ua.martishyn.app.data.entities.enums.Role;
 import ua.martishyn.app.data.service.UserService;
@@ -26,20 +25,40 @@ public class AdminUserEditPostCommand implements ICommand {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (userDataValidation(request)) {
-            if (updateUser(request)) {
-                log.info("User updated successfully");
-                response.sendRedirect("users-page.command");
-                return;
-            } else {
-                request.setAttribute("errorLogic", "Problems with updating route");
-            }
-        } else {
-            request.setAttribute("errorLogic", "Problems with updating route");
+        if (userDataValidation(request) && updateUser(request)) {
+            log.info("User updated successfully");
+            response.sendRedirect("users-page.command");
+            return;
         }
         log.info("Unfortunately, user not updated. Redirect to view --> {}", Constants.ADMIN_USERS);
         RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.ADMIN_USERS);
         requestDispatcher.forward(request, response);
+    }
+
+    private boolean updateUser(HttpServletRequest request) {
+        int userId = Integer.parseInt(request.getParameter("id"));
+        String firstName = request.getParameter("firstName");
+        String lastName = request.getParameter("lastName");
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+        String hashPass = null;
+        try {
+            hashPass = PasswordEncodingService.makeHash(password);
+        } catch (Exception e) {
+            log.error("Something wrong with password hashing {}", e.getMessage());
+        }
+        Role role = Role.valueOf(request.getParameter("role"));
+
+        UserService userService = new UserService(new UserDaoImpl());
+        User updatedUser = User.builder()
+                .id(userId)
+                .firstName(firstName)
+                .lastName(lastName)
+                .email(email)
+                .password(hashPass)
+                .role(role)
+                .build();
+        return userService.update(updatedUser);
     }
 
     private boolean userDataValidation(HttpServletRequest request) {
@@ -70,31 +89,5 @@ public class AdminUserEditPostCommand implements ICommand {
             return false;
         }
         return true;
-    }
-
-    private boolean updateUser(HttpServletRequest request) {
-        int userId = Integer.parseInt(request.getParameter("id"));
-        String firstName = request.getParameter("firstName");
-        String lastName = request.getParameter("lastName");
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
-        String hashPass = null;
-        try {
-            hashPass = PasswordEncodingService.makeHash(password);
-        } catch (Exception e) {
-            log.error("Something wrong with password hashing {}" , e.getMessage());
-        }
-        Role role = Role.valueOf(request.getParameter("role"));
-
-        UserService userService = new UserService(new UserDaoImpl());
-        User updatedUser = User.builder()
-                .id(userId)
-                .firstName(firstName)
-                .lastName(lastName)
-                .email(email)
-                .password(hashPass)
-                .role(role)
-                .build();
-        return userService.update(updatedUser);
     }
 }

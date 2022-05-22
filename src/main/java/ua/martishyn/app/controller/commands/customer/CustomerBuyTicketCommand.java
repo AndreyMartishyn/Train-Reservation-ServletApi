@@ -45,8 +45,7 @@ public class CustomerBuyTicketCommand implements ICommand {
                 log.info("Ticket not created");
             }
         }
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("customer-booking.command");
-        log.info("Redirect to view --> {}", Constants.CUSTOMER_BOOK_PAGE);
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("index.command");
         requestDispatcher.forward(request, response);
     }
 
@@ -71,7 +70,7 @@ public class CustomerBuyTicketCommand implements ICommand {
         return isAvailablePlace(request, wagon, place);
     }
 
-    private boolean isAvailablePlace(HttpServletRequest request, String wagon, String place) {
+    protected boolean isAvailablePlace(HttpServletRequest request, String wagon, String place) {
         int selectedWagon = Integer.parseInt(wagon);
         int selectedPlace = Integer.parseInt(place);
         Optional<Wagon> wagonBooked = trainAndModelDao.getWagonById(selectedWagon);

@@ -23,36 +23,40 @@ public class LoginCommand implements ICommand {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        if (isUserLogged(request)) {
+            response.sendRedirect("index.command");
+        } else {
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.LOGIN_PAGE);
+            requestDispatcher.forward(request, response);
+        }
+    }
+
+    private boolean isUserLogged(HttpServletRequest request) {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
-
         if (checkForValidDataInput(email, password)) {
             Optional<User> optionalUser = getUserByEmail(email);
-            if (!checkUserPresenceInDB(email)) {
-                request.setAttribute("noSuchUser", "No user found");
-                log.error("No user found with email --> {}", optionalUser.get().getEmail());
+            if (!checkUserPresenceInDB(email) || !optionalUser.isPresent()) {
+                request.setAttribute(Constants.ERROR_VALIDATION, "No user found");
+                log.error("No user found with email --> {}", email);
             } else {
                 User loggedUser = optionalUser.get();
-                if (loggedUser.getPassword().equals(PasswordEncodingService.makeHash(password))) {
-                    log.trace("Found user in DB --> {}", loggedUser.getEmail());
+                if (!loggedUser.getPassword().equals(PasswordEncodingService.makeHash(password))) {
+                    request.setAttribute(Constants.ERROR_VALIDATION, "Enter correct password");
+                } else {
+                    log.trace("Found user in DB --> {}, role : {}", email, loggedUser.getRole());
                     request.getSession().setAttribute("user", loggedUser);
                     request.getSession().setAttribute("role", loggedUser.getRole());
-                    log.trace("User ROLE  --> {}", loggedUser.getRole());
-                    response.sendRedirect("index.command");
-                    return;
-                } else {
-                    log.error("Wrong password for user in DB --> {}", loggedUser.getEmail());
-                    request.setAttribute("notCorrectPass", "Enter correct password");
+                    return true;
                 }
             }
         } else {
-            request.setAttribute("notValidInput", "Enter valid input");
+            request.setAttribute(Constants.ERROR_VALIDATION, "Enter valid input");
         }
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.LOGIN_PAGE);
-        requestDispatcher.forward(request, response);
+        return false;
     }
 
-    public Optional<User> getUserByEmail(String email){
+    public Optional<User> getUserByEmail(String email) {
         UserService userService = new UserService(new UserDaoImpl());
         return userService.authenticate(email);
     }

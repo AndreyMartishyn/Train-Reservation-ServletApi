@@ -2,7 +2,8 @@ package ua.martishyn.app.controller;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ua.martishyn.app.controller.commands.*;
+import ua.martishyn.app.controller.commands.CommandContainer;
+import ua.martishyn.app.controller.commands.ICommand;
 import ua.martishyn.app.controller.filters.HasRole;
 import ua.martishyn.app.data.entities.enums.Role;
 
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
+import java.util.Arrays;
 
 @WebServlet({"*.command"})
 public class FrontController extends HttpServlet {
@@ -45,7 +47,7 @@ public class FrontController extends HttpServlet {
                 if (annotation instanceof HasRole) {
                     Role requiredRole = ((HasRole) annotation).role();
                     Role currentRole = (Role) req.getSession().getAttribute("role");
-                    if (requiredRole != currentRole) {
+                    if (differentRoles(requiredRole, currentRole)) {
                         resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                         resp.sendError(HttpServletResponse.SC_UNAUTHORIZED);
                         return;
@@ -61,5 +63,9 @@ public class FrontController extends HttpServlet {
         } else {
             log.error("Not suitable command --> {}", actionCommand);
         }
+    }
+
+    private boolean differentRoles(Role requiredRole, Role currentRole) {
+        return !requiredRole.equals(currentRole);
     }
 }

@@ -30,18 +30,18 @@ import java.util.Optional;
 @HasRole(role = Role.ADMIN)
 public class SingleRouteEditPOSTCommand implements ICommand {
     private static final Logger log = LogManager.getLogger(SingleRouteEditPOSTCommand.class);
-    DateTimeFormatter formatPattern = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+    private static final DateTimeFormatter formatPattern = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (routeDataValidation(request) && updateSingleRoute(request)){
-                log.info("Route updated successfully");
-                response.sendRedirect("routes-page.command");
-                return;
-            }
-        log.info("Unfortunately, route not updated. Redirect to view --> {}", Constants.ADMIN_ROUTE_ADD_EDIT);
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.ADMIN_ROUTE_ADD_EDIT);
-        requestDispatcher.forward(request, response);
+        if (routeDataValidation(request) && updateSingleRoute(request)) {
+            log.info("Route updated successfully");
+            response.sendRedirect("routes-page.command");
+        } else {
+            log.info("Unfortunately, route not updated. Redirect to view --> {}", Constants.ADMIN_ROUTE_ADD_EDIT);
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.ADMIN_ROUTE_ADD_EDIT);
+            requestDispatcher.forward(request, response);
+        }
     }
 
     private boolean updateSingleRoute(HttpServletRequest request) {

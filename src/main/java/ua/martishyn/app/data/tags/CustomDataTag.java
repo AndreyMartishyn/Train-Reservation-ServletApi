@@ -1,4 +1,4 @@
-package ua.martishyn.app.data.tag;
+package ua.martishyn.app.data.tags;
 
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.SimpleTagSupport;

@@ -24,17 +24,16 @@ public class SingleRouteDeleteCommand implements ICommand {
         if (deleteRoutePart(request)) {
             log.info("Deleting route done");
             response.sendRedirect("routes-page.command");
-            return;
+        } else {
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.ADMIN_ROUTES);
+            requestDispatcher.forward(request, response);
         }
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.ADMIN_ROUTES);
-        log.info("Redirecting to view --> {}", Constants.ADMIN_ROUTES);
-        requestDispatcher.forward(request, response);
     }
 
     private boolean deleteRoutePart(HttpServletRequest request) {
         RouteDao singleRouteDao = new RouteDaoImpl();
         int id = Integer.parseInt(request.getParameter("id"));
         int stationId = Integer.parseInt(request.getParameter("stationId"));
-        return singleRouteDao.deleteSingleRoute(id,stationId);
+        return singleRouteDao.deleteSingleRoute(id, stationId);
     }
 }

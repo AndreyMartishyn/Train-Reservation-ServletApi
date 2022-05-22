@@ -1,4 +1,4 @@
-package ua.martishyn.app.data.service;
+package ua.martishyn.app.controller.commands.customer;
 
 import ua.martishyn.app.data.entities.ComplexRoute;
 import ua.martishyn.app.data.entities.PersonalRoute;
@@ -104,7 +104,7 @@ public class TrainHelper {
     //gets train_coaches objects and makes stream with check if class is appropriate and sums seats for same class
     private int getClassPlaces(List<Wagon> wagons, ComfortClass type) {
         return wagons.stream()
-                .filter(wagon -> wagon.getComfortClass().name().equals(type.name()))
+                .filter(wagon -> wagon.getType().name().equals(type.name()))
                 .mapToInt(Wagon::getNumOfSeats)
                 .reduce(0, Integer::sum);
     }

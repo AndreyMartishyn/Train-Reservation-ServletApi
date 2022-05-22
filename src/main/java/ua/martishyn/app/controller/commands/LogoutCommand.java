@@ -2,7 +2,6 @@ package ua.martishyn.app.controller.commands;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ua.martishyn.app.data.utils.Constants;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -21,7 +20,7 @@ public class LogoutCommand implements ICommand {
             session.invalidate();
         }
         log.info("User logged out");
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.HOME_PAGE);
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("index.command");
         requestDispatcher.forward(request, response);
     }
 }

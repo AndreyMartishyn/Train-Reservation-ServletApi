@@ -29,9 +29,6 @@
                 </li>
                 <c:if test="${sessionScope.user.role == 'CUSTOMER'}">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="customer-booking.command"><fmt:message key="book"/></a>
-                </li>
-                <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="customer-tickets-page.command">My tickets</a>
                 </li>
                 </c:if>

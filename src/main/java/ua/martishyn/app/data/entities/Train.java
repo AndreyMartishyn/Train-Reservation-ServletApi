@@ -1,20 +1,17 @@
 package ua.martishyn.app.data.entities;
 
-import java.io.Serializable;
-import java.util.List;
 import java.util.Objects;
 
 public class Train implements Entity {
     private int id;
     private TrainModel model;
-    private List<Wagon> trainCarriages;
 
     public static Builder builder() {
         return new Builder();
     }
 
-    private static class Builder {
-        private Train newTrain;
+    public static class Builder {
+        private final Train newTrain;
 
         public Builder() {
             newTrain = new Train();
@@ -43,20 +40,8 @@ public class Train implements Entity {
         this.id = id;
     }
 
-    public TrainModel getModel() {
-        return model;
-    }
-
     public void setModel(TrainModel model) {
         this.model = model;
-    }
-
-    public List<Wagon> getTrainCarriages() {
-        return trainCarriages;
-    }
-
-    public void setTrainCarriages(List<Wagon> trainCarriages) {
-        this.trainCarriages = trainCarriages;
     }
 
     @Override

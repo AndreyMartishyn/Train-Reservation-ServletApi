@@ -24,12 +24,10 @@ public class StationDeleteCommand implements ICommand {
         if (deleteStation(request)) {
             log.info("Station deleted successfully");
             response.sendRedirect("stations-page.command");
-            return;
+        } else {
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.ADMIN_STATIONS);
+            requestDispatcher.forward(request, response);
         }
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.ADMIN_STATIONS);
-        log.info("Redirecting to view --> {}", Constants.ADMIN_STATIONS);
-        requestDispatcher.forward(request, response);
-
     }
 
     private boolean deleteStation(HttpServletRequest request) {

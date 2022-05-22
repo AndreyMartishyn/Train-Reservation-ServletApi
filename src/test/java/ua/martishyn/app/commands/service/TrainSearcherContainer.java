@@ -1,4 +1,4 @@
-package ua.martishyn.app.utils;
+package ua.martishyn.app.commands.service;
 
 import ua.martishyn.app.data.entities.*;
 import ua.martishyn.app.data.entities.enums.ComfortClass;
@@ -27,13 +27,13 @@ public class TrainSearcherContainer {
         Wagon firstWagon = new Wagon();
         firstWagon.setId(3);
         firstWagon.setRouteId(111);
-        firstWagon.setComfortClass(ComfortClass.FIRST);
+        firstWagon.setType(ComfortClass.FIRST);
         firstWagon.setNumOfSeats(10);
         firstWagon.setPriceForSeat(100);
         Wagon secondWagon = new Wagon();
         secondWagon.setId(5);
         secondWagon.setRouteId(222);
-        secondWagon.setComfortClass(ComfortClass.SECOND);
+        secondWagon.setType(ComfortClass.SECOND);
         secondWagon.setNumOfSeats(10);
         secondWagon.setPriceForSeat(200);
         wagons.add(firstWagon);

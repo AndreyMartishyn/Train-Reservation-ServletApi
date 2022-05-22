@@ -7,6 +7,8 @@ import ua.martishyn.app.controller.commands.admin.user.AdminUserEditCommand;
 import ua.martishyn.app.controller.commands.admin.user.AdminUserEditPostCommand;
 import ua.martishyn.app.controller.commands.admin.user.AdminUsersPageCommand;
 import ua.martishyn.app.controller.commands.common.AboutUsCommand;
+import ua.martishyn.app.controller.commands.common.SearchTicketsCommand;
+import ua.martishyn.app.controller.commands.common.ShowRouteCommand;
 import ua.martishyn.app.controller.commands.customer.*;
 
 import java.util.HashMap;
@@ -46,13 +48,12 @@ public class CommandContainer {
         commands.put("/route-add.command", new SingleRouteAddCommand());
         commands.put("/route-add-post.command", new SingleRouteAddPOSTCommand());
         //users booking
-        commands.put("/customer-booking.command", new CustomerBookingCommand());
-        commands.put("/customer-search-tickets.command", new CustomerSearchTicketsCommand());
+        commands.put("/search-tickets.command", new SearchTicketsCommand());
         commands.put("/customer-ticket-form.command", new CustomerTicketFormCommand());
         commands.put("/customer-buy-ticket.command", new CustomerBuyTicketCommand());
         commands.put("/customer-tickets-page.command", new CustomerTicketsPageCommand());
         commands.put("/customer-ticket-pay.command", new CustomerTicketPayCommand());
-        commands.put("/customer-show-route.command", new CustomerShowRouteCommand());
+        commands.put("/show-route.command", new ShowRouteCommand());
 
     }
 

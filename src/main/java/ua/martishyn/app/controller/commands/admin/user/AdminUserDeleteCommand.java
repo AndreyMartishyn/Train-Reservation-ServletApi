@@ -5,12 +5,9 @@ import org.apache.logging.log4j.Logger;
 import ua.martishyn.app.controller.commands.ICommand;
 import ua.martishyn.app.controller.filters.HasRole;
 import ua.martishyn.app.data.dao.impl.UserDaoImpl;
-import ua.martishyn.app.data.dao.interfaces.UserDao;
 import ua.martishyn.app.data.entities.enums.Role;
 import ua.martishyn.app.data.service.UserService;
 import ua.martishyn.app.data.utils.Constants;
-import ua.martishyn.app.data.utils.validator.DataInputValidator;
-import ua.martishyn.app.data.utils.validator.DataInputValidatorImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -27,11 +24,10 @@ public class AdminUserDeleteCommand implements ICommand {
         if (deleteUser(request)) {
             log.info("Deleting user done");
             response.sendRedirect("users-page.command");
-            return;
+        } else {
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.ADMIN_USERS);
+            requestDispatcher.forward(request, response);
         }
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.ADMIN_USERS);
-        log.info("Redirecting to view --> {}", Constants.ADMIN_USERS);
-        requestDispatcher.forward(request, response);
     }
 
     private boolean deleteUser(HttpServletRequest request) {

@@ -1,4 +1,4 @@
-package ua.martishyn.app.command;
+package ua.martishyn.app.commands;
 
 import org.junit.After;
 import org.junit.Before;
@@ -45,10 +45,11 @@ public class LoginPostTest {
         when(mockRequest.getParameter("email")).thenReturn("1@gmail.com");
         when(mockRequest.getParameter("password")).thenReturn("pass");
         loginCommand.execute(mockRequest, mockResponse);
-        verify(mockRequest).setAttribute("notValidInput", "Enter valid input");
+        verify(mockRequest).setAttribute(Constants.ERROR_VALIDATION, "Enter valid input");
         verify(mockRequest, times(1)).getRequestDispatcher(Constants.LOGIN_PAGE);
         verify(mockDispatcher).forward(mockRequest, mockResponse);
     }
+
 
 //    @Test
 //    public void shouldRedirectToLoginWhenUserNotFound() throws Exception {

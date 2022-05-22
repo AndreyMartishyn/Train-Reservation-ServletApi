@@ -30,18 +30,51 @@ import java.util.Optional;
 @HasRole(role = Role.ADMIN)
 public class SingleRouteAddPOSTCommand implements ICommand {
     private static final Logger log = LogManager.getLogger(SingleRouteAddPOSTCommand.class);
-    DateTimeFormatter formatPattern = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+    private static final DateTimeFormatter formatPattern = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (routeDataValidation(request) && createSingleRoute(request)) {
             log.info("Route added successfully");
             response.sendRedirect("routes-page.command");
-            return;
+        } else {
+            log.error("Unfortunately, route not added");
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.ADMIN_ROUTE_ADD_EDIT);
+            requestDispatcher.forward(request, response);
         }
-        log.error("Unfortunately, route not added");
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.ADMIN_ROUTE_ADD_EDIT);
-        requestDispatcher.forward(request, response);
+    }
+
+    private boolean createSingleRoute(HttpServletRequest request) {
+        if (!routeDataValidation(request)){
+            return false;
+        }
+        int id = Integer.parseInt(request.getParameter("id").trim());
+        int trainId = Integer.parseInt(request.getParameter("trainId").trim());
+        int stationId = Integer.parseInt(request.getParameter("stationId"));
+
+        if (!trainAndStationExist(trainId, stationId)) {
+            request.setAttribute(Constants.ERROR_VALIDATION, "Train/Station does`t exist even");
+            return false;
+        }
+        LocalDateTime arrival = LocalDateTime.parse(request.getParameter("arrival"), formatPattern);
+        LocalDateTime departure = LocalDateTime.parse(request.getParameter("departure"), formatPattern);
+        RouteDao routeDao = new RouteDaoImpl();
+        SingleRoute newSingleRoute = SingleRoute.builder()
+                .id(id)
+                .trainId(trainId)
+                .stationId(stationId)
+                .arrivalDate(arrival)
+                .departureDate(departure)
+                .build();
+        return routeDao.createSingleRoute(newSingleRoute);
+    }
+
+    private boolean trainAndStationExist(int trainId, int stationId) {
+        TrainAndModelDao trainAndModelDao = new TrainModelDaoImpl();
+        StationDao stationDao = new StationDaoImpl();
+        Optional<Train> searchedTrain = trainAndModelDao.getTrain(trainId);
+        Optional<Station> searchedStation = stationDao.getById(stationId);
+        return searchedTrain.isPresent() && searchedStation.isPresent();
     }
 
     private boolean routeDataValidation(HttpServletRequest request) {
@@ -74,38 +107,6 @@ public class SingleRouteAddPOSTCommand implements ICommand {
             return false;
         }
         return true;
-    }
-
-    private boolean createSingleRoute(HttpServletRequest request) {
-        int id = Integer.parseInt(request.getParameter("id"));
-        int trainId = Integer.parseInt(request.getParameter("trainId"));
-        int stationId = Integer.parseInt(request.getParameter("stationId"));
-        LocalDateTime arrival;
-        LocalDateTime departure;
-        arrival = LocalDateTime.parse(request.getParameter("arrival"), formatPattern);
-        departure = LocalDateTime.parse(request.getParameter("departure"), formatPattern);
-        if (!trainAndStationExist(trainId, stationId)) {
-            request.setAttribute(Constants.ERROR_VALIDATION, "Train/Station does`t exist even");
-            return false;
-        }
-
-        RouteDao routeDao = new RouteDaoImpl();
-        SingleRoute newSingleRoute = SingleRoute.builder()
-                .id(id)
-                .trainId(trainId)
-                .stationId(stationId)
-                .arrivalDate(arrival)
-                .departureDate(departure)
-                .build();
-        return routeDao.createSingleRoute(newSingleRoute);
-    }
-
-    private boolean trainAndStationExist(int trainId, int stationId) {
-        TrainAndModelDao trainAndModelDao = new TrainModelDaoImpl();
-        StationDao stationDao = new StationDaoImpl();
-        Optional<Train> searchedTrain = trainAndModelDao.getTrain(trainId);
-        Optional<Station> searchedStation = stationDao.getById(stationId);
-        return searchedTrain.isPresent() && searchedStation.isPresent();
     }
 }
 
