@@ -10,6 +10,8 @@ public class PersonalRoute implements Entity {
     private String roadTime;
     private int firstClassSeats;
     private int secondClassSeats;
+    private int firstClassTotalPrice;
+    private int secondClassTotalPrice;
     private StringBuilder redirectLink;
 
 
@@ -92,5 +94,21 @@ public class PersonalRoute implements Entity {
 
     public void setRedirectLink(StringBuilder redirectLink) {
         this.redirectLink = redirectLink;
+    }
+
+    public int getFirstClassTotalPrice() {
+        return firstClassTotalPrice;
+    }
+
+    public void setFirstClassTotalPrice(int firstClassTotalPrice) {
+        this.firstClassTotalPrice = firstClassTotalPrice;
+    }
+
+    public int getSecondClassTotalPrice() {
+        return secondClassTotalPrice;
+    }
+
+    public void setSecondClassTotalPrice(int secondClassTotalPrice) {
+        this.secondClassTotalPrice = secondClassTotalPrice;
     }
 }

@@ -7,7 +7,7 @@ public class Wagon implements Entity {
     private int routeId;
     private ComfortClass type;
     private int numOfSeats;
-    private int priceForSeat;
+    private int price;
 
     public static Builder builder() {
         return new Builder();
@@ -40,8 +40,8 @@ public class Wagon implements Entity {
             return this;
         }
 
-        public Builder priceForSeat(int price) {
-            newWagon.priceForSeat = price;
+        public Builder price(int price) {
+            newWagon.price = price;
             return this;
         }
 
@@ -82,7 +82,11 @@ public class Wagon implements Entity {
         this.numOfSeats = numOfSeats;
     }
 
-    public void setPriceForSeat(int priceForSeat) {
-        this.priceForSeat = priceForSeat;
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
     }
 }

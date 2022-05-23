@@ -11,10 +11,7 @@ import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class TrainHelper {
@@ -48,7 +45,7 @@ public class TrainHelper {
                 StringBuilder redirectLink = new StringBuilder();
                 redirectLink.append("?train=")
                         .append(personalRoute.getTrain().getId());
-                int numOfStationsPassed = 0;
+                int overallStationCounter = 0;
                 int fromId = 0;
                 int toId = 0;
                 LocalDateTime depDate = null;
@@ -58,7 +55,7 @@ public class TrainHelper {
                     Station station = stationObject.getStation();
                     if (station.getId() == fromStation.getId()) {
                         depDate = stationObject.getDepartureDate();
-                        fromId = numOfStationsPassed;
+                        fromId = overallStationCounter;
                         personalRoute.setDeparture(formatPattern.format(depDate));
                         personalRoute.setDepartureStation(fromStation.getName());
                         redirectLink.append("&fromStation=")
@@ -66,9 +63,10 @@ public class TrainHelper {
                                 .append("&departure=")
                                 .append(formatPattern.format(depDate));
                     }
+                    overallStationCounter++;
                     if (station.getId() == toStation.getId()) {
                         arrDate = stationObject.getArrivalDate();
-                        toId = numOfStationsPassed;
+                        toId = overallStationCounter;
                         personalRoute.setArrival(formatPattern.format(arrDate));
                         personalRoute.setArrivalStation(toStation.getName());
                         redirectLink.append("&toStation=")
@@ -76,23 +74,41 @@ public class TrainHelper {
                                 .append("&arrival=")
                                 .append(formatPattern.format(arrDate));
                     }
-                    numOfStationsPassed++;
                 }
                 if (fromId < toId) {
+                    int totalStationInRoute = toId - fromId;
                     long duration = Duration.between(Objects.requireNonNull(depDate), arrDate).toMillis();
-                    personalRoute.setRoadTime(routePattern.format(new Date(duration)));
+                    String durationFormatted = routePattern.format(new Date(duration));
+                    redirectLink.append("&duration=")
+                                .append(durationFormatted);
+                    personalRoute.setRoadTime(durationFormatted);
                     List<Wagon> trainWagons = wagons.stream()
                             .filter(wagon -> wagon.getRouteId() == complexRoute.getId())
                             .collect(Collectors.toList());
+
                     int firstClassPlaces = getClassPlaces(trainWagons, ComfortClass.FIRST);
+                    int firstClassPrice = getPriceForClassSeat(trainWagons, ComfortClass.FIRST, totalStationInRoute);
                     personalRoute.setFirstClassSeats(firstClassPlaces);
+                    personalRoute.setFirstClassTotalPrice(firstClassPrice);
+
                     int secondClassPlaces = getClassPlaces(trainWagons, ComfortClass.SECOND);
+                    int secondClassPrice = getPriceForClassSeat(trainWagons, ComfortClass.SECOND, totalStationInRoute);
                     personalRoute.setSecondClassSeats(secondClassPlaces);
+                    personalRoute.setSecondClassTotalPrice(secondClassPrice);
+
                     personalRoute.setRedirectLink(redirectLink);
                     addRoute(personalRoute);
                 }
             }
         }
+    }
+
+    //find any wagon with requested class to get appropriate price and calculates acc to number of stations
+    private int getPriceForClassSeat(List<Wagon> trainWagons, ComfortClass type, int numOfStations) {
+        Optional<Wagon> desirableClassWagon = trainWagons.stream()
+                .filter(wagon -> wagon.getType().equals(type))
+                .findFirst();
+        return desirableClassWagon.map(wagon -> wagon.getPrice() * numOfStations).orElse(0);
     }
 
     private boolean stationsExistInRoute(List<ComplexRoute.IntermediateStation> stations) {

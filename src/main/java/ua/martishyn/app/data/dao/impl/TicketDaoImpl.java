@@ -2,10 +2,13 @@ package ua.martishyn.app.data.dao.impl;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ua.martishyn.app.data.dao.interfaces.StationDao;
 import ua.martishyn.app.data.dao.interfaces.TicketDao;
 import ua.martishyn.app.data.dao.interfaces.TrainAndModelDao;
+import ua.martishyn.app.data.entities.Station;
 import ua.martishyn.app.data.entities.Ticket;
 import ua.martishyn.app.data.entities.Train;
+import ua.martishyn.app.data.entities.Wagon;
 import ua.martishyn.app.data.utils.DataBasePoolManager;
 
 import java.sql.Connection;
@@ -19,7 +22,7 @@ import java.util.Optional;
 public class TicketDaoImpl implements TicketDao {
     private static final Logger log = LogManager.getLogger(TicketDaoImpl.class);
     private static final String CREATE_TICKET = "INSERT INTO tickets (id, user_id, train_id, first_name, last_name,  " +
-            "departure_station, departure_time, arrival_station, arrival_time, place, wagon, comfort_class, price, isPaid) " +
+            "departure_station, departure_time, arrival_station, arrival_time, place, wagon_id, price, isPaid, duration) " +
             "VALUES (?, ?, ?, ?, ?, ? , ?, ?, ? , ?, ? , ?, ?, ?);";
     private static final String GET_TICKETS_BY_USER_ID = "SELECT * FROM tickets WHERE user_id = ?;";
     private static final String GET_ALL_TICKETS = "SELECT * FROM tickets;";
@@ -106,35 +109,40 @@ public class TicketDaoImpl implements TicketDao {
         preparedStatement.setInt(3, ticket.getTrain().getId());
         preparedStatement.setString(4, ticket.getFirstName());
         preparedStatement.setString(5, ticket.getLastName());
-        preparedStatement.setString(6, ticket.getDepartureStation());
+        preparedStatement.setInt(6, ticket.getDepartureStation().getId());
         preparedStatement.setString(7, ticket.getDepartureTime());
-        preparedStatement.setString(8, ticket.getArrivalStation());
+        preparedStatement.setInt(8, ticket.getArrivalStation().getId());
         preparedStatement.setString(9, ticket.getArrivalTime());
         preparedStatement.setInt(10, ticket.getPlace());
-        preparedStatement.setInt(11, ticket.getWagon());
-        preparedStatement.setString(12, ticket.getComfortClass());
-        preparedStatement.setInt(13, ticket.getPrice());
-        preparedStatement.setBoolean(14, ticket.isPaid());
+        preparedStatement.setInt(11, ticket.getWagon().getId());
+        preparedStatement.setInt(12, ticket.getPrice());
+        preparedStatement.setBoolean(13, ticket.isPaid());
+        preparedStatement.setString(14, ticket.getDuration());
     }
 
     private Ticket getTicketFromResultSet(ResultSet resultSet) throws SQLException {
         TrainAndModelDao trainAndModelDao = new TrainModelDaoImpl();
+        StationDao stationDao = new StationDaoImpl();
         Optional<Train> train = trainAndModelDao.getTrain(resultSet.getInt(3));
         Ticket ticketFromDb = new Ticket();
+        Optional<Station> departureStation = stationDao.getById(resultSet.getInt(6));
+        Optional<Station> arrivalStation = stationDao.getById(resultSet.getInt(8));
+        Optional<Wagon> wagonFromDb = trainAndModelDao.getWagonById(resultSet.getInt(11));
         ticketFromDb.setId(resultSet.getInt(1));
         ticketFromDb.setUserId(resultSet.getInt(2));
         train.ifPresent(ticketFromDb::setTrain);
         ticketFromDb.setFirstName(resultSet.getString(4));
         ticketFromDb.setLastName(resultSet.getString(5));
-        ticketFromDb.setDepartureStation(resultSet.getString(6));
+        departureStation.ifPresent(ticketFromDb::setDepartureStation);
         ticketFromDb.setDepartureTime(resultSet.getString(7));
-        ticketFromDb.setArrivalStation(resultSet.getString(8));
+        arrivalStation.ifPresent(ticketFromDb::setArrivalStation);
         ticketFromDb.setArrivalTime(resultSet.getString(9));
         ticketFromDb.setPlace(resultSet.getInt(10));
-        ticketFromDb.setWagon(resultSet.getInt(11));
-        ticketFromDb.setComfortClass(resultSet.getString(12));
-        ticketFromDb.setPrice(resultSet.getInt(13));
-        ticketFromDb.setPaid(resultSet.getBoolean(14));
+        wagonFromDb.ifPresent(ticketFromDb::setWagon);
+        ticketFromDb.setType(wagonFromDb.get().getType());
+        ticketFromDb.setPrice(resultSet.getInt(12));
+        ticketFromDb.setPaid(resultSet.getBoolean(13));
+        ticketFromDb.setDuration(resultSet.getString(14));
         return ticketFromDb;
     }
 

@@ -47,7 +47,7 @@
                                   <th scope="col">Schedule</th>
                                   <th scope="col">Duration</th>
                                   <th scope="col">Seats available</th>
-                                  <th scope="col">Price</th>
+                                  <th scope="col">Price(UAH)</th>
                                   </tr>
                 </thead>
                 <tbody>
@@ -59,7 +59,7 @@
                                 <c:out value="${route.train.model.name}"/>
                                 </strong>
                                 <br>
-                                <a href="customer-show-route.command?route=<c:out value="${route.routeId}"/>">Route</a>
+                                <a href="show-route.command?route=<c:out value="${route.routeId}"/>">Route</a>
                                 </td>
 
                                 <td>
@@ -81,21 +81,21 @@
                                 <td styles = "text-align:center">
                                 F1  <c:out value="${route.firstClassSeats}"/>
 									<c:if test="${route.firstClassSeats != 0}">
-                                <a href="customer-ticket-form.command<c:out value="${route.redirectLink}"/>&class=FIRST"
+                                <a href="customer-ticket-form.command<c:out value="${route.redirectLink}"/>&class=FIRST&price=<c:out value="${route.firstClassTotalPrice}"/>"
                                     class="btn btn-dark" >select</a>
                                     </c:if>
                                 <br><br>
                                 S2  <c:out value="${route.secondClassSeats}"/>
                                    <c:if test="${route.secondClassSeats != 0}">
-                                <a href="customer-ticket-form.command<c:out value="${route.redirectLink}"/>&class=SECOND"
+                                <a href="customer-ticket-form.command<c:out value="${route.redirectLink}"/>&class=SECOND&price=<c:out value="${route.secondClassTotalPrice}"/>"
                                     class="btn btn-dark" >select</a>
                                     </c:if>
                                </td>
 
                                <td>
-                               <p style = "text-align: center">600UAH</p>
+                               <p style = "text-align: center"><c:out value="${route.firstClassTotalPrice}"/></p>
                                <br>
-                               <p style = "text-align: center">300UAH</p>
+                               <p style = "text-align: center"><c:out value="${route.secondClassTotalPrice}"/></p>
                                </td>
                                 </tr>
                                 </c:forEach>

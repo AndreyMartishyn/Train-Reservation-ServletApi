@@ -14,14 +14,15 @@
                                   <tr>
                                   <th scope="col">Ticket#</th>
                                   <th scope="col">Train#</th>
-                                  <th scope="col">First name</th>
-                                  <th scope="col">Last name</th>
+                                  <th scope="col">Name</th>
+                                  <th scope="col">Surname</th>
                                   <th scope="col">From</th>
                                   <th scope="col">Departure</th>
                                   <th scope="col">To</th>
                                   <th scope="col">Arrival</th>
                                   <th scope="col">Wagon#</th>
                                   <th scope="col">Place#</th>
+                                  <th scope="col">Duration</th>
                                   <th scope="col">Class</th>
                                   <th scope="col">Price</th>
                                   <th scope="col">Status</th>
@@ -58,7 +59,7 @@
 
                                 <td style="text-align:center">
                                 <strong>
-                                <c:out value="${ticket.departureStation}"/>
+                                <c:out value="${ticket.departureStation.name}"/>
                                 </strong>
                                 </td>
 
@@ -70,7 +71,7 @@
 
                                 <td style="text-align:center">
                                 <strong>
-                                <c:out value="${ticket.arrivalStation}"/>
+                                <c:out value="${ticket.arrivalStation.name}"/>
                                 </strong>
                                 </td>
 
@@ -81,15 +82,19 @@
                                 </td>
 
 							    <td>
-                                <c:out value="${ticket.wagon}"/>
+                                <c:out value="${ticket.wagon.id}"/>
                                 </td>
 
                                  <td>
                                 <c:out value="${ticket.place}"/>
                                 </td>
 
+                                <td>
+                                <c:out value="${ticket.duration}"/>
+                                </td>
+
                                  <td>
-                                <c:out value="${ticket.comfortClass}"/>
+                                <c:out value="${ticket.type}"/>
                                 </td>
 
                                  <td>

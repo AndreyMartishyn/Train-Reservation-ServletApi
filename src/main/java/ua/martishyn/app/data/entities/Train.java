@@ -44,6 +44,10 @@ public class Train implements Entity {
         this.model = model;
     }
 
+    public TrainModel getModel() {
+        return model;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -33,13 +33,12 @@ public class SearchTicketsCommand implements ICommand {
             log.error("Same stations chosen by user");
             request.setAttribute("sameStations", "Departure and arrival stations are same");
         } else {
-            Station fromStation = getStation(request, "stationFrom");
-            Station toStation = getStation(request, "stationTo");
-            RouteDao routeDao = new RouteDaoImpl();
-            Optional<List<ComplexRoute>> routeList = getComplexRoutes(routeDao);
+            Optional<List<ComplexRoute>> routeList = getComplexRoutes();
             if (routeList.isPresent()) {
                 TrainAndModelDao trainAndModelDao = new TrainModelDaoImpl();
                 List<Wagon> wagons =  trainAndModelDao.getAllWagons();
+                Station fromStation = getStation(request, "stationFrom");
+                Station toStation = getStation(request, "stationTo");
                 TrainHelper trainSearcher = new TrainHelper(routeList.get(), fromStation, toStation, wagons);
                 List<PersonalRoute> suitableRoutes = trainSearcher.getSuitableRoutes();
                 if (!suitableRoutes.isEmpty()) {
@@ -55,7 +54,8 @@ public class SearchTicketsCommand implements ICommand {
         requestDispatcher.forward(request, response);
     }
 
-    private Optional<List<ComplexRoute>> getComplexRoutes(RouteDao routeDao) {
+    private Optional<List<ComplexRoute>> getComplexRoutes() {
+        RouteDao routeDao = new RouteDaoImpl();
         return routeDao.getAllComplexRoutes();
     }
 

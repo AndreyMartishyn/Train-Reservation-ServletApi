@@ -155,7 +155,7 @@ public class TrainModelDaoImpl implements TrainAndModelDao {
                 .routeId(resultSet.getInt("route_id"))
                 .type(ComfortClass.valueOf(resultSet.getString("comfort_class")))
                 .numOfSeats(resultSet.getInt("seats"))
-                .priceForSeat(resultSet.getInt("price"))
+                .price(resultSet.getInt("price"))
                 .build();
     }
 

@@ -9,7 +9,10 @@ import ua.martishyn.app.controller.commands.admin.user.AdminUsersPageCommand;
 import ua.martishyn.app.controller.commands.common.AboutUsCommand;
 import ua.martishyn.app.controller.commands.common.SearchTicketsCommand;
 import ua.martishyn.app.controller.commands.common.ShowRouteCommand;
-import ua.martishyn.app.controller.commands.customer.*;
+import ua.martishyn.app.controller.commands.customer.CustomerBuyTicketCommand;
+import ua.martishyn.app.controller.commands.customer.CustomerTicketFormCommand;
+import ua.martishyn.app.controller.commands.customer.CustomerTicketPayCommand;
+import ua.martishyn.app.controller.commands.customer.CustomerTicketsPageCommand;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +20,8 @@ import java.util.Map;
 public class CommandContainer {
     static Map<String, ICommand> commands = new HashMap<>();
 
-    private CommandContainer(){}
+    private CommandContainer() {
+    }
 
     static {
         commands.put("/index.command", new IndexPageCommand());
@@ -54,7 +58,6 @@ public class CommandContainer {
         commands.put("/customer-tickets-page.command", new CustomerTicketsPageCommand());
         commands.put("/customer-ticket-pay.command", new CustomerTicketPayCommand());
         commands.put("/show-route.command", new ShowRouteCommand());
-
     }
 
     public static boolean isCommandExists(String command) {

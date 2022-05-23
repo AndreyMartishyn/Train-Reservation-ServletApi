@@ -29,13 +29,13 @@ public class TrainSearcherContainer {
         firstWagon.setRouteId(111);
         firstWagon.setType(ComfortClass.FIRST);
         firstWagon.setNumOfSeats(10);
-        firstWagon.setPriceForSeat(100);
+        firstWagon.setPrice(100);
         Wagon secondWagon = new Wagon();
         secondWagon.setId(5);
         secondWagon.setRouteId(222);
         secondWagon.setType(ComfortClass.SECOND);
         secondWagon.setNumOfSeats(10);
-        secondWagon.setPriceForSeat(200);
+        secondWagon.setPrice(200);
         wagons.add(firstWagon);
         wagons.add(secondWagon);
     }

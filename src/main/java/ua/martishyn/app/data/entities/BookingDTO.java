@@ -11,6 +11,8 @@ public class BookingDTO implements Entity {
     private String arrivalTime;
     private String comfortClass;
     private List<Integer> coachesNumbers;
+    private int cost;
+    private String duration;
 
     public int getTrainId() {
         return trainId;
@@ -67,5 +69,21 @@ public class BookingDTO implements Entity {
 
     public void setCoachesNumbers(List<Integer> coaches) {
         this.coachesNumbers = coaches;
+    }
+
+    public void setCost(int cost) {
+        this.cost = cost;
+    }
+
+    public int getCost() {
+        return cost;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
+
+    public String getDuration() {
+        return duration;
     }
 }

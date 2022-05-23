@@ -26,27 +26,21 @@ public class CustomerTicketsPageCommand implements ICommand {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (isUserInSession(request)) {
-            User currentUser = (User) request.getSession().getAttribute("user");
-            Optional<List<Ticket>> ticketsFromDb = ticketDao.getAllTicketsById(currentUser.getId());
-            if (ticketsFromDb.isPresent()) {
-                log.info("Appropriate tickets found. Size : {}", ticketsFromDb.get().size());
-                request.setAttribute("userTickets", ticketsFromDb.get());
-            } else {
-                log.info("Tickets not found");
-                request.setAttribute("noTickets", "No tickets found for customer");
-            }
+        Optional<List<Ticket>> ticketsFromDb = ticketDao.getAllTicketsById(getUserId(request));
+        if (ticketsFromDb.isPresent()) {
+            log.info("Appropriate tickets found. Size : {}", ticketsFromDb.get().size());
+            request.setAttribute("userTickets", ticketsFromDb.get());
         } else {
-            log.info("User not in session. Redirect to main page");
-            response.sendRedirect("index.command");
-            return;
+            log.info("Tickets not found");
+            request.setAttribute("noTickets", "No tickets found for customer");
         }
         RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.CUSTOMER_TICKETS_PAGE);
         log.info("Redirect to view --> {}", Constants.CUSTOMER_TICKETS_PAGE);
         requestDispatcher.forward(request, response);
     }
 
-    boolean isUserInSession(HttpServletRequest request) {
-        return request.getSession().getAttribute("user") != null;
+    private int getUserId(HttpServletRequest request) {
+        User currentUser = (User) request.getSession().getAttribute("user");
+        return currentUser.getId();
     }
 }

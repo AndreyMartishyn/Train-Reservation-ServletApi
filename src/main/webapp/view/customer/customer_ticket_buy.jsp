@@ -9,7 +9,6 @@
 <form action="customer-buy-ticket.command" method="post">
 <section class="order-form my-4 mx-4">
     <div class="container pt-4">
-
       <div class="row">
         <div class="col-12">
           <h1>Order Form</h1>
@@ -17,7 +16,6 @@
           <hr class="mt-1">
         </div>
         <div class="col-12">
-
           <div class="row mx-4">
             <div class="col-12 mb-2">
               <label class="order-form-label">First name and Surname*</label>
@@ -86,6 +84,8 @@
              <input type="hidden" name="departureTime" value="<c:out value='${bookingDTO.departureTime}' />" />
              <input type="hidden" name="arrivalTime" value="<c:out value='${bookingDTO.arrivalTime}' />" />
              <input type="hidden" name="class" value="<c:out value='${bookingDTO.comfortClass}' />" />
+             <input type="hidden" name="price" value="<c:out value='${bookingDTO.cost}' />" />
+             <input type="hidden" name="duration" value="<c:out value='${bookingDTO.duration}' />" />
              <input type="submit" class="btn btn-dark" ></button>
             </div>
           </div>

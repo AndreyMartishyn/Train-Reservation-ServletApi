@@ -1,21 +1,23 @@
 package ua.martishyn.app.data.entities;
 
-public class Ticket implements Entity{
+import ua.martishyn.app.data.entities.enums.ComfortClass;
+
+public class Ticket implements Entity {
     private int id;
     private Train train;
     private int userId;
     private String firstName;
     private String lastName;
-    private String departureStation;
-    private String arrivalStation;
+    private Station departureStation;
+    private Station arrivalStation;
     private String departureTime;
     private String arrivalTime;
-    private String duration;
-    private String comfortClass;
+    private Wagon wagon;
+    private ComfortClass type;
     private int place;
-    private int wagon;
     private int price;
     private boolean isPaid;
+    private String duration;
 
     public int getId() {
         return id;
@@ -57,19 +59,19 @@ public class Ticket implements Entity{
         this.lastName = lastName;
     }
 
-    public String getDepartureStation() {
+    public Station getDepartureStation() {
         return departureStation;
     }
 
-    public void setDepartureStation(String departureStation) {
+    public void setDepartureStation(Station departureStation) {
         this.departureStation = departureStation;
     }
 
-    public String getArrivalStation() {
+    public Station getArrivalStation() {
         return arrivalStation;
     }
 
-    public void setArrivalStation(String arrivalStation) {
+    public void setArrivalStation(Station arrivalStation) {
         this.arrivalStation = arrivalStation;
     }
 
@@ -97,12 +99,20 @@ public class Ticket implements Entity{
         this.duration = duration;
     }
 
-    public String getComfortClass() {
-        return comfortClass;
+    public Wagon getWagon() {
+        return wagon;
     }
 
-    public void setComfortClass(String comfortClass) {
-        this.comfortClass = comfortClass;
+    public void setWagon(Wagon wagon) {
+        this.wagon = wagon;
+    }
+
+    public ComfortClass getType() {
+        return type;
+    }
+
+    public void setType(ComfortClass type) {
+        this.type = type;
     }
 
     public int getPlace() {
@@ -111,14 +121,6 @@ public class Ticket implements Entity{
 
     public void setPlace(int place) {
         this.place = place;
-    }
-
-    public int getWagon() {
-        return wagon;
-    }
-
-    public void setWagon(int wagon) {
-        this.wagon = wagon;
     }
 
     public int getPrice() {

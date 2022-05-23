@@ -15,7 +15,6 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -29,17 +28,16 @@ public class CustomerTicketFormCommand implements ICommand {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         BookingDTO bookingDTO = makeDTOObject(request);
         Optional<List<Wagon>> coachesByClass = getCoachesByClass(bookingDTO);
-        if (coachesByClass.isPresent()) {
+        if (!coachesByClass.isPresent()) {
+            log.info("No coaches found");
+            response.sendRedirect("index.command");
+        } else {
             bookingDTO.setCoachesNumbers(getCoachesNumbers(coachesByClass.get()));
             request.setAttribute("bookingDTO", bookingDTO);
-        } else {
-            log.info("No coaches found");
-            response.sendRedirect("customer-booking.command");
-            return;
+            log.info("DTO object is transferred to the jsp form");
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.CUSTOMER_TICKETS_FORM);
+            requestDispatcher.forward(request, response);
         }
-        log.info("DTO object is transferred to the jsp form");
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.CUSTOMER_TICKETS_FORM);
-        requestDispatcher.forward(request, response);
     }
 
     private Optional<List<Wagon>> getCoachesByClass(BookingDTO bookingDTO) {
@@ -54,6 +52,8 @@ public class CustomerTicketFormCommand implements ICommand {
         String departure = request.getParameter("departure");
         String arrival = request.getParameter("arrival");
         String comfortClass = request.getParameter("class");
+        int cost = Integer.parseInt(request.getParameter("price"));
+        String duration = request.getParameter("duration");
 
         //creating bookingDTO object to transfer data from link to the form. Allows auto-fil of info
         BookingDTO bookingDTO = new BookingDTO();
@@ -63,6 +63,8 @@ public class CustomerTicketFormCommand implements ICommand {
         bookingDTO.setDepartureTime(departure);
         bookingDTO.setArrivalTime(arrival);
         bookingDTO.setComfortClass(comfortClass);
+        bookingDTO.setCost(cost);
+        bookingDTO.setDuration(duration);
         return bookingDTO;
     }
 

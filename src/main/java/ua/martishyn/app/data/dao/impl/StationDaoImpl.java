@@ -39,12 +39,20 @@ public class StationDaoImpl implements StationDao {
         return Optional.ofNullable(stationFromDb);
     }
 
-    private Station getStationFromResultSet(ResultSet resultSet) throws SQLException {
-        return Station.builder()
-                .id(resultSet.getInt(1))
-                .name(resultSet.getString(2))
-                .code(resultSet.getString(3))
-                .build();
+    @Override
+    public Optional<Station> getByName(String name) {
+        Station stationFromDb = null;
+        try (Connection connection = DataBasePoolManager.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_STATION_BY_NAME)) {
+            preparedStatement.setString(1, name);
+            ResultSet stationFromResultSet = preparedStatement.executeQuery();
+            while (stationFromResultSet.next()) {
+                stationFromDb = getStationFromResultSet(stationFromResultSet);
+            }
+        } catch (SQLException exception) {
+            System.out.println("Unable to get station from db" + exception);
+        }
+        return Optional.ofNullable(stationFromDb);
     }
 
     @Override
@@ -73,11 +81,6 @@ public class StationDaoImpl implements StationDao {
             log.error("Problems with creating station {}", e.toString());
         }
         return false;
-    }
-
-    private void createStationStatement(PreparedStatement preparedStatement, Station station) throws SQLException {
-        preparedStatement.setString(1, station.getName());
-        preparedStatement.setString(2, station.getCode());
     }
 
     @Override
@@ -109,6 +112,18 @@ public class StationDaoImpl implements StationDao {
         return true;
     }
 
+    private void createStationStatement(PreparedStatement preparedStatement, Station station) throws SQLException {
+        preparedStatement.setString(1, station.getName());
+        preparedStatement.setString(2, station.getCode());
+    }
+
+    private Station getStationFromResultSet(ResultSet resultSet) throws SQLException {
+        return Station.builder()
+                .id(resultSet.getInt(1))
+                .name(resultSet.getString(2))
+                .code(resultSet.getString(3))
+                .build();
+    }
 
     @Override
     public boolean delete(int id) {

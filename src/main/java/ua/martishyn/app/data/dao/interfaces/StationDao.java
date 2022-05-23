@@ -10,6 +10,8 @@ public interface StationDao {
 
     Optional<List<Station>> getAll();
 
+    Optional<Station> getByName(String name);
+
     boolean createStation(Station station);
 
     boolean update(Station station);

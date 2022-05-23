@@ -12,8 +12,8 @@ CREATE TABLE `route_stations` (
   `departure` datetime NOT NULL,
   KEY `train_id` (`train_id`),
   KEY `station_id` (`station_id`),
-  CONSTRAINT `route_stations_ibfk_1` FOREIGN KEY (`train_id`) REFERENCES `trains` (`id`),
-  CONSTRAINT `route_stations_ibfk_2` FOREIGN KEY (`station_id`) REFERENCES `stations` (`id`)
+  FOREIGN KEY (`train_id`) REFERENCES `trains` (`id`),
+  FOREIGN KEY (`station_id`) REFERENCES `stations` (`id`)
 )
 INSERT INTO route_stations VALUES
 (114, 125, 2, '2022-05-27 15:00:00', '2022-05-27 15:10:00'),
@@ -66,7 +66,7 @@ CREATE TABLE `trains` (
   `model_id` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `model_id` (`model_id`),
-  CONSTRAINT `trains_ibfk_1` FOREIGN KEY (`model_id`) REFERENCES `train_models` (`id`)
+  FOREIGN KEY (`model_id`) REFERENCES `train_models` (`id`)
 )
 INSERT INTO trains (id, model_id) VALUES
 (200, 1),
@@ -82,7 +82,14 @@ route_id INT NOT NULL,
 comfort_class ENUM ('FIRST', 'SECOND') NOT NULL,
 seats INT NOT NULL UNSIGNED,
 price INT NOT NULL UNSIGNED,
-PRIMARY KEY(wagon_id));
+PRIMARY KEY(wagon_id),
+FOREIGN KEY (route_id) REFERENCES route_stations(id),
+INSERT INTO train_wagons (wagon_id, route_id, comfort_class, seats, price) VALUES
+(2, 114, 'FIRST', 45, 80),
+(5, 114, 'FIRST', 40, 80),
+(7, 114, 'SECOND', 60, 50),
+(4, 114, 'SECOND', 60, 50),
+
 --
 -- Table structure for table `users`
 --
@@ -97,6 +104,10 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
 )
+INSERT INTO users (id, first_name, last_name, pass_encoded, email, role) VALUES
+--encoded password is 'password1' as decoded, for login purposes
+(1, ADMIN, ADMIN, '846d29aa0bb20f3665d1b5b558b8b7bdf34537b8d98694881b1c42566ee2a7fd', admin@gmail.com, 'ADMIN'),
+(1, First, Customer, '846d29aa0bb20f3665d1b5b558b8b7bdf34537b8d98694881b1c42566ee2a7fd', customer@gmail.com, 'CUSTOMER')
 --
 -- Table structure for table `tickets`
 --
@@ -104,17 +115,21 @@ create table tickets(
 id INT NOT NULL,
 user_id INT NOT NULL,
 train_id INT NOT NULL,
-first_name varchar(255) NOT NULL,
-last_name varchar(255) NOT NULL,
-departure_station varchar(255) NOT NULL,
-departure_time varchar(255) NOT NULL,
-arrival_station varchar(255) NOT NULL,
-arrival_time varchar(255) NOT NULL,
+first_name varchar(55) NOT NULL,
+last_name varchar(55) NOT NULL,
+departure_station INT NOT NULL,
+departure_time varchar(55) NOT NULL,
+arrival_station INT NOT NULL,
+arrival_time varchar(55) NOT NULL,
 place INT NOT NULL,
 wagon_id INT NOT NULL,
-comfort_class varchar(255) NOT NULL,
 price INT NOT NULL,
 isPaid bit,
+duration varchar(55),
 PRIMARY KEY(id),
- foreign key (user_id) references users(id),
- foreign key (wagon_id) references train_wagons(wagon_id))
+FOREIGN KEY(user_id) REFERENCES users(id),
+FOREIGN KEY(wagon_id) REFERENCES train_wagons(wagon_id)),
+FOREIGN KEY(train_id) REFERENCES trains(id),
+FOREIGN KEY(departure_station) REFERENCES stations(id),
+FOREIGN KEY(arrival_station) REFERENCES stations(id))
+
