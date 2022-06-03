@@ -4,11 +4,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.martishyn.app.controller.commands.ICommand;
 import ua.martishyn.app.controller.filters.HasRole;
-import ua.martishyn.app.data.dao.impl.StationDaoImpl;
-import ua.martishyn.app.data.dao.interfaces.StationDao;
 import ua.martishyn.app.data.entities.Station;
 import ua.martishyn.app.data.entities.enums.Role;
-import ua.martishyn.app.data.utils.Constants;
+import ua.martishyn.app.data.service.StationService;
+import ua.martishyn.app.data.utils.ViewConstants;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -20,25 +19,31 @@ import java.util.Optional;
 @HasRole(role = Role.ADMIN)
 public class StationEditCommand implements ICommand {
     private static final Logger log = LogManager.getLogger(StationEditCommand.class);
+    private final StationService stationService;
+
+    public StationEditCommand() {
+        stationService = new StationService();
+    }
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestDispatcher requestDispatcher;
-        Optional<Station> stationFromDb = getStation(request);
-        if (stationFromDb.isPresent()) {
-            log.info("Editing station with id {}", stationFromDb.get().getId());
-            request.setAttribute("station", stationFromDb.get());
-            requestDispatcher = request.getRequestDispatcher(Constants.ADMIN_ADD_EDIT_STATIONS);
+        if (isStationExist(request)) {
+            requestDispatcher = request.getRequestDispatcher(ViewConstants.ADMIN_ADD_EDIT_STATIONS);
         } else {
-            requestDispatcher = request.getRequestDispatcher(Constants.ADMIN_STATIONS);
+            requestDispatcher = request.getRequestDispatcher(ViewConstants.ADMIN_STATIONS);
         }
         requestDispatcher.forward(request, response);
     }
 
-    private Optional<Station> getStation(HttpServletRequest request) {
-        StationDao stationDao = new StationDaoImpl();
+    private boolean isStationExist(HttpServletRequest request) {
         int id = Integer.parseInt(request.getParameter("id"));
-        return stationDao.getById(id);
+        Optional<Station> stationFromDb = stationService.getStationById(id);
+        if (stationFromDb.isPresent()){
+            log.info("Editing station with id {}", stationFromDb.get().getId());
+            request.setAttribute("station", stationFromDb.get());
+        }
+        return stationFromDb.isPresent();
     }
 }
 

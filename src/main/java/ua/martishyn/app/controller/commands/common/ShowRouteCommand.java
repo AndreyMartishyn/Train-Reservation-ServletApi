@@ -1,10 +1,9 @@
 package ua.martishyn.app.controller.commands.common;
 
 import ua.martishyn.app.controller.commands.ICommand;
-import ua.martishyn.app.data.dao.impl.RouteDaoImpl;
-import ua.martishyn.app.data.dao.interfaces.RouteDao;
-import ua.martishyn.app.data.entities.ComplexRoute;
-import ua.martishyn.app.data.utils.Constants;
+import ua.martishyn.app.data.entities.Route;
+import ua.martishyn.app.data.service.RouteService;
+import ua.martishyn.app.data.utils.ViewConstants;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -13,29 +12,22 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class ShowRouteCommand implements ICommand {
-    private static final RouteDao routeDao = new RouteDaoImpl();
+    private final RouteService routeService;
+
+    public ShowRouteCommand() {
+        routeService = new RouteService();
+    }
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Optional<List<ComplexRoute>> routesFromDb = routeDao.getAllComplexRoutes();
+        Optional<List<Route>> routesFromDb = routeService.getAllRoutes();
         if (routesFromDb.isPresent()) {
-            List<ComplexRoute.IntermediateStation> stationForRoute = getStationForRoute(request, routesFromDb.get());
+            List<Route.IntermediateStation> stationForRoute = routeService.getStationForRoute(request, routesFromDb.get());
             request.setAttribute("routeInfo", stationForRoute);
         }
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.CUSTOMER_ROUTE_VIEW);
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher(ViewConstants.CUSTOMER_ROUTE_VIEW);
         requestDispatcher.forward(request, response);
-    }
-
-    private List<ComplexRoute.IntermediateStation> getStationForRoute(HttpServletRequest request, List<ComplexRoute> routeList) {
-        int routeId = Integer.parseInt(request.getParameter("route"));
-        request.setAttribute("routeId", routeId);
-        return routeList.stream()
-                .filter(complexRoute -> complexRoute.getId() == routeId)
-                .map(ComplexRoute::getIntermediateStations)
-                .flatMap(List::stream)
-                .collect(Collectors.toList());
     }
 }

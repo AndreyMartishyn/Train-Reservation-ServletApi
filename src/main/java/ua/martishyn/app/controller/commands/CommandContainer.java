@@ -45,12 +45,12 @@ public class CommandContainer {
         commands.put("/user-edit-post.command", new AdminUserEditPostCommand());
         commands.put("/user-delete.command", new AdminUserDeleteCommand());
         //routes admin crud
-        commands.put("/routes-page.command", new SingleRoutesPageCommand());
-        commands.put("/route-edit.command", new SingleRouteEditCommand());
-        commands.put("/route-edit-post.command", new SingleRouteEditPOSTCommand());
-        commands.put("/route-delete.command", new SingleRouteDeleteCommand());
-        commands.put("/route-add.command", new SingleRouteAddCommand());
-        commands.put("/route-add-post.command", new SingleRouteAddPOSTCommand());
+        commands.put("/routes-page.command", new RoutePointsPage());
+        commands.put("/route-edit.command", new RoutePointEditCommand());
+        commands.put("/route-edit-post.command", new RoutePointEditPostCommand());
+        commands.put("/route-delete.command", new RoutePointDeleteCommand());
+        commands.put("/route-add.command", new RoutePointAddCommand());
+        commands.put("/route-add-post.command", new RoutePointAddPostCommand());
         //users booking
         commands.put("/search-tickets.command", new SearchTicketsCommand());
         commands.put("/customer-ticket-form.command", new CustomerTicketFormCommand());

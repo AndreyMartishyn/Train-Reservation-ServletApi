@@ -1,7 +1,7 @@
 package ua.martishyn.app.controller.commands.common;
 
 import ua.martishyn.app.controller.commands.ICommand;
-import ua.martishyn.app.data.utils.Constants;
+import ua.martishyn.app.data.utils.ViewConstants;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,7 +12,7 @@ import java.io.IOException;
 public class AboutUsCommand implements ICommand {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.ABOUT_PAGE);
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher(ViewConstants.ABOUT_PAGE);
         requestDispatcher.forward(request, response);
     }
 }

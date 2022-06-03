@@ -4,12 +4,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.martishyn.app.controller.commands.ICommand;
 import ua.martishyn.app.controller.filters.HasRole;
-import ua.martishyn.app.data.dao.impl.UserDaoImpl;
-import ua.martishyn.app.data.dao.interfaces.UserDao;
 import ua.martishyn.app.data.entities.User;
 import ua.martishyn.app.data.entities.enums.Role;
 import ua.martishyn.app.data.service.UserService;
-import ua.martishyn.app.data.utils.Constants;
+import ua.martishyn.app.data.utils.ViewConstants;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -21,25 +19,31 @@ import java.util.Optional;
 @HasRole(role = Role.ADMIN)
 public class AdminUserEditCommand implements ICommand {
     private static final Logger log = LogManager.getLogger(AdminUserEditCommand.class);
+    private final UserService userService;
+
+    public AdminUserEditCommand() {
+        userService = new UserService();
+    }
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestDispatcher requestDispatcher;
-        Optional<User> userFromDb = getUser(request);
-        if (userFromDb.isPresent()) {
-            request.setAttribute("user", userFromDb.get());
-            log.info("Editing user with id {}", userFromDb.get().getId());
-            requestDispatcher = request.getRequestDispatcher(Constants.ADMIN_USERS_EDIT);
+        if (isUserExist(request)) {
+            requestDispatcher = request.getRequestDispatcher(ViewConstants.ADMIN_USERS_EDIT);
         } else {
-            requestDispatcher = request.getRequestDispatcher(Constants.ADMIN_USERS);
+            requestDispatcher = request.getRequestDispatcher(ViewConstants.ADMIN_USERS);
         }
         requestDispatcher.forward(request, response);
     }
 
-    private Optional<User> getUser(HttpServletRequest request) {
-        UserService userService = new UserService(new UserDaoImpl());
+    private boolean isUserExist(HttpServletRequest request) {
         int id = Integer.parseInt(request.getParameter("id"));
-        return userService.getById(id);
+        Optional<User> userFromDb = userService.getUserById(id);
+        if (userFromDb.isPresent()) {
+            request.setAttribute("user", userFromDb.get());
+            log.info("Editing user with id {}", userFromDb.get().getId());
+        }
+        return userFromDb.isPresent();
     }
 }
 

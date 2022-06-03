@@ -3,7 +3,7 @@ package ua.martishyn.app.data.entities;
 
 import java.util.List;
 
-public class BookingDTO implements Entity {
+public class TicketFormDto implements Entity {
     private int trainId;
     private String departureStation;
     private String arrivalStation;

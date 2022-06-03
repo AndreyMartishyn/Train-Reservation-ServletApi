@@ -8,7 +8,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import ua.martishyn.app.controller.commands.LoginCommand;
 import ua.martishyn.app.data.dao.impl.UserDaoImpl;
-import ua.martishyn.app.data.utils.Constants;
+import ua.martishyn.app.data.service.UserService;
+import ua.martishyn.app.data.utils.UserServiceConstants;
+import ua.martishyn.app.data.utils.ViewConstants;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -36,7 +38,7 @@ public class LoginPostTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        when(mockRequest.getRequestDispatcher(Constants.LOGIN_PAGE)).thenReturn(mockDispatcher);
+        when(mockRequest.getRequestDispatcher(ViewConstants.LOGIN_PAGE)).thenReturn(mockDispatcher);
         loginCommand = new LoginCommand();
     }
 
@@ -45,8 +47,8 @@ public class LoginPostTest {
         when(mockRequest.getParameter("email")).thenReturn("1@gmail.com");
         when(mockRequest.getParameter("password")).thenReturn("pass");
         loginCommand.execute(mockRequest, mockResponse);
-        verify(mockRequest).setAttribute(Constants.ERROR_VALIDATION, "Enter valid input");
-        verify(mockRequest, times(1)).getRequestDispatcher(Constants.LOGIN_PAGE);
+        verify(mockRequest).setAttribute(ViewConstants.ERROR_VALIDATION, UserServiceConstants.INVALID_INPUT);
+        verify(mockRequest, times(1)).getRequestDispatcher(ViewConstants.LOGIN_PAGE);
         verify(mockDispatcher).forward(mockRequest, mockResponse);
     }
 

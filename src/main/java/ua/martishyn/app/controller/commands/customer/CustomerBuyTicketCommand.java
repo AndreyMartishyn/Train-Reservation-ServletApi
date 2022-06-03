@@ -12,7 +12,8 @@ import ua.martishyn.app.data.dao.interfaces.TicketDao;
 import ua.martishyn.app.data.dao.interfaces.TrainAndModelDao;
 import ua.martishyn.app.data.entities.*;
 import ua.martishyn.app.data.entities.enums.Role;
-import ua.martishyn.app.data.utils.Constants;
+import ua.martishyn.app.data.service.TicketService;
+import ua.martishyn.app.data.utils.ViewConstants;
 import ua.martishyn.app.data.utils.validator.DataInputValidator;
 import ua.martishyn.app.data.utils.validator.DataInputValidatorImpl;
 
@@ -28,17 +29,15 @@ import java.util.Random;
 @HasRole(role = Role.CUSTOMER)
 public class CustomerBuyTicketCommand implements ICommand {
     private static final Logger log = LogManager.getLogger(CustomerBuyTicketCommand.class);
-    private TicketDao ticketDao;
-    private TrainAndModelDao trainAndModelDao;
-    private List<Ticket> tickets;
-    private StationDao stationDao;
+    private final TicketService ticketService;
+
+    public CustomerBuyTicketCommand() {
+        ticketService = new TicketService();
+    }
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        initDaos();
-        if (isTickerDataValid(request)
-                && !isPlaceOccupied(request, tickets)
-                && createTicket(request)) {
+        if (ticketService.isTickerDataValid(request) && ticketService.createTicket(request)){
             log.info("Ticket created successfully");
             response.sendRedirect("customer-tickets-page.command");
         } else {
@@ -46,107 +45,6 @@ public class CustomerBuyTicketCommand implements ICommand {
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("index.command");
             requestDispatcher.forward(request, response);
         }
-    }
-
-
-    private boolean createTicket(HttpServletRequest request) {
-        String firstName = request.getParameter("firstName");
-        String lastName = request.getParameter("lastName");
-        String trainId = request.getParameter("trainId");
-        String fromStation = request.getParameter("departureStation");
-        String toStation = request.getParameter("arrivalStation");
-        String departureTime = request.getParameter("departureTime");
-        String arrivalTime = request.getParameter("arrivalTime");
-        int wagon = Integer.parseInt(request.getParameter("wagon"));
-        int place = Integer.parseInt(request.getParameter("place"));
-        int cost = Integer.parseInt(request.getParameter("price"));
-        String duration = request.getParameter("duration");
-
-        Random random = new Random();
-        Ticket userTicket = new Ticket();
-
-        Optional<Train> trainFromBooking = trainAndModelDao.getTrain(Integer.parseInt(trainId));
-        Optional<Wagon> wagonBooked = trainAndModelDao.getWagonById(wagon);
-        Optional<Station> departure = stationDao.getByName(fromStation);
-        Optional<Station> arrival = stationDao.getByName(toStation);
-        User currentUser = (User) request.getSession().getAttribute("user");
-
-        //generate random number from 100 to 999
-        int randomNum = random.nextInt(900) + 100;
-        userTicket.setId(randomNum);
-        trainFromBooking.ifPresent(userTicket::setTrain);
-        userTicket.setUserId(currentUser.getId());
-        userTicket.setFirstName(firstName);
-        userTicket.setLastName(lastName);
-        departure.ifPresent(userTicket::setDepartureStation);
-        userTicket.setDepartureTime(departureTime);
-        arrival.ifPresent(userTicket::setArrivalStation);
-        userTicket.setArrivalTime(arrivalTime);
-        if (wagonBooked.isPresent()) {
-            userTicket.setWagon(wagonBooked.get());
-            userTicket.setPlace(place);
-            updateCoach(trainAndModelDao, wagonBooked.get());
-        }
-        userTicket.setPaid(false);
-        userTicket.setPrice(cost);
-        userTicket.setDuration(duration);
-        return ticketDao.createTicket(userTicket);
-    }
-
-    private void initDaos() {
-        ticketDao = new TicketDaoImpl();
-        trainAndModelDao = new TrainModelDaoImpl();
-        stationDao = new StationDaoImpl();
-        Optional<List<Ticket>> allTickets = ticketDao.getAllTickets();
-        allTickets.ifPresent(ticketList -> tickets = ticketList);
-    }
-
-    private boolean isPlaceOccupied(HttpServletRequest request, List<Ticket> ticketList) {
-        int wagonNum = Integer.parseInt(request.getParameter("wagon"));
-        int placeNum = Integer.parseInt(request.getParameter("place"));
-        return ticketList.stream()
-                .anyMatch(ticket -> ticket.getWagon().getId() == wagonNum
-                        && ticket.getPlace() == placeNum);
-    }
-
-    private void updateCoach(TrainAndModelDao trainAndModelDao, Wagon bookedWagon) {
-        int availableSeatsNum = bookedWagon.getNumOfSeats();
-        bookedWagon.setNumOfSeats(--availableSeatsNum);
-        trainAndModelDao.updateCoach(bookedWagon);
-    }
-
-    private boolean isTickerDataValid(HttpServletRequest request) {
-        DataInputValidator dataValidator = new DataInputValidatorImpl();
-        String firstName = request.getParameter("firstName").trim();
-        if (!dataValidator.isValidStringInput(firstName)) {
-            request.setAttribute(Constants.ERROR_VALIDATION, "Wrong first name input");
-            return false;
-        }
-        String lastName = request.getParameter("lastName").trim();
-        if (!dataValidator.isValidStringInput(lastName)) {
-            request.setAttribute(Constants.ERROR_VALIDATION, "Wrong last name input");
-            return false;
-        }
-        String place = request.getParameter("place").trim();
-        if (!dataValidator.isValidNumInput(place)) {
-            request.setAttribute(Constants.ERROR_VALIDATION, "Enter valid place");
-            return false;
-        }
-        String wagon = request.getParameter("wagon").trim();
-        return isAvailablePlace(request, wagon, place);
-    }
-
-    private boolean isAvailablePlace(HttpServletRequest request, String wagon, String place) {
-        int selectedWagon = Integer.parseInt(wagon);
-        int selectedPlace = Integer.parseInt(place);
-        Optional<Wagon> wagonBooked = trainAndModelDao.getWagonById(selectedWagon);
-        int numOfPlaces = wagonBooked.get().getNumOfSeats();
-        if (selectedPlace <= numOfPlaces && selectedPlace > 0) {
-            return true;
-        }
-        String result = "Enter valid place between 1 and " + numOfPlaces;
-        request.setAttribute(Constants.ERROR_VALIDATION, result);
-        return false;
     }
 }
 

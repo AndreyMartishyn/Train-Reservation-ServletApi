@@ -7,7 +7,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import ua.martishyn.app.controller.FrontController;
 import ua.martishyn.app.data.entities.enums.Role;
-import ua.martishyn.app.data.utils.Constants;
+import ua.martishyn.app.data.utils.ViewConstants;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -60,17 +60,17 @@ public class FrontControllerTest extends FrontController {
         when(mockedRequest.getContextPath()).thenReturn("/train-reservation");
 
         frontController.doGet(mockedRequest, mockedResponse);
-        verify(mockedRequest, times(0)).getRequestDispatcher(Constants.HOME_PAGE);
+        verify(mockedRequest, times(0)).getRequestDispatcher(ViewConstants.HOME_PAGE);
     }
 
     @Test
     public void shouldExecuteCommandWhenCommandExist() throws IOException, ServletException {
-        when(mockedRequest.getRequestDispatcher(Constants.LOGIN_PAGE)).thenReturn(mockedDispatcher);
+        when(mockedRequest.getRequestDispatcher(ViewConstants.LOGIN_PAGE)).thenReturn(mockedDispatcher);
         when(mockedRequest.getRequestURI()).thenReturn("/train-reservation/login-page.command");
         when(mockedRequest.getContextPath()).thenReturn("/train-reservation");
 
         frontController.doPost(mockedRequest, mockedResponse);
-        verify(mockedRequest, times(1)).getRequestDispatcher(Constants.LOGIN_PAGE);
+        verify(mockedRequest, times(1)).getRequestDispatcher(ViewConstants.LOGIN_PAGE);
         verify(mockedDispatcher).forward(mockedRequest, mockedResponse);
     }
 

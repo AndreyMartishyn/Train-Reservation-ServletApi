@@ -24,7 +24,7 @@ public class TrainModelDaoImpl implements TrainAndModelDao {
     private static final String GET_WAGONS_BY_CLASS = "SELECT * FROM train_wagons WHERE comfort_class = ?;";
     private static final String GET_WAGON_BY_ID = "SELECT * FROM train_wagons WHERE wagon_id = ?;";
     private static final String GET_ALL_WAGONS = "SELECT * FROM train_wagons;";
-    private static final String UPDATE_COACH_SEATS = "UPDATE train_wagons SET seats = ? WHERE wagon_id = ?";
+    private static final String UPDATE_WAGON_PLACES = "UPDATE train_wagons SET seats = ? WHERE wagon_id = ?";
 
     @Override
     public Optional<Train> getTrain(int id) {
@@ -111,7 +111,7 @@ public class TrainModelDaoImpl implements TrainAndModelDao {
         PreparedStatement preparedStatement = null;
         try {
             connection = DataBasePoolManager.getInstance().getConnection();
-            preparedStatement = connection.prepareStatement(UPDATE_COACH_SEATS);
+            preparedStatement = connection.prepareStatement(UPDATE_WAGON_PLACES);
             connection.setAutoCommit(false);
             preparedStatement.setInt(1, wagon.getNumOfSeats());
             preparedStatement.setInt(2, wagon.getId());

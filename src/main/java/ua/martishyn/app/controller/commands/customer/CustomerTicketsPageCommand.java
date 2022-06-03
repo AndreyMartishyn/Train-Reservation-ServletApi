@@ -4,12 +4,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.martishyn.app.controller.commands.ICommand;
 import ua.martishyn.app.controller.filters.HasRole;
-import ua.martishyn.app.data.dao.impl.TicketDaoImpl;
-import ua.martishyn.app.data.dao.interfaces.TicketDao;
 import ua.martishyn.app.data.entities.Ticket;
-import ua.martishyn.app.data.entities.User;
 import ua.martishyn.app.data.entities.enums.Role;
-import ua.martishyn.app.data.utils.Constants;
+import ua.martishyn.app.data.service.TicketService;
+import ua.martishyn.app.data.utils.ViewConstants;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -17,30 +15,27 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 @HasRole(role = Role.CUSTOMER)
 public class CustomerTicketsPageCommand implements ICommand {
-    private static final TicketDao ticketDao = new TicketDaoImpl();
     private static final Logger log = LogManager.getLogger(CustomerTicketsPageCommand.class);
+    private final TicketService ticketService;
+
+    public CustomerTicketsPageCommand() {
+        ticketService = new TicketService();
+    }
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Optional<List<Ticket>> ticketsFromDb = ticketDao.getAllTicketsById(getUserId(request));
-        if (ticketsFromDb.isPresent()) {
-            log.info("Appropriate tickets found. Size : {}", ticketsFromDb.get().size());
-            request.setAttribute("userTickets", ticketsFromDb.get());
-        } else {
+        List<Ticket> ticketsFromDb = ticketService.getAllTickets(request);
+        if (ticketsFromDb.isEmpty()) {
             log.info("Tickets not found");
             request.setAttribute("noTickets", "No tickets found for customer");
+        } else {
+            log.info("Appropriate tickets found. Size : {}", ticketsFromDb.size());
+            request.setAttribute("userTickets", ticketsFromDb);
         }
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.CUSTOMER_TICKETS_PAGE);
-        log.info("Redirect to view --> {}", Constants.CUSTOMER_TICKETS_PAGE);
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher(ViewConstants.CUSTOMER_TICKETS_PAGE);
         requestDispatcher.forward(request, response);
-    }
-
-    private int getUserId(HttpServletRequest request) {
-        User currentUser = (User) request.getSession().getAttribute("user");
-        return currentUser.getId();
     }
 }

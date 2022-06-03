@@ -1,6 +1,6 @@
-package ua.martishyn.app.controller.commands.customer;
+package ua.martishyn.app.data.service;
 
-import ua.martishyn.app.data.entities.ComplexRoute;
+import ua.martishyn.app.data.entities.Route;
 import ua.martishyn.app.data.entities.PersonalRoute;
 import ua.martishyn.app.data.entities.Station;
 import ua.martishyn.app.data.entities.Wagon;
@@ -14,15 +14,15 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class TrainHelper {
+public class BookingSearcher {
     private final List<PersonalRoute> suitableRoutes;
-    private final List<ComplexRoute> routeList;
+    private final List<Route> routeList;
     private final Station fromStation;
     private final Station toStation;
     private final List<Wagon> wagons;
 
-    public TrainHelper(List<ComplexRoute> routeList, Station fromStation,
-                       Station toStation, List<Wagon> wagons) {
+    public BookingSearcher(List<Route> routeList, Station fromStation,
+                           Station toStation, List<Wagon> wagons) {
         this.suitableRoutes = new ArrayList<>();
         this.routeList = routeList;
         this.fromStation = fromStation;
@@ -35,13 +35,13 @@ public class TrainHelper {
         DateTimeFormatter formatPattern = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
         DateFormat routePattern = new SimpleDateFormat("HH:mm");
 
-        for (ComplexRoute complexRoute : routeList) {
-            List<ComplexRoute.IntermediateStation> stations = complexRoute.getIntermediateStations();
+        for (Route route : routeList) {
+            List<Route.IntermediateStation> stations = route.getIntermediateStations();
             //checks if arrival and departure stations are in route
             if (stationsExistInRoute(stations)) {
                 PersonalRoute personalRoute = new PersonalRoute();
-                personalRoute.setRouteId(complexRoute.getId());
-                personalRoute.setTrain(complexRoute.getTrain());
+                personalRoute.setRouteId(route.getId());
+                personalRoute.setTrain(route.getTrain());
                 StringBuilder redirectLink = new StringBuilder();
                 redirectLink.append("?train=")
                         .append(personalRoute.getTrain().getId());
@@ -51,7 +51,7 @@ public class TrainHelper {
                 LocalDateTime depDate = null;
                 LocalDateTime arrDate = null;
 
-                for (ComplexRoute.IntermediateStation stationObject : stations) {
+                for (Route.IntermediateStation stationObject : stations) {
                     Station station = stationObject.getStation();
                     if (station.getId() == fromStation.getId()) {
                         depDate = stationObject.getDepartureDate();
@@ -83,7 +83,7 @@ public class TrainHelper {
                                 .append(durationFormatted);
                     personalRoute.setRoadTime(durationFormatted);
                     List<Wagon> trainWagons = wagons.stream()
-                            .filter(wagon -> wagon.getRouteId() == complexRoute.getId())
+                            .filter(wagon -> wagon.getRouteId() == route.getId())
                             .collect(Collectors.toList());
 
                     int firstClassPlaces = getClassPlaces(trainWagons, ComfortClass.FIRST);
@@ -111,7 +111,7 @@ public class TrainHelper {
         return desirableClassWagon.map(wagon -> wagon.getPrice() * numOfStations).orElse(0);
     }
 
-    private boolean stationsExistInRoute(List<ComplexRoute.IntermediateStation> stations) {
+    private boolean stationsExistInRoute(List<Route.IntermediateStation> stations) {
         return (stations.stream().anyMatch(st -> st.getStation().equals(fromStation))
                 &&
                 stations.stream().anyMatch(st1 -> st1.getStation().equals(toStation)));

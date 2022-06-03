@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TrainSearcherContainer {
-    private static List<ComplexRoute> complexRoutes = new ArrayList<>();
+    private static List<Route> routes = new ArrayList<>();
     private static List<Wagon> wagons = new ArrayList<>();
     private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
@@ -54,7 +54,7 @@ public class TrainSearcherContainer {
                 .code("THRD")
                 .build();
         DateTimeFormatter formatPattern = DateTimeFormatter.ofPattern(DATE_FORMAT);
-        ComplexRoute firstRoute = new ComplexRoute();
+        Route firstRoute = new Route();
         firstRoute.setId(111);
         Train train = new Train();
         TrainModel trainModel = new TrainModel();
@@ -69,7 +69,7 @@ public class TrainSearcherContainer {
                 LocalDateTime.parse("2022-10-24 17:40:00", formatPattern));
         firstRoute.addIntermediateStation(stationThird, LocalDateTime.parse("2022-10-24 17:50:00", formatPattern),
                 LocalDateTime.parse("2022-10-24 18:50:00", formatPattern));
-        ComplexRoute secondRoute = new ComplexRoute();
+        Route secondRoute = new Route();
         secondRoute.setId(222);
         Train train1 = new Train();
         TrainModel trainModel1 = new TrainModel();
@@ -82,16 +82,16 @@ public class TrainSearcherContainer {
                 LocalDateTime.parse("2022-10-25 17:40:00", formatPattern));
         secondRoute.addIntermediateStation(stationThird, LocalDateTime.parse("2022-10-25 17:50:00", formatPattern),
                 LocalDateTime.parse("2022-10-25 18:50:00", formatPattern));
-        complexRoutes.add(firstRoute);
-        complexRoutes.add(secondRoute);
+        routes.add(firstRoute);
+        routes.add(secondRoute);
     }
 
     public List<Wagon> getWagons() {
         return wagons;
     }
 
-    public List<ComplexRoute> getComplexRoutes() {
-        return complexRoutes;
+    public List<Route> getComplexRoutes() {
+        return routes;
     }
 
 

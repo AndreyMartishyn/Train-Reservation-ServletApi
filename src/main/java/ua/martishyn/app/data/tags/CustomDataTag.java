@@ -11,7 +11,7 @@ public class CustomDataTag extends SimpleTagSupport {
     @Override
     public void doTag() throws IOException {
         LocalDateTime localNow = LocalDateTime.now(TimeZone.getTimeZone("Europe").toZoneId());
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.YYYY HH:mm a");
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm a");
         String formatDateTime = localNow.format(format);
         JspWriter out = getJspContext().getOut();
         out.println(formatDateTime);

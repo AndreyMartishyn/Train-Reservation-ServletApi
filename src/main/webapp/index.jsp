@@ -27,6 +27,7 @@
         </select>
          <span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${busyPlace}</span>
          <span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${noRoutes}</span>
+         <span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${noStations}</span>
          <span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${errorValidation}</span>
          <span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${sameStations}</span>
        </div>

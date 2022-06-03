@@ -7,7 +7,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import ua.martishyn.app.controller.commands.common.SearchTicketsCommand;
 import ua.martishyn.app.data.entities.*;
-import ua.martishyn.app.controller.commands.customer.TrainHelper;
+import ua.martishyn.app.data.service.BookingSearcher;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -20,8 +20,8 @@ import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.verify;
 
 public class TrainSearcherTest {
-    private TrainHelper trainSearcher;
-    private List<ComplexRoute> routeList;
+    private BookingSearcher trainSearcher;
+    private List<Route> routeList;
     private List<Wagon> wagons;
     private SearchTicketsCommand customerSearchTicketsCommand;
 
@@ -63,7 +63,7 @@ public class TrainSearcherTest {
                 .name("ARR")
                 .code("ARR")
                 .build();
-        trainSearcher = new TrainHelper(routeList, notExistingDeparture, notExistingArrival, wagons);
+        trainSearcher = new BookingSearcher(routeList, notExistingDeparture, notExistingArrival, wagons);
         int expected = 0;
         int actual = trainSearcher.getSuitableRoutes().size();
         Assert.assertEquals(expected, actual);
@@ -79,7 +79,7 @@ public class TrainSearcherTest {
                 .name("FIRST")
                 .code("FRST")
                 .build();
-        trainSearcher = new TrainHelper(routeList, notExistingDeparture, notExistingArrival, wagons);
+        trainSearcher = new BookingSearcher(routeList, notExistingDeparture, notExistingArrival, wagons);
         int expected = 0;
         int actual = trainSearcher.getSuitableRoutes().size();
         Assert.assertEquals(expected, actual);
@@ -95,7 +95,7 @@ public class TrainSearcherTest {
                 .name("Third")
                 .code("THRD")
                 .build();
-        trainSearcher = new TrainHelper(routeList, departure, arrival, wagons);
+        trainSearcher = new BookingSearcher(routeList, departure, arrival, wagons);
         int expected = 2;
         int actual = trainSearcher.getSuitableRoutes().size();
         Assert.assertEquals(expected, actual);
@@ -112,7 +112,7 @@ public class TrainSearcherTest {
                 .name("Third")
                 .code("THRD")
                 .build();
-        trainSearcher = new TrainHelper(routeList, departure, arrival, wagons);
+        trainSearcher = new BookingSearcher(routeList, departure, arrival, wagons);
         int expected = 1;
         int actual = trainSearcher.getSuitableRoutes().size();
         Assert.assertEquals(expected, actual);

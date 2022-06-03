@@ -4,14 +4,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.martishyn.app.controller.commands.ICommand;
 import ua.martishyn.app.controller.filters.HasRole;
-import ua.martishyn.app.data.dao.impl.UserDaoImpl;
 import ua.martishyn.app.data.entities.User;
 import ua.martishyn.app.data.entities.enums.Role;
 import ua.martishyn.app.data.service.UserService;
-import ua.martishyn.app.data.utils.Constants;
+import ua.martishyn.app.data.utils.ViewConstants;
 import ua.martishyn.app.data.utils.password_encoding.PasswordEncodingService;
-import ua.martishyn.app.data.utils.validator.DataInputValidator;
-import ua.martishyn.app.data.utils.validator.DataInputValidatorImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -22,72 +19,20 @@ import java.io.IOException;
 @HasRole(role = Role.ADMIN)
 public class AdminUserEditPostCommand implements ICommand {
     private static final Logger log = LogManager.getLogger(AdminUserEditPostCommand.class);
+    private final UserService userService;
+
+    public AdminUserEditPostCommand() {
+        userService = new UserService();
+    }
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (userDataValidation(request) && updateUser(request)) {
+        if (userService.isUserInputIsValid(request) && userService.updateUser(request)) {
             log.info("User updated successfully");
             response.sendRedirect("users-page.command");
             return;
         }
-        log.info("Unfortunately, user not updated. Redirect to view --> {}", Constants.ADMIN_USERS);
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher(Constants.ADMIN_USERS);
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher(ViewConstants.ADMIN_USERS);
         requestDispatcher.forward(request, response);
-    }
-
-    private boolean updateUser(HttpServletRequest request) {
-        int userId = Integer.parseInt(request.getParameter("id"));
-        String firstName = request.getParameter("firstName");
-        String lastName = request.getParameter("lastName");
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
-        String hashPass = null;
-        try {
-            hashPass = PasswordEncodingService.makeHash(password);
-        } catch (Exception e) {
-            log.error("Something wrong with password hashing {}", e.getMessage());
-        }
-        Role role = Role.valueOf(request.getParameter("role"));
-
-        UserService userService = new UserService(new UserDaoImpl());
-        User updatedUser = User.builder()
-                .id(userId)
-                .firstName(firstName)
-                .lastName(lastName)
-                .email(email)
-                .password(hashPass)
-                .role(role)
-                .build();
-        return userService.update(updatedUser);
-    }
-
-    private boolean userDataValidation(HttpServletRequest request) {
-        final DataInputValidator dataValidator = new DataInputValidatorImpl();
-        String id = request.getParameter("id").trim();
-        if (!dataValidator.isValidNumInput(id)) {
-            request.setAttribute(Constants.ERROR_VALIDATION, "Enter valid id");
-            return false;
-        }
-        String firstName = request.getParameter("firstName").trim();
-        if (!dataValidator.isValidNameField(firstName)) {
-            request.setAttribute(Constants.ERROR_VALIDATION, "Enter valid first-name");
-            return false;
-        }
-        String lastName = request.getParameter("lastName").trim();
-        if (!dataValidator.isValidNameField(lastName)) {
-            request.setAttribute(Constants.ERROR_VALIDATION, "Enter valid last-name");
-            return false;
-        }
-        String email = request.getParameter("email").trim();
-        if (!dataValidator.isValidEmailField(email)) {
-            request.setAttribute(Constants.ERROR_VALIDATION, "Enter valid email");
-            return false;
-        }
-        String password = request.getParameter("password").trim();
-        if (!dataValidator.isValidPasswordField(password)) {
-            request.setAttribute(Constants.ERROR_VALIDATION, "Enter valid password");
-            return false;
-        }
-        return true;
     }
 }

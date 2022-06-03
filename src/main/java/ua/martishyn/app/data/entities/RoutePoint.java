@@ -1,10 +1,9 @@
 package ua.martishyn.app.data.entities;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
-public class SingleRoute implements Entity {
+public class RoutePoint implements Entity {
     private int id;
     private int trainId;
     private int stationId;
@@ -16,10 +15,10 @@ public class SingleRoute implements Entity {
     }
 
     public static class Builder {
-        private final SingleRoute intermediateStationRoute;
+        private final RoutePoint intermediateStationRoute;
 
         public Builder() {
-            intermediateStationRoute = new SingleRoute();
+            intermediateStationRoute = new RoutePoint();
         }
 
         public Builder id(int id) {
@@ -47,7 +46,7 @@ public class SingleRoute implements Entity {
             return this;
         }
 
-        public SingleRoute build() {
+        public RoutePoint build() {
             return intermediateStationRoute;
         }
     }
@@ -76,7 +75,7 @@ public class SingleRoute implements Entity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SingleRoute that = (SingleRoute) o;
+        RoutePoint that = (RoutePoint) o;
         return id == that.id && trainId == that.trainId && stationId == that.stationId && Objects.equals(arrival, that.arrival) && Objects.equals(departure, that.departure);
     }
 

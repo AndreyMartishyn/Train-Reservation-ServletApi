@@ -1,22 +1,22 @@
 package ua.martishyn.app.data.dao.interfaces;
 
-import ua.martishyn.app.data.entities.ComplexRoute;
-import ua.martishyn.app.data.entities.SingleRoute;
+import ua.martishyn.app.data.entities.Route;
+import ua.martishyn.app.data.entities.RoutePoint;
 
 import java.util.List;
 import java.util.Optional;
 
 
 public interface RouteDao {
-    Optional<List<SingleRoute>> getAllIntermediateStationRoutes();
+    Optional<List<RoutePoint>> getAllIntermediateStationRoutes();
 
-    Optional<SingleRoute> getSingleRoute(int id, int stationId);
+    Optional<RoutePoint> getSingleRoute(int id, int stationId);
 
-    Optional<List<ComplexRoute>> getAllComplexRoutes();
+    Optional<List<Route>> getAllComplexRoutes();
 
-    boolean createSingleRoute(SingleRoute singleRoute);
+    boolean createSingleRoute(RoutePoint routePoint);
 
-    boolean updateSingleRoute(SingleRoute singleRoute);
+    boolean updateSingleRoute(RoutePoint routePoint);
 
     boolean deleteSingleRoute(int id, int stationId);
 }

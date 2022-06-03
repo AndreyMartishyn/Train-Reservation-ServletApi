@@ -1,6 +1,6 @@
 package ua.martishyn.app.data.utils;
 
-public class Constants {
+public class ViewConstants {
     private static final String JSP_LOC = "/view/";
 
     public static final String ABOUT_PAGE = JSP_LOC + "about_us.jsp";
