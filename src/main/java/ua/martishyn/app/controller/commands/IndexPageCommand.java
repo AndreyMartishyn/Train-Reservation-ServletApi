@@ -4,7 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.martishyn.app.data.entities.Station;
 import ua.martishyn.app.data.service.StationService;
-import ua.martishyn.app.data.utils.ViewConstants;
+import ua.martishyn.app.data.utils.constants.ViewConstants;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -23,13 +23,13 @@ public class IndexPageCommand implements ICommand {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<Station> stations = stationService.getAllStations();
-        showStationsForm(request, stations);
+        prepareStationsForSearch(request);
         RequestDispatcher requestDispatcher = request.getRequestDispatcher(ViewConstants.HOME_PAGE);
         requestDispatcher.forward(request, response);
     }
 
-    private void showStationsForm(HttpServletRequest request, List<Station> stations) {
+    private void prepareStationsForSearch(HttpServletRequest request) {
+        List<Station> stations = stationService.getAllStations();
         if (stations.isEmpty()) {
             request.setAttribute("noStations", "No stations found");
         } else {

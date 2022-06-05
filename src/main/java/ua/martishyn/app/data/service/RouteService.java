@@ -4,10 +4,10 @@ import ua.martishyn.app.data.dao.impl.RouteDaoImpl;
 import ua.martishyn.app.data.dao.interfaces.RouteDao;
 import ua.martishyn.app.data.entities.Route;
 import ua.martishyn.app.data.entities.RoutePoint;
-import ua.martishyn.app.data.utils.ViewConstants;
+import ua.martishyn.app.data.utils.constants.DateConstants;
+import ua.martishyn.app.data.utils.constants.ViewConstants;
 import ua.martishyn.app.data.utils.validator.DataInputValidator;
 import ua.martishyn.app.data.utils.validator.DataInputValidatorImpl;
-import ua.martishyn.app.data.utils.DateConstants;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
@@ -25,27 +25,27 @@ public class RouteService {
     }
 
     public boolean createRoutePoint(RoutePoint newRoutePoint) {
-        return routeDao.createSingleRoute(newRoutePoint);
+        return routeDao.createRoutePoint(newRoutePoint);
     }
 
     public boolean deleteRoutePointByIdAndStation(int routeId, int stationId) {
-        return routeDao.deleteSingleRoute(routeId,stationId);
+        return routeDao.deleteSingleRoute(routeId, stationId);
     }
 
-    public Optional<List<RoutePoint>> getAllRoutePoints() {
-        return routeDao.getAllIntermediateStationRoutes();
+    public Optional<List<RoutePoint>> getRoutePointsPaginated(int offset, int limit) {
+        return routeDao.getAllRoutePoints(offset, limit);
     }
 
     public Optional<RoutePoint> getRoutePointByRouteAndStation(int routeId, int stationId) {
-        return routeDao.getSingleRoute(routeId, stationId);
+        return routeDao.getRoutePoint(routeId, stationId);
     }
 
     public boolean updateRoutePoint(RoutePoint newRoutePoint) {
-        return routeDao.updateSingleRoute(newRoutePoint);
+        return routeDao.updateRoutePoint(newRoutePoint);
     }
 
     public Optional<List<Route>> getAllRoutes() {
-        return routeDao.getAllComplexRoutes();
+        return routeDao.getAllRoutes();
     }
 
     public List<Route.IntermediateStation> getStationForRoute(HttpServletRequest request, List<Route> routeList) {

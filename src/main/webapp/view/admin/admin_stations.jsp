@@ -21,7 +21,7 @@
 
         </thead>
         <tbody>
-        <c:forEach items="${stations}" var="station" >
+        <c:forEach items="${paginatedEntries}" var="station" >
         <tr>
         <td><c:out value="${station.id}"/> </td>
         <td><c:out value="${station.name}"/> </td>
@@ -34,9 +34,35 @@
         </c:forEach>
         </tbody>
         </table>
-        </form>
-        <a href="station-add.command" class="btn btn-dark"><fmt:message key="admin.page.station.add"/></a>
-</body>
-</html>
-</body>
-</html>
+                                  <a href="station-add.command" class="btn btn-dark"><fmt:message key="admin.page.station.add"/></a>
+        <br><br>
+                 <%--For displaying Previous link except for the 1st page --%>
+                 <c:if test="${currentPage != 1}">
+                     <td><a href="stations-page.command?page=${currentPage - 1}">Previous</a></td>
+                 </c:if>
+                            <table style = "border:1px solid black;margin-left:auto;margin-right:auto;" cellpadding="5" cellspacing="5" >
+                            <tr>
+                             <c:forEach begin="1" end="${noOfPages}" var="i">
+                             <c:choose>
+                             <c:when test="${currentPage eq i}">
+                             <td>${i}</td>
+                                                         </c:when>
+                                                         <c:otherwise>
+                                                             <td><a href="stations-page.command?page=${i}">${i}</a></td>
+                                                         </c:otherwise>
+                                                     </c:choose>
+                                                 </c:forEach>
+                                             </tr>
+                                         </table>
+
+                                         <%--For displaying Next link --%>
+
+                <c:if test="${currentPage lt noOfPages}">
+                <td><a href="stations-page.command?page=${currentPage + 1}">Next</a></td>
+                </c:if>
+                 </form>
+                 </div>
+               </html>
+               </body>
+               </html>
+

@@ -3,7 +3,7 @@ package ua.martishyn.app.data.service;
 import ua.martishyn.app.data.dao.impl.StationDaoImpl;
 import ua.martishyn.app.data.dao.interfaces.StationDao;
 import ua.martishyn.app.data.entities.Station;
-import ua.martishyn.app.data.utils.ViewConstants;
+import ua.martishyn.app.data.utils.constants.ViewConstants;
 import ua.martishyn.app.data.utils.validator.DataInputValidator;
 import ua.martishyn.app.data.utils.validator.DataInputValidatorImpl;
 
@@ -21,13 +21,17 @@ public class StationService {
         dataInputValidator = new DataInputValidatorImpl();
     }
 
+    public List<Station> getAllStationsPaginated(int offSet, int entriesPerPage) {
+        return stationDao.getAllStationsPaginated(offSet, entriesPerPage).orElse(Collections.emptyList());
+    }
+
+
     public List<Station> getAllStations() {
-        final Optional<List<Station>> all = stationDao.getAll();
-        return all.orElse(Collections.emptyList());
+        return stationDao.getAllStations().orElse(Collections.emptyList());
     }
 
     public Optional<Station> getStationByName(String station) {
-       return stationDao.getByName(station);
+        return stationDao.getByName(station);
     }
 
     public boolean deleteStationById(int stationId) {
@@ -39,7 +43,7 @@ public class StationService {
         return stationDao.getById(stationId);
     }
 
-    public boolean isStationExist(int stationId){
+    public boolean isStationExist(int stationId) {
         return stationDao.getById(stationId).isPresent();
     }
 

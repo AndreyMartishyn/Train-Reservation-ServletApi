@@ -31,9 +31,14 @@ public class AuthenticationFilter implements Filter {
         String page = req.getRequestURI().substring(req.getContextPath().length());
 
         log.info("Authentication check in progress");
+        if (page.equals("/")){
+            ((HttpServletResponse) response).sendRedirect(req.getContextPath() + "/index.command");
+            return;
+        }
         long count = commonPages.stream()
                 .filter(page::startsWith)
                 .count();
+
         if (count != 0) {
             chain.doFilter(request, response);
             return;

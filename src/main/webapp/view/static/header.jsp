@@ -1,7 +1,8 @@
  <div style="text-align: center; box-sizing: content-box;">
      <cstm:custom/>
  </div>
-<div style="text-align: center;background:#C2C2D6;;height: 50px;padding: 5px;border-radius: 10px;">
+<div style="text-align: center;background:#C2C2D6;;height: 60px;padding: 5px;border-radius: 10px;">
+
    <h1><fmt:message key="main.page.title"/></h1>
 </div>
 <nav class="navbar navbar-expand-lg navbar-light ">

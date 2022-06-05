@@ -7,7 +7,7 @@ import ua.martishyn.app.controller.filters.HasRole;
 import ua.martishyn.app.data.entities.Station;
 import ua.martishyn.app.data.entities.enums.Role;
 import ua.martishyn.app.data.service.StationService;
-import ua.martishyn.app.data.utils.ViewConstants;
+import ua.martishyn.app.data.utils.constants.ViewConstants;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;

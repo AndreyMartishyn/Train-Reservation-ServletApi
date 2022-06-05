@@ -4,14 +4,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.martishyn.app.controller.commands.ICommand;
 import ua.martishyn.app.controller.filters.HasRole;
-import ua.martishyn.app.data.dao.impl.TrainModelDaoImpl;
-import ua.martishyn.app.data.dao.interfaces.TrainAndModelDao;
 import ua.martishyn.app.data.entities.TicketFormDto;
 import ua.martishyn.app.data.entities.Wagon;
 import ua.martishyn.app.data.entities.enums.Role;
 import ua.martishyn.app.data.service.TicketService;
 import ua.martishyn.app.data.service.TrainService;
-import ua.martishyn.app.data.utils.ViewConstants;
+import ua.martishyn.app.data.utils.constants.ViewConstants;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -20,7 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @HasRole(role = Role.CUSTOMER)
 public class CustomerTicketFormCommand implements ICommand {

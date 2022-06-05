@@ -8,7 +8,9 @@ import java.util.Optional;
 public interface StationDao {
     Optional<Station> getById(int id);
 
-    Optional<List<Station>> getAll();
+    Optional<List<Station>> getAllStationsPaginated(int offset, int limit);
+
+    Optional<List<Station>> getAllStations();
 
     Optional<Station> getByName(String name);
 
@@ -17,4 +19,6 @@ public interface StationDao {
     boolean update(Station station);
 
     boolean delete(int id);
+
+
 }

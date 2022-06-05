@@ -4,10 +4,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.martishyn.app.data.dao.impl.UserDaoImpl;
 import ua.martishyn.app.data.dao.interfaces.UserDao;
+import ua.martishyn.app.data.entities.RoutePoint;
 import ua.martishyn.app.data.entities.User;
 import ua.martishyn.app.data.entities.enums.Role;
-import ua.martishyn.app.data.utils.ViewConstants;
-import ua.martishyn.app.data.utils.UserServiceConstants;
+import ua.martishyn.app.data.utils.constants.ViewConstants;
+import ua.martishyn.app.data.utils.constants.UserServiceConstants;
 import ua.martishyn.app.data.utils.password_encoding.PasswordEncodingService;
 import ua.martishyn.app.data.utils.validator.DataInputValidator;
 import ua.martishyn.app.data.utils.validator.DataInputValidatorImpl;
@@ -26,20 +27,12 @@ public class UserService {
         dataInputValidator = new DataInputValidatorImpl();
     }
 
-    public Optional<User> getUserById(int id) {
-        return userDao.getById(id);
-    }
-
     public Optional<User> authenticateUserByEmail(String email) {
         return userDao.getByEmail(email);
     }
 
-    public Optional<List<User>> getAllUsers() {
-        return userDao.getAll();
-    }
-
-    public boolean update(User user) {
-        return userDao.update(user);
+    public Optional<List<User>> getUsersPaginated(int offSet, int entriesPerPage) {
+        return userDao.getUsersPaginated(offSet,entriesPerPage);
     }
 
     public boolean deleteUserById(int id) {
@@ -76,17 +69,10 @@ public class UserService {
                 dataInputValidator.isValidPasswordField(password);
     }
 
-    public boolean updateUser(HttpServletRequest request) {
-        User userFromRequest = getUserFromRequest(request);
-        User updatedUser = User.builder()
-                .id(userFromRequest.getId())
-                .firstName(userFromRequest.getFirstName())
-                .lastName(userFromRequest.getLastName())
-                .email(userFromRequest.getEmail())
-                .password(userFromRequest.getPassword())
-                .role(userFromRequest.getRole())
-                .build();
-        return userDao.update(updatedUser);
+    public void updateUserRoleAdmin(HttpServletRequest request) {
+        int id = Integer.parseInt(request.getParameter("id"));
+        Role role = Role.valueOf(request.getParameter("role"));
+        userDao.updateUserRole(role, id);
     }
 
     public boolean createUser(HttpServletRequest request) {
@@ -143,4 +129,6 @@ public class UserService {
         }
         return true;
     }
+
+
 }

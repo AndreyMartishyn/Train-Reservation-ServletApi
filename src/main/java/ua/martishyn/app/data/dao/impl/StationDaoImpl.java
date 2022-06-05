@@ -4,7 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.martishyn.app.data.dao.interfaces.StationDao;
 import ua.martishyn.app.data.entities.Station;
-import ua.martishyn.app.data.utils.DataBasePoolManager;
+import ua.martishyn.app.data.utils.db_pool.DataBasePoolManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,9 +19,42 @@ public class StationDaoImpl implements StationDao {
     private static final String CREATE_STATION = "INSERT INTO stations VALUES (DEFAULT, ?, ?);";
     private static final String GET_STATION_BY_ID = "SELECT * FROM stations WHERE id = ?;";
     private static final String GET_STATION_BY_NAME = "SELECT * FROM stations WHERE name = ?;";
-    private static final String GET_ALL_STATIONS = "SELECT * FROM stations;";
+    private static final String GET_STATIONS = "SELECT * FROM stations;";
+    private static final String GET_STATIONS_PAGINATED = "SELECT * FROM stations limit %d, %d;";
     private static final String UPDATE_STATION = "UPDATE stations SET name = ?, code = ? WHERE id = ?;";
     private static final String DELETE_STATION = "DELETE FROM stations WHERE id =?";
+
+
+    @Override
+    public Optional<List<Station>> getAllStationsPaginated(int offset, int limit) {
+        List<Station> stations = new ArrayList<>();
+        String sql = String.format(GET_STATIONS_PAGINATED, offset, limit);
+        try (Connection connection = DataBasePoolManager.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            ResultSet stationFromResultSet = preparedStatement.executeQuery();
+            while (stationFromResultSet.next()) {
+                stations.add(getStationFromResultSet(stationFromResultSet));
+            }
+        } catch (SQLException e) {
+            log.error("Problems with getting all stations {}", e.toString());
+        }
+        return Optional.of(stations);
+    }
+
+    @Override
+    public Optional<List<Station>> getAllStations() {
+        List<Station> stations = new ArrayList<>();
+        try (Connection connection = DataBasePoolManager.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_STATIONS)) {
+            ResultSet stationFromResultSet = preparedStatement.executeQuery();
+            while (stationFromResultSet.next()) {
+                stations.add(getStationFromResultSet(stationFromResultSet));
+            }
+        } catch (SQLException e) {
+            log.error("Problems with getting all stations {}", e.toString());
+        }
+        return Optional.of(stations);
+    }
 
     @Override
     public Optional<Station> getById(int id) {
@@ -53,21 +86,6 @@ public class StationDaoImpl implements StationDao {
             System.out.println("Unable to get station from db" + exception);
         }
         return Optional.ofNullable(stationFromDb);
-    }
-
-    @Override
-    public Optional<List<Station>> getAll() {
-        List<Station> stations = new ArrayList<>();
-        try (Connection connection = DataBasePoolManager.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_STATIONS)) {
-            ResultSet stationFromResultSet = preparedStatement.executeQuery();
-            while (stationFromResultSet.next()) {
-                stations.add(getStationFromResultSet(stationFromResultSet));
-            }
-        } catch (SQLException e) {
-            log.error("Problems with getting all stations {}", e.toString());
-        }
-        return Optional.of(stations);
     }
 
     @Override

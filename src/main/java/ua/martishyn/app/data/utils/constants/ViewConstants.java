@@ -1,4 +1,4 @@
-package ua.martishyn.app.data.utils;
+package ua.martishyn.app.data.utils.constants;
 
 public class ViewConstants {
     private static final String JSP_LOC = "/view/";

@@ -4,11 +4,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.martishyn.app.controller.commands.ICommand;
 import ua.martishyn.app.controller.filters.HasRole;
-import ua.martishyn.app.data.entities.User;
 import ua.martishyn.app.data.entities.enums.Role;
 import ua.martishyn.app.data.service.UserService;
-import ua.martishyn.app.data.utils.ViewConstants;
-import ua.martishyn.app.data.utils.password_encoding.PasswordEncodingService;
+import ua.martishyn.app.data.utils.constants.ViewConstants;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -27,12 +25,8 @@ public class AdminUserEditPostCommand implements ICommand {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (userService.isUserInputIsValid(request) && userService.updateUser(request)) {
-            log.info("User updated successfully");
-            response.sendRedirect("users-page.command");
-            return;
-        }
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher(ViewConstants.ADMIN_USERS);
-        requestDispatcher.forward(request, response);
+        userService.updateUserRoleAdmin(request);
+        log.info("User updated successfully");
+        response.sendRedirect("users-page.command");
     }
 }

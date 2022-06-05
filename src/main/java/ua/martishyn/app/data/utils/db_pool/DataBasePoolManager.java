@@ -1,4 +1,4 @@
-package ua.martishyn.app.data.utils;
+package ua.martishyn.app.data.utils.db_pool;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;

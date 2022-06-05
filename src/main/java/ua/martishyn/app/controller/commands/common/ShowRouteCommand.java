@@ -3,7 +3,7 @@ package ua.martishyn.app.controller.commands.common;
 import ua.martishyn.app.controller.commands.ICommand;
 import ua.martishyn.app.data.entities.Route;
 import ua.martishyn.app.data.service.RouteService;
-import ua.martishyn.app.data.utils.ViewConstants;
+import ua.martishyn.app.data.utils.constants.ViewConstants;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;

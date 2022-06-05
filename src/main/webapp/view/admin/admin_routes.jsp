@@ -38,7 +38,6 @@
                         </c:forEach>
         </tbody>
         </table>
-
                         <a href="route-add.command" class="btn btn-dark"><fmt:message key="admin.page.route.add"/></a>
 <br><br>
 <%--For displaying Previous link except for the 1st page --%>
@@ -65,7 +64,7 @@
                           <c:if test="${currentPage lt noOfPages}">
                               <td><a href="routes-page.command?page=${currentPage + 1}">Next</a></td>
                           </c:if>
- </body>
+
   </form>
   </div>
 </html>

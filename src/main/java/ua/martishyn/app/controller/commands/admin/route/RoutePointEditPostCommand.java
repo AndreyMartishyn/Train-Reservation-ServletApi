@@ -9,8 +9,8 @@ import ua.martishyn.app.data.entities.enums.Role;
 import ua.martishyn.app.data.service.RouteService;
 import ua.martishyn.app.data.service.StationService;
 import ua.martishyn.app.data.service.TrainService;
-import ua.martishyn.app.data.utils.ViewConstants;
-import ua.martishyn.app.data.utils.DateConstants;
+import ua.martishyn.app.data.utils.constants.ViewConstants;
+import ua.martishyn.app.data.utils.constants.DateConstants;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;

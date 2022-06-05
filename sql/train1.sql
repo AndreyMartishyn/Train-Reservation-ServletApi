@@ -10,8 +10,6 @@ CREATE TABLE `route_stations` (
   `station_id` int NOT NULL,
   `arrival` datetime NOT NULL,
   `departure` datetime NOT NULL,
-  KEY `train_id` (`train_id`),
-  KEY `station_id` (`station_id`),
   FOREIGN KEY (`train_id`) REFERENCES `trains` (`id`),
   FOREIGN KEY (`station_id`) REFERENCES `stations` (`id`)
 )
