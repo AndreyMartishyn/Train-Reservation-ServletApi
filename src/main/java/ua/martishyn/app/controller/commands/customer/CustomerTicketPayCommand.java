@@ -24,11 +24,8 @@ public class CustomerTicketPayCommand implements ICommand {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (ticketService.isTicketPaid(request)) {
-            log.info("Ticket is paid now");
-        } else {
-            request.setAttribute("notPaid", "Ticket not paid");
-        }
+        ticketService.isTicketPaid(request);
+        log.info("Ticket is paid now");
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("customer-tickets-page.command");
         requestDispatcher.forward(request, response);
     }

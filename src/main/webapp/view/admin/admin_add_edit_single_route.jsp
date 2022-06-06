@@ -38,28 +38,32 @@
                 <th><fmt:message key="admin.page.train.id"/>:</th>
                 <td>
                     <input type="text" name="trainId" size="30"
-                           value="<c:out value='${singleRoute.trainId}' />" required/>
+                    pattern="^\d{1,10}$"
+                    title="Input for number should be only number up to 10 digits" required>
                 </td>
             </tr>
             <tr>
                 <th><fmt:message key="admin.page.station.id"/>:</th>
                 <td>
                     <input type="text" name="stationId" size="30"
-                           value="<c:out value='${singleRoute.stationId}' />"required/>
+                    pattern="^\d{1,10}$"
+                   title="Input for number should be only number up to 10 digits" required>
                 </td>
             </tr>
             <tr>
                 <th><fmt:message key="admin.page.arrival"/>:</th>
                 <td>
                     <input type="datetime-local" name="arrival" size="30"
-                             value="<c:out value='${singleRoute.arrival}' />" required />
+                             value="<c:out value='${singleRoute.arrival}' />"
+                             title="Dates should be within 1 months and year" required/>
                 </td>
             </tr>
             <tr>
                 <th><fmt:message key="admin.page.departure"/>:</th>
                 <td>
                     <input type="datetime-local" name="departure" size="30"
-                           value="<c:out value='${singleRoute.departure}' />" required />
+                           value="<c:out value='${singleRoute.departure}' />"
+                            title="Dates should be within 1 months and year" required/>
                 </td>
             </tr>
 

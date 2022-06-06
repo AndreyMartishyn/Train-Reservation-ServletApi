@@ -18,11 +18,11 @@
    </div>
    <div class="form-group">
     <input type="email" name="email" class="form-control" placeholder="<fmt:message key="enter.your.email"/>"
-    pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z-]+\.[a-zA-Z.]+$" title="Your email in format test1@test.com" required>
+    pattern="^[a-zA-Z0-9_.-]{2,20}+@[a-zA-Z-]{3,7}+\.[a-zA-Z.]{2,3}+$" title="Your email in format test1@test.com without './_-'" required>
     </div>
     <div class="form-group">
     <input type="password" name="password" class="form-control" placeholder="<fmt:message key="enter.your.password"/>"
-    pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" title="Password must contain 8+ chars without symbols and at least 1 digit" required>
+    pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,16}$" title="Password must contain 8-16 latin characters without symbols and at least 1 digit" required>
     <small><fmt:message key="small.id"/></small>
     </div>
     <div class="form-group">

@@ -15,12 +15,16 @@ public class LogoutCommand implements ICommand {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        invalidateSession(request);
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("index.command");
+        requestDispatcher.forward(request, response);
+    }
+
+    private void invalidateSession(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session != null) {
             session.invalidate();
         }
         log.info("User logged out");
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("index.command");
-        requestDispatcher.forward(request, response);
     }
 }

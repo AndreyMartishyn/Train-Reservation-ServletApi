@@ -22,6 +22,7 @@ public class ShowRouteCommand implements ICommand {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //TODO MAKE TAKING ROUTES BY PARTICULAR ROUTE, NOT FROM DB FULLY BY STREAM
         Optional<List<Route>> routesFromDb = routeService.getAllRoutes();
         if (routesFromDb.isPresent()) {
             List<Route.IntermediateStation> stationForRoute = routeService.getStationForRoute(request, routesFromDb.get());

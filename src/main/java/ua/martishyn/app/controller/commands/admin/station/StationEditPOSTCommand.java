@@ -26,28 +26,12 @@ public class StationEditPOSTCommand implements ICommand {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (isStationInputValid(request) && updateStation(request)) {
+        if (stationService.isStationDataValid(request) && stationService.updateStationFromRequest(request)) {
             log.info("Route updated successfully");
             response.sendRedirect("stations-page.command");
             return;
         }
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(ViewConstants.ADMIN_ADD_EDIT_STATIONS);
             requestDispatcher.forward(request, response);
-    }
-
-    private boolean isStationInputValid(HttpServletRequest request){
-        return stationService.isStationDataValid(request);
-    }
-
-    private boolean updateStation(HttpServletRequest request) {
-        int stationId = Integer.parseInt(request.getParameter("id"));
-        String name = request.getParameter("name");
-        String code = request.getParameter("code");
-        Station newStation = Station.builder()
-                .id(stationId)
-                .name(name)
-                .code(code)
-                .build();
-        return stationService.updateStation(newStation);
     }
 }

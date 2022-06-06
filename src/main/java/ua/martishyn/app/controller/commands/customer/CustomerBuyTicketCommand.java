@@ -24,14 +24,13 @@ public class CustomerBuyTicketCommand implements ICommand {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (ticketService.isTickerDataValid(request) && ticketService.createTicket(request)){
+        if (ticketService.isTickerDataValid(request) && ticketService.createTicket(request)) {
             log.info("Ticket created successfully");
             response.sendRedirect("customer-tickets-page.command");
-        } else {
-            log.info("Ticket not created");
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher("index.command");
-            requestDispatcher.forward(request, response);
+            return;
         }
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("index.command");
+        requestDispatcher.forward(request, response);
     }
 }
 

@@ -32,9 +32,9 @@ public class IndexPageCommand implements ICommand {
         List<Station> stations = stationService.getAllStations();
         if (stations.isEmpty()) {
             request.setAttribute("noStations", "No stations found");
-        } else {
-            log.info("Loading stations from db. Stations quantity : {}", stations.size());
-            request.setAttribute("stations", stations);
+            return;
         }
+        log.info("Loading stations from db. Stations quantity : {}", stations.size());
+        request.setAttribute("stations", stations);
     }
 }

@@ -152,12 +152,12 @@ public class TicketService {
 
     public boolean isTickerDataValid(HttpServletRequest request) {
         String firstName = request.getParameter("firstName").trim();
-        if (!dataInputValidator.isValidStringInput(firstName)) {
+        if (!dataInputValidator.isValidNameField(firstName)) {
             request.setAttribute(ViewConstants.ERROR_VALIDATION, "Wrong first name input");
             return false;
         }
         String lastName = request.getParameter("lastName").trim();
-        if (!dataInputValidator.isValidStringInput(lastName)) {
+        if (!dataInputValidator.isValidNameField(lastName)) {
             request.setAttribute(ViewConstants.ERROR_VALIDATION, "Wrong last name input");
             return false;
         }
