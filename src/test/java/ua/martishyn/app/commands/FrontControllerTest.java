@@ -7,7 +7,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import ua.martishyn.app.controller.FrontController;
 import ua.martishyn.app.data.entities.enums.Role;
-import ua.martishyn.app.data.utils.ViewConstants;
+import ua.martishyn.app.data.utils.constants.ViewConstants;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -32,14 +32,12 @@ public class FrontControllerTest extends FrontController {
     @Mock
     HttpSession mockedSession;
 
-    @InjectMocks
     FrontController frontController;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         frontController = new FrontController();
-
     }
 
 //    @Test

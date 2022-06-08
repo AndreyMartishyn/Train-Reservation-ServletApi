@@ -3,7 +3,8 @@ package ua.martishyn.app.data.service;
 import ua.martishyn.app.data.dao.impl.StationDaoImpl;
 import ua.martishyn.app.data.dao.interfaces.StationDao;
 import ua.martishyn.app.data.entities.Station;
-import ua.martishyn.app.data.utils.ViewConstants;
+import ua.martishyn.app.data.utils.constants.StationServiceConstants;
+import ua.martishyn.app.data.utils.constants.ViewConstants;
 import ua.martishyn.app.data.utils.validator.DataInputValidator;
 import ua.martishyn.app.data.utils.validator.DataInputValidatorImpl;
 
@@ -21,13 +22,16 @@ public class StationService {
         dataInputValidator = new DataInputValidatorImpl();
     }
 
+    public List<Station> getAllStationsPaginated(int offSet, int entriesPerPage) {
+        return stationDao.getAllStationsPaginated(offSet, entriesPerPage).orElse(Collections.emptyList());
+    }
+
     public List<Station> getAllStations() {
-        final Optional<List<Station>> all = stationDao.getAll();
-        return all.orElse(Collections.emptyList());
+        return stationDao.getAllStations().orElse(Collections.emptyList());
     }
 
     public Optional<Station> getStationByName(String station) {
-       return stationDao.getByName(station);
+        return stationDao.getByName(station);
     }
 
     public boolean deleteStationById(int stationId) {
@@ -39,28 +43,49 @@ public class StationService {
         return stationDao.getById(stationId);
     }
 
-    public boolean isStationExist(int stationId){
+    public boolean isStationExist(int stationId) {
         return stationDao.getById(stationId).isPresent();
     }
 
-    public boolean updateStation(Station newStation) {
-        return stationDao.update(newStation);
+    public boolean createStation(HttpServletRequest request) {
+        Station newStation = getStationForCreate(request);
+        return stationDao.createStation(newStation);
     }
 
-    public boolean createStation(Station newStation) {
-        return stationDao.createStation(newStation);
+    public boolean updateStationFromRequest(HttpServletRequest request) {
+        Station updatedStation = getStationForUpdate(request);
+        return stationDao.update(updatedStation);
+    }
+
+    public Station getStationForCreate(HttpServletRequest request) {
+        String name = request.getParameter("name");
+        String code = request.getParameter("code");
+        return Station.builder()
+                .name(name)
+                .code(code)
+                .build();
+    }
+
+    public Station getStationForUpdate(HttpServletRequest request) {
+        int stationId = Integer.parseInt(request.getParameter("id"));
+        String name = request.getParameter("name");
+        String code = request.getParameter("code");
+        return Station.builder()
+                .id(stationId)
+                .name(name)
+                .code(code)
+                .build();
     }
 
     public boolean isStationDataValid(HttpServletRequest request) {
         String name = request.getParameter("name").trim();
-
-        if (dataInputValidator.isValidStringInput(name)) {
-            request.setAttribute(ViewConstants.ERROR_VALIDATION, "Wrong name input");
+        if (!dataInputValidator.isValidStationNameInput(name)) {
+            request.setAttribute(ViewConstants.ERROR_VALIDATION, StationServiceConstants.STATION_NAME_INVALID_MESS);
             return false;
         }
         String code = request.getParameter("code").trim();
-        if (dataInputValidator.isValidStringInput(code)) {
-            request.setAttribute(ViewConstants.ERROR_VALIDATION, "Wrong code input");
+        if (!dataInputValidator.isValidStationCodeInput(code)) {
+            request.setAttribute(ViewConstants.ERROR_VALIDATION, StationServiceConstants.STATION_CODE_INVALID_MESS);
             return false;
         }
         return true;

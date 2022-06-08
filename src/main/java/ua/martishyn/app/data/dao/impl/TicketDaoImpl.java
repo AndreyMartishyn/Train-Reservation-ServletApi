@@ -9,7 +9,7 @@ import ua.martishyn.app.data.entities.Station;
 import ua.martishyn.app.data.entities.Ticket;
 import ua.martishyn.app.data.entities.Train;
 import ua.martishyn.app.data.entities.Wagon;
-import ua.martishyn.app.data.utils.DataBasePoolManager;
+import ua.martishyn.app.data.utils.db_pool.DataBasePoolManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

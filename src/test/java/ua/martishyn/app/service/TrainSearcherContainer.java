@@ -1,4 +1,4 @@
-package ua.martishyn.app.commands.service;
+package ua.martishyn.app.service;
 
 import ua.martishyn.app.data.entities.*;
 import ua.martishyn.app.data.entities.enums.ComfortClass;

@@ -9,7 +9,7 @@ import ua.martishyn.app.data.entities.Route;
 import ua.martishyn.app.data.entities.RoutePoint;
 import ua.martishyn.app.data.entities.Station;
 import ua.martishyn.app.data.entities.Train;
-import ua.martishyn.app.data.utils.DataBasePoolManager;
+import ua.martishyn.app.data.utils.db_pool.DataBasePoolManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -23,7 +23,8 @@ import java.util.Optional;
 
 public class RouteDaoImpl implements RouteDao {
     private static final Logger log = LogManager.getLogger(RouteDaoImpl.class);
-    private static final String GET_ALL_ROUTEPOINTS = "SELECT * FROM route_stations;";
+    private static final String GET_ALL_ROUTES = "SELECT * FROM route_stations";
+    private static final String GET_ALL_ROUTEPOINTS = "SELECT * FROM route_stations limit %d, %d";
     private static final String GET_ROUTEPOINT = "SELECT * FROM route_stations where id = ? and station_id = ?;";
     private static final String ADD_ROUTEPOINT = "INSERT INTO route_stations VALUES (?, ?, ?, ? , ?);";
     private static final String DELETE_ROUTEPOINT = "DELETE FROM route_stations WHERE id = ? AND station_id = ?;";
@@ -31,22 +32,23 @@ public class RouteDaoImpl implements RouteDao {
             "station_id = ?, arrival = ?, departure = ? WHERE id= ? AND station_id =?;";
 
     @Override
-    public Optional<List<RoutePoint>> getAllIntermediateStationRoutes() {
+    public Optional<List<RoutePoint>> getAllRoutePointsPaginated(int offset, int limit) {
         List<RoutePoint> routeParts = new ArrayList<>();
+        String paginatedSql = String.format(GET_ALL_ROUTEPOINTS, offset, limit);
         try (Connection connection = DataBasePoolManager.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_ROUTEPOINTS)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(paginatedSql)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                routeParts.add(getRoutePartFromResultSet(resultSet));
+                routeParts.add(getRoutePointFromResultSet(resultSet));
             }
-        } catch (SQLException | ParseException exception) {
+        } catch (SQLException exception) {
             log.error("Problems with getting list of intermediate stations {}", exception.toString());
         }
         return Optional.of(routeParts);
     }
 
     @Override
-    public Optional<RoutePoint> getSingleRoute(int id, int stationId) {
+    public Optional<RoutePoint> getRoutePoint(int id, int stationId) {
         RoutePoint routePoint = null;
         try (Connection connection = DataBasePoolManager.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_ROUTEPOINT)) {
@@ -54,26 +56,26 @@ public class RouteDaoImpl implements RouteDao {
             preparedStatement.setInt(2, stationId);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                routePoint = getRoutePartFromResultSet(resultSet);
+                routePoint = getRoutePointFromResultSet(resultSet);
             }
-        } catch (SQLException | ParseException e) {
+        } catch (SQLException e) {
             log.error("Problems with getting single route {}", e.toString());
         }
         return Optional.ofNullable(routePoint);
     }
 
     @Override
-    public Optional<List<Route>> getAllComplexRoutes() {
+    public Optional<List<Route>> getAllRoutes() {
         TrainAndModelDao trainDao = new TrainModelDaoImpl();
         List<Route> routeList = new ArrayList<>();
         Route route;
         int routeId;
         try (Connection connection = DataBasePoolManager.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_ROUTEPOINTS)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_ROUTES)) {
             ResultSet routeResultSet = preparedStatement.executeQuery();
             while (routeResultSet.next()) {
                 routeId = routeResultSet.getInt(1);
-                route = getComplexRoute(routeList, routeId);
+                route = getRoute(routeList, routeId);
                 if (route == null) {
                     route = new Route();
                     route.setId(routeId);
@@ -85,7 +87,7 @@ public class RouteDaoImpl implements RouteDao {
                 }
                 addIntermediateStations(route, routeResultSet);
             }
-        } catch (SQLException  e) {
+        } catch (SQLException e) {
             log.error("Problems with getting list of routes {}", e.toString());
         }
         return Optional.of(routeList);
@@ -100,7 +102,7 @@ public class RouteDaoImpl implements RouteDao {
 
     }
 
-    private Route getComplexRoute(List<Route> routeList, int routeId) {
+    private Route getRoute(List<Route> routeList, int routeId) {
         for (Route route : routeList) {
             if (route.getId() == routeId) {
                 return route;
@@ -110,7 +112,7 @@ public class RouteDaoImpl implements RouteDao {
     }
 
     @Override
-    public boolean createSingleRoute(RoutePoint routePoint) {
+    public boolean createRoutePoint(RoutePoint routePoint) {
         try (Connection connection = DataBasePoolManager.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(ADD_ROUTEPOINT)) {
             createRouteStatement(preparedStatement, routePoint);
@@ -125,7 +127,7 @@ public class RouteDaoImpl implements RouteDao {
     }
 
     @Override
-    public boolean updateSingleRoute(RoutePoint routePoint) {
+    public boolean updateRoutePoint(RoutePoint routePoint) {
         Connection con = null;
         PreparedStatement preparedStatement = null;
         try {
@@ -176,7 +178,8 @@ public class RouteDaoImpl implements RouteDao {
         return false;
     }
 
-    private RoutePoint getRoutePartFromResultSet(ResultSet resultSet) throws SQLException, ParseException {
+
+    private RoutePoint getRoutePointFromResultSet(ResultSet resultSet) throws SQLException {
         return RoutePoint.builder()
                 .id(resultSet.getInt("id"))
                 .trainId(resultSet.getInt("train_id"))

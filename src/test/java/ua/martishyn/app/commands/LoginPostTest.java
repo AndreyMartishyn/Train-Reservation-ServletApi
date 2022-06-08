@@ -8,9 +8,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import ua.martishyn.app.controller.commands.LoginCommand;
 import ua.martishyn.app.data.dao.impl.UserDaoImpl;
-import ua.martishyn.app.data.service.UserService;
-import ua.martishyn.app.data.utils.UserServiceConstants;
-import ua.martishyn.app.data.utils.ViewConstants;
+import ua.martishyn.app.data.utils.constants.UserServiceConstants;
+import ua.martishyn.app.data.utils.constants.ViewConstants;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;

@@ -3,7 +3,7 @@ package ua.martishyn.app.data.service;
 import ua.martishyn.app.data.dao.impl.TicketDaoImpl;
 import ua.martishyn.app.data.dao.interfaces.TicketDao;
 import ua.martishyn.app.data.entities.*;
-import ua.martishyn.app.data.utils.ViewConstants;
+import ua.martishyn.app.data.utils.constants.ViewConstants;
 import ua.martishyn.app.data.utils.validator.DataInputValidator;
 import ua.martishyn.app.data.utils.validator.DataInputValidatorImpl;
 
@@ -26,7 +26,6 @@ public class TicketService {
         stationService = new StationService();
         dataInputValidator = new DataInputValidatorImpl();
     }
-
 
     public List<Ticket> getAllTickets(HttpServletRequest request) {
         User currentUser = (User) request.getSession().getAttribute("user");
@@ -152,12 +151,12 @@ public class TicketService {
 
     public boolean isTickerDataValid(HttpServletRequest request) {
         String firstName = request.getParameter("firstName").trim();
-        if (!dataInputValidator.isValidStringInput(firstName)) {
+        if (!dataInputValidator.isValidNameField(firstName)) {
             request.setAttribute(ViewConstants.ERROR_VALIDATION, "Wrong first name input");
             return false;
         }
         String lastName = request.getParameter("lastName").trim();
-        if (!dataInputValidator.isValidStringInput(lastName)) {
+        if (!dataInputValidator.isValidNameField(lastName)) {
             request.setAttribute(ViewConstants.ERROR_VALIDATION, "Wrong last name input");
             return false;
         }

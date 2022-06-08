@@ -5,7 +5,7 @@ import org.apache.logging.log4j.Logger;
 import ua.martishyn.app.data.dao.interfaces.UserDao;
 import ua.martishyn.app.data.entities.User;
 import ua.martishyn.app.data.entities.enums.Role;
-import ua.martishyn.app.data.utils.DataBasePoolManager;
+import ua.martishyn.app.data.utils.db_pool.DataBasePoolManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,34 +18,18 @@ import java.util.Optional;
 public class UserDaoImpl implements UserDao {
     private static final Logger log = LogManager.getLogger(UserDaoImpl.class);
     private static final String CREATE_USER = "INSERT INTO users VALUES (DEFAULT, ?, ?, ?, ?, ?);";
-    private static final String GET_USER_BY_ID = "SELECT * FROM users WHERE id = ?;";
     private static final String GET_USER_BY_EMAIL = "SELECT * FROM users WHERE email = ?;";
-    private static final String GET_ALL_USERS = "SELECT * FROM users;";
-    private static final String UPDATE_USER = "UPDATE users SET first_name = ?, last_name = ?, " +
+    private static final String GET_PAGINATED_USERS = "SELECT * FROM users limit %d, %d;";
+    private static final String UPDATE_ROLE_BY_ID = "UPDATE users SET role = ? WHERE id = ?;";
+    private static final String UPDATE_USER_FULL = "UPDATE users SET first_name = ?, last_name = ?, " +
             "pass_encoded = ?, email = ?, role = ? WHERE id = ?;";
     private static final String DELETE_USER = "DELETE FROM users WHERE id =?";
-
-    @Override
-    public Optional<User> getById(int id) {
-        User userFromDb = null;
-        try (Connection connection = DataBasePoolManager.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_BY_ID)) {
-            preparedStatement.setInt(1, id);
-            ResultSet userResultSet = preparedStatement.executeQuery();
-            while (userResultSet.next()) {
-                userFromDb = getUserFromResultSet(userResultSet);
-            }
-        } catch (SQLException exception) {
-            log.error("Problems with getting user by id {}", exception.toString());
-        }
-        return Optional.ofNullable(userFromDb);
-    }
 
     @Override
     public Optional<User> getByEmail(String email) {
         User userFromDb = new User();
         try (Connection connection = DataBasePoolManager.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_BY_EMAIL);) {
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_BY_EMAIL)) {
             preparedStatement.setString(1, email);
             ResultSet userResultSet = preparedStatement.executeQuery();
             while (userResultSet.next()) {
@@ -58,10 +42,11 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public Optional<List<User>> getAll() {
+    public Optional<List<User>> getUsersPaginated(int offSet, int entriesPerPage) {
         List<User> usersList = new ArrayList<>();
+        String paginatedSql = String.format(GET_PAGINATED_USERS, offSet, entriesPerPage);
         try (Connection connection = DataBasePoolManager.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_USERS)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(paginatedSql)) {
             ResultSet usersResultSet = preparedStatement.executeQuery();
             while (usersResultSet.next()) {
                 usersList.add(getUserFromResultSet(usersResultSet));
@@ -110,13 +95,13 @@ public class UserDaoImpl implements UserDao {
         PreparedStatement preparedStatement = null;
         try {
             connection = DataBasePoolManager.getInstance().getConnection();
-            preparedStatement = connection.prepareStatement(UPDATE_USER);
+            connection.setAutoCommit(false);
+            preparedStatement = connection.prepareStatement(UPDATE_USER_FULL);
             connection.setAutoCommit(false);
             createUserStatement(preparedStatement, user);
             preparedStatement.setInt(6, user.getId());
             preparedStatement.executeUpdate();
             connection.commit();
-
         } catch (SQLException exception) {
             log.error("Problems with updating user by id {}", exception.toString());
             if (connection != null) {
@@ -131,6 +116,33 @@ public class UserDaoImpl implements UserDao {
             close(preparedStatement);
         }
         return true;
+    }
+
+    @Override
+    public void updateUserRole(Role role, int userId) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = DataBasePoolManager.getInstance().getConnection();
+            preparedStatement = connection.prepareStatement(UPDATE_ROLE_BY_ID);
+            connection.setAutoCommit(false);
+            preparedStatement.setString(1, role.name());
+            preparedStatement.setInt(2, userId);
+            preparedStatement.executeUpdate();
+            connection.commit();
+        } catch (SQLException exception) {
+            log.error("Problems with updating user-role by id {}", exception.toString());
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException e) {
+                    log.error("Problems with transaction {}", e.toString());
+                }
+            }
+        } finally {
+            close(connection);
+            close(preparedStatement);
+        }
     }
 
     @Override

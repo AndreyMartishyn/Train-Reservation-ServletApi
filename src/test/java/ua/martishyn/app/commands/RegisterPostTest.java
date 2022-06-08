@@ -7,8 +7,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import ua.martishyn.app.controller.commands.RegisterCommand;
 import ua.martishyn.app.data.entities.User;
-import ua.martishyn.app.data.utils.UserServiceConstants;
-import ua.martishyn.app.data.utils.ViewConstants;
+import ua.martishyn.app.data.utils.constants.UserServiceConstants;
+import ua.martishyn.app.data.utils.constants.ViewConstants;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;

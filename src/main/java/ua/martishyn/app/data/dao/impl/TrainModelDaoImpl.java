@@ -7,7 +7,7 @@ import ua.martishyn.app.data.entities.Train;
 import ua.martishyn.app.data.entities.TrainModel;
 import ua.martishyn.app.data.entities.Wagon;
 import ua.martishyn.app.data.entities.enums.ComfortClass;
-import ua.martishyn.app.data.utils.DataBasePoolManager;
+import ua.martishyn.app.data.utils.db_pool.DataBasePoolManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

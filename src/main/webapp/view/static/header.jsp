@@ -1,11 +1,18 @@
  <div style="text-align: center; box-sizing: content-box;">
      <cstm:custom/>
  </div>
-<div style="text-align: center;background:#C2C2D6;;height: 50px;padding: 5px;border-radius: 10px;">
-   <h1><fmt:message key="main.page.title"/></h1>
+     <div style="text-align: center;background:#fff;;height: 80px;padding: 5px; border-radius: 10px;">
+         <img src="view/images/local_railway.png" height="80"/>
+     </div>
 </div>
-<nav class="navbar navbar-expand-lg navbar-light ">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
+    <a class="navbar-brand mt-2 mt-lg-0" href="index.command">
+                        <img src="view/images/train_header.png"
+                                height="30"
+                                alt="Logo"
+                                loading="lazy"/>
+                    </a>
         <c:choose>
             <c:when test="${sessionScope.user == null}">
                 <a class="navbar-brand" href="index.command"><fmt:message key="welcome.guest"/></a>
@@ -29,7 +36,7 @@
                 </li>
                 <c:if test="${sessionScope.user.role == 'CUSTOMER'}">
                 <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="customer-tickets-page.command">My tickets</a>
+                <a class="nav-link active" aria-current="page" href="customer-tickets-page.command"><fmt:message key="main.page.tickets"/></a>
                 </li>
                 </c:if>
                 <c:if test="${sessionScope.user.role == 'ADMIN'}">
@@ -60,14 +67,7 @@
                     </c:otherwise>
                 </c:choose>
             </ul>
-				<span class="lang">
-				<form>
-                        <select id="language" name="language" onchange="submit()">
-                            <option value="en" ${language == 'en' ? 'selected' : ''}>EN</option>
-                            <option value="ua" ${language == 'ua' ? 'selected' : ''}>UA</option>
-                        </select>
-				</form>
-                </span>
+
                 </div>
     </div>
 </nav>

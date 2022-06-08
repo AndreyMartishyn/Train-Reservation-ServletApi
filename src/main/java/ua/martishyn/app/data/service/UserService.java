@@ -6,8 +6,8 @@ import ua.martishyn.app.data.dao.impl.UserDaoImpl;
 import ua.martishyn.app.data.dao.interfaces.UserDao;
 import ua.martishyn.app.data.entities.User;
 import ua.martishyn.app.data.entities.enums.Role;
-import ua.martishyn.app.data.utils.ViewConstants;
-import ua.martishyn.app.data.utils.UserServiceConstants;
+import ua.martishyn.app.data.utils.constants.UserServiceConstants;
+import ua.martishyn.app.data.utils.constants.ViewConstants;
 import ua.martishyn.app.data.utils.password_encoding.PasswordEncodingService;
 import ua.martishyn.app.data.utils.validator.DataInputValidator;
 import ua.martishyn.app.data.utils.validator.DataInputValidatorImpl;
@@ -26,20 +26,12 @@ public class UserService {
         dataInputValidator = new DataInputValidatorImpl();
     }
 
-    public Optional<User> getUserById(int id) {
-        return userDao.getById(id);
-    }
-
     public Optional<User> authenticateUserByEmail(String email) {
         return userDao.getByEmail(email);
     }
 
-    public Optional<List<User>> getAllUsers() {
-        return userDao.getAll();
-    }
-
-    public boolean update(User user) {
-        return userDao.update(user);
+    public Optional<List<User>> getUsersPaginated(int offSet, int entriesPerPage) {
+        return userDao.getUsersPaginated(offSet, entriesPerPage);
     }
 
     public boolean deleteUserById(int id) {
@@ -76,17 +68,10 @@ public class UserService {
                 dataInputValidator.isValidPasswordField(password);
     }
 
-    public boolean updateUser(HttpServletRequest request) {
-        User userFromRequest = getUserFromRequest(request);
-        User updatedUser = User.builder()
-                .id(userFromRequest.getId())
-                .firstName(userFromRequest.getFirstName())
-                .lastName(userFromRequest.getLastName())
-                .email(userFromRequest.getEmail())
-                .password(userFromRequest.getPassword())
-                .role(userFromRequest.getRole())
-                .build();
-        return userDao.update(updatedUser);
+    public void updateUserRoleAdmin(HttpServletRequest request) {
+        int id = Integer.parseInt(request.getParameter("id"));
+        Role role = Role.valueOf(request.getParameter("role"));
+        userDao.updateUserRole(role, id);
     }
 
     public boolean createUser(HttpServletRequest request) {
@@ -101,13 +86,13 @@ public class UserService {
         return userDao.createUser(createdUser);
     }
 
-    public User getUserFromRequest(HttpServletRequest request){
+    public User getUserFromRequest(HttpServletRequest request) {
         int userId = Integer.parseInt(request.getParameter("id"));
         String firstName = request.getParameter("firstName");
         String lastName = request.getParameter("lastName");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
-        String hashPass =  PasswordEncodingService.makeHash(password);
+        String hashPass = PasswordEncodingService.makeHash(password);
         Role role = Role.valueOf(request.getParameter("role"));
 
         return User.builder()
@@ -143,4 +128,6 @@ public class UserService {
         }
         return true;
     }
+
+
 }

@@ -3,7 +3,7 @@ package ua.martishyn.app.controller.commands.common;
 import ua.martishyn.app.controller.commands.ICommand;
 import ua.martishyn.app.data.entities.Route;
 import ua.martishyn.app.data.service.RouteService;
-import ua.martishyn.app.data.utils.ViewConstants;
+import ua.martishyn.app.data.utils.constants.ViewConstants;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -22,6 +22,7 @@ public class ShowRouteCommand implements ICommand {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //TODO MAKE TAKING ROUTES BY PARTICULAR ROUTE, NOT FROM DB FULLY BY STREAM
         Optional<List<Route>> routesFromDb = routeService.getAllRoutes();
         if (routesFromDb.isPresent()) {
             List<Route.IntermediateStation> stationForRoute = routeService.getStationForRoute(request, routesFromDb.get());

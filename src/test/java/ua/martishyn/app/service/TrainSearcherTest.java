@@ -1,12 +1,15 @@
-package ua.martishyn.app.commands.service;
+package ua.martishyn.app.service;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import ua.martishyn.app.controller.commands.common.SearchTicketsCommand;
-import ua.martishyn.app.data.entities.*;
+import ua.martishyn.app.data.entities.Route;
+import ua.martishyn.app.data.entities.Station;
+import ua.martishyn.app.data.entities.Wagon;
 import ua.martishyn.app.data.service.BookingSearcher;
 
 import javax.servlet.RequestDispatcher;
@@ -17,7 +20,6 @@ import java.io.IOException;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.verify;
 
 public class TrainSearcherTest {
     private BookingSearcher trainSearcher;
@@ -118,4 +120,11 @@ public class TrainSearcherTest {
         Assert.assertEquals(expected, actual);
     }
 
+    @After
+    public void tearDown() {
+        trainSearcher = null;
+        routeList = null;
+        wagons = null;
+        customerSearchTicketsCommand = null;
+    }
 }

@@ -5,16 +5,16 @@
 </head>
 <body>
 <%@ include file="/view/static/header.jsp"%>
-<br><br>
- 		<div align="center">
- 		<form>
- 		                <h2>Route schedule for route # <c:out value="${routeId}"/></h2>
+<br>
+<div class="wrapper">
+<div id="formContent-table">
+ 		<h2><fmt:message key="user.page.book.info.schedule"/># <c:out value="${routeId}"/></h2>
  		<table class="table table-striped table-responsive-md btn-table" >
                 <thead>
                                   <tr>
-                                  <th scope="col">Station</th>
-                                  <th scope="col">Arrival time</th>
-                                  <th scope="col">Departure time</th>
+                                  <th scope="col"><fmt:message key="user.page.book.info.schedule.station"/></th>
+                                  <th scope="col"><fmt:message key="user.page.book.info.arrival.time"/></th>
+                                  <th scope="col"><fmt:message key="user.page.book.info.departure.time"/></th>
                                   </tr>
                 </thead>
                 <tbody>
@@ -22,7 +22,8 @@
                               <tr>
                                 <td style="text-align:center">
                                 <strong>
-                                <c:out value="${routeInfo.station.name}"/>
+                                <fmt:message key="${routeInfo.station.name}"/>
+
                                 <c:out value="${routeInfo.station.code}"/>
                                 </strong>
                                 </td>
@@ -42,7 +43,7 @@
                                  </c:forEach>
                 </tbody>
                 </table>
-                 </form>
+               </div>
                 </div>
         </body>
 </html>

@@ -77,7 +77,7 @@ public class BookingSearcher {
                 }
                 if (fromId < toId) {
                     int totalStationInRoute = toId - fromId;
-                    long duration = Duration.between(Objects.requireNonNull(depDate), arrDate).toMillis();
+                    long duration = Duration.between((depDate), arrDate).toMillis();
                     String durationFormatted = routePattern.format(new Date(duration));
                     redirectLink.append("&duration=")
                                 .append(durationFormatted);
@@ -97,7 +97,7 @@ public class BookingSearcher {
                     personalRoute.setSecondClassTotalPrice(secondClassPrice);
 
                     personalRoute.setRedirectLink(redirectLink);
-                    addRoute(personalRoute);
+                    suitableRoutes.add(personalRoute);
                 }
             }
         }
@@ -123,10 +123,6 @@ public class BookingSearcher {
                 .filter(wagon -> wagon.getType().name().equals(type.name()))
                 .mapToInt(Wagon::getNumOfSeats)
                 .reduce(0, Integer::sum);
-    }
-
-    public void addRoute(PersonalRoute personalRoute) {
-        suitableRoutes.add(personalRoute);
     }
 
     public List<PersonalRoute> getSuitableRoutes() {

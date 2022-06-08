@@ -5,9 +5,9 @@
 </head>
 <body>
 <%@ include file="/view/static/header.jsp" %>
-		<br><br>
-        <div align="center">
-		<form>
+<br>
+<div class="wrapper">
+ 		    <div id="formContent-table">
         <h2><fmt:message key="admin.page.route-stations"/></h2>
         <span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${noRoutes}</span>
 
@@ -31,15 +31,14 @@
                         <td><c:out value="${datef:formatLocalDateTime(route.arrival, 'dd.MM.yyyy HH:mm')}"/> </td>
                         <td><c:out value="${datef:formatLocalDateTime(route.departure, 'dd.MM.yyyy HH:mm')}"/> </td>
                         <td>
-                        <a href="route-edit.command?id=<c:out value='${route.id}'/>&stationId=<c:out value='${route.stationId}' />" class="btn btn-dark"><fmt:message key="admin.page.edit"/></a>
-                        <a href="route-delete.command?id=<c:out value='${route.id}'/>&stationId=<c:out value='${route.stationId}' />" class="btn btn-dark"><fmt:message key="admin.page.delete"/></a>
+                        <a href="route-edit.command?id=<c:out value='${route.id}'/>&stationId=<c:out value='${route.stationId}' />"  class="btn btn-dark"><fmt:message key="admin.page.edit"/></a>
+                        <a href="route-delete.command?id=<c:out value='${route.id}'/>&stationId=<c:out value='${route.stationId}' />"  class="btn btn-dark"><fmt:message key="admin.page.delete"/></a>
                         </td>
                         </tr>
                         </c:forEach>
         </tbody>
         </table>
-
-                        <a href="route-add.command" class="btn btn-dark"><fmt:message key="admin.page.route.add"/></a>
+                        <a href="route-add.command"  class="btn btn-dark"><fmt:message key="admin.page.route.add"/></a>
 <br><br>
 <%--For displaying Previous link except for the 1st page --%>
   <c:if test="${currentPage != 1}">
@@ -65,9 +64,8 @@
                           <c:if test="${currentPage lt noOfPages}">
                               <td><a href="routes-page.command?page=${currentPage + 1}">Next</a></td>
                           </c:if>
- </body>
-  </form>
   </div>
+</div>
 </html>
 </body>
 </html>

@@ -1,9 +1,9 @@
 package ua.martishyn.app.data.utils.validator;
 
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import ua.martishyn.app.data.utils.constants.DateConstants;
+
+import java.time.LocalDateTime;
 
 /**
  * Basic back-end validation class
@@ -13,10 +13,11 @@ import java.text.SimpleDateFormat;
 
 public class DataInputValidatorImpl implements DataInputValidator {
     private static final String LOGIN_NAME_REGEX = "^[A-Za-z\\u0400-\\u04ff]{1,16}$";
-    private static final String STRING_REGEX = "^([\\p{L}-]*[\\s]*)$";
+    private static final String STATION_NAME_REGEX = "^[\\p{L}']*(?:[\\s-]\\p{L}*)$";
+    private static final String STATION_CODE_REGEX = "^[\\p{Lu}]{3}$";
     private static final String NUM_REGEX = "^\\d{1,10}$";
-    private static final String PASSWORD_REGEX = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$";
-    private static final String EMAIL_REGEX = "^[a-zA-Z0-9_.+-]+@[a-zA-Z-]+\\.[a-zA-Z.]+$";
+    private static final String PASSWORD_REGEX = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,16}$";
+    private static final String EMAIL_REGEX = "^[a-zA-Z0-9_.-]{2,20}+@[a-zA-Z-]{5,7}+\\.[a-zA-Z.]{2,3}+$";
 
     /**
      * Checks input for correct
@@ -64,6 +65,7 @@ public class DataInputValidatorImpl implements DataInputValidator {
         }
         return email.matches(EMAIL_REGEX);
     }
+
     /**
      * Checks user input in accordance
      * with correct String form regex
@@ -72,12 +74,29 @@ public class DataInputValidatorImpl implements DataInputValidator {
      * @return true or false
      */
 
+
     @Override
-    public boolean isValidStringInput(String data) {
+    public boolean isValidStationNameInput(String data) {
         if (isNullAndEmpty(data)) {
             return false;
         }
-        return data.matches(STRING_REGEX);
+        return data.matches(STATION_NAME_REGEX);
+    }
+
+    /**
+     * Checks user input in accordance
+     * with correct regex for station code
+     *
+     * @param data
+     * @return true or false
+     */
+
+    @Override
+    public boolean isValidStationCodeInput(String data) {
+        if (isNullAndEmpty(data)) {
+            return false;
+        }
+        return data.matches(STATION_CODE_REGEX);
     }
 
     /**
@@ -112,11 +131,13 @@ public class DataInputValidatorImpl implements DataInputValidator {
             return false;
         }
         try {
-            DateFormat formatPattern = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-            formatPattern.setLenient(false);
-            formatPattern.parse(departure);
-            formatPattern.parse(arrival);
-        } catch (ParseException e) {
+            final LocalDateTime departureDate = LocalDateTime.parse(departure, DateConstants.formatterForLocalDate);
+            final LocalDateTime arrivalDate = LocalDateTime.parse(arrival, DateConstants.formatterForLocalDate);
+            if (departureDate.isBefore(arrivalDate) || arrivalDate.isBefore(LocalDateTime.now()) || departureDate.isEqual(LocalDateTime.now())
+                    || departureDate.getYear() != arrivalDate.getYear() || departureDate.getMonthValue() != arrivalDate.getMonthValue()) {
+                return false;
+            }
+        } catch (Exception e) {
             return false;
         }
         return true;

@@ -4,8 +4,9 @@
 </head>
 <body>
 <%@ include file="/view/static/header.jsp" %>
-<br><br>
-<div align="center">
+<br>
+		<div class="wrapper fadeInDown">
+        <div id="formContent">
                 <c:if test="${station != null}">
                 <form action="station-edit-post.command" method="post">
                 </c:if>
@@ -23,8 +24,10 @@
                 </c:if>
                 <div class="input-group">
                 <span class="input-group-text"><fmt:message key="admin.page.station.station-name-code"/></span>
-                <input type="text" class="form-control" name="name" value="<c:out value='${station.name}' />" required/>
-                <input type="text" class="form-control" name="code"  value="<c:out value='${station.code}' />"required />
+                <input type="text" class="form-control" name="name" value="<c:out value='${station.name}' />"
+                pattern="^[\p{L}']*(?:[\s-]\p{L}*)$" title="Station name should contain cyryllic/latic 2 words with hyphen (may include apostrophe)" required>
+                <input type="text" class="form-control" name="code"  value="<c:out value='${station.code}' />"
+                pattern="^([\p{Lu}]{1,3})$" title="Station code must contain 3 capitalized letters cyrillic / latic" required>
               	</div>
                <span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${errorValidation}</span>
                <span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${errorLogic}</span>
@@ -34,6 +37,7 @@
                </div>
                 </div>
                 </div>
-                </form>
+                </div>
+
 </body>
 </html>
