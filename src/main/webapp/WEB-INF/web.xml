@@ -6,6 +6,10 @@
 
   <display-name>Archetype Created Web Application</display-name>
 
+    <welcome-file-list>
+      <welcome-file>index.command</welcome-file>
+    </welcome-file-list>
+
     <error-page>
       <error-code>500</error-code>
       <location>/view/errors/error500.html</location>

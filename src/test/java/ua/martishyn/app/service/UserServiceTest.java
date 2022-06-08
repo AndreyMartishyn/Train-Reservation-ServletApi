@@ -1,4 +1,4 @@
-package ua.martishyn.app.commands.service;
+package ua.martishyn.app.service;
 
 import org.junit.After;
 import org.junit.Assert;

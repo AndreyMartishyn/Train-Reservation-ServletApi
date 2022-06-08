@@ -32,7 +32,6 @@ public class FrontControllerTest extends FrontController {
     @Mock
     HttpSession mockedSession;
 
-    @InjectMocks
     FrontController frontController;
 
     @Before

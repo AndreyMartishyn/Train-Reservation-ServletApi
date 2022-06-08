@@ -27,7 +27,6 @@ public class TicketService {
         dataInputValidator = new DataInputValidatorImpl();
     }
 
-
     public List<Ticket> getAllTickets(HttpServletRequest request) {
         User currentUser = (User) request.getSession().getAttribute("user");
         final Optional<List<Ticket>> allTicketsById = ticketDao.getAllTicketsById(currentUser.getId());

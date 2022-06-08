@@ -4,9 +4,17 @@
 </head>
 <body>
 <%@ include file="/view/static/header.jsp"%>
-<br>
 <div align="center">
-<div class="col-md-5">
+<span class="lang">
+<form>
+                                        <select id="language" name="language" onchange="submit()">
+                                            <option value="en" ${language == 'en' ? 'selected' : ''}>EN</option>
+                                            <option value="ua" ${language == 'ua' ? 'selected' : ''}>UA</option>
+                                        </select>
+</form>
+</span>
+<div class="wrapper fadeInDown">
+    <div id="formContent">
 <form action="search-tickets.command" method="get">
 <h3 class="mb-4 text-center"><fmt:message key="user.page.book.title"/></h3>
 		<div class="form-group">
@@ -31,24 +39,23 @@
          <span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${errorValidation}</span>
          <span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${sameStations}</span>
        </div>
-            <button type="submit" class="btn btn-dark" value="Search">Search</button>
-        </div>
-        </div>
+            <button type="submit" class="btn btn-dark" ><fmt:message key="user.page.book.search"/></button>
         </form>
+        </div>
+        </div>
+        <br>
 
+    <div id="formContent-table">
  		<c:if test="${requestScope.suitableRoutes != null}">
- 		<br><br>
- 		<div align="center">
- 		<form>
- 		<table class="table table-striped table-responsive-md btn-table" >
+ 	 		<table class="table table-striped table-responsive-md btn-table" >
                 <thead>
                                   <tr>
-                                  <th scope="col">Train</th>
-                                  <th scope="col">From/To</th>
-                                  <th scope="col">Schedule</th>
-                                  <th scope="col">Duration</th>
-                                  <th scope="col">Seats available</th>
-                                  <th scope="col">Price(UAH)</th>
+                                  <th scope="col"><fmt:message key="user.page.book.train"/></th>
+                                  <th scope="col"><fmt:message key="user.page.book.from"/>/<fmt:message key="user.page.book.to"/></th>
+                                  <th scope="col"><fmt:message key="user.page.book.schedule"/></th>
+                                  <th scope="col"><fmt:message key="user.page.book.duration"/></th>
+                                  <th scope="col"><fmt:message key="user.page.book.seats"/></th>
+                                  <th scope="col"><fmt:message key="user.page.book.price"/>(UAH)</th>
                                   </tr>
                 </thead>
                 <tbody>
@@ -60,7 +67,7 @@
                                 <c:out value="${route.train.model.name}"/>
                                 </strong>
                                 <br>
-                                <a href="show-route.command?route=<c:out value="${route.routeId}"/>">Route</a>
+                                <a href="show-route.command?route=<c:out value="${route.routeId}"/>"><fmt:message key="user.page.book.info.route"/></a>
                                 </td>
 
                                 <td>
@@ -70,9 +77,9 @@
 						        </td>
 
                                 <td>
-                                <p style = "text-align: left">Departure: <c:out value="${route.departure}"/></p>
+                                <p style = "text-align: left"><fmt:message key="user.page.book.info.departure"/>: <c:out value="${route.departure}"/></p>
 								<br>
-                                <p style = "text-align: left">Arrival: <c:out value="${route.arrival}"/></p>
+                                <p style = "text-align: left"><fmt:message key="user.page.book.info.arrival"/>: <c:out value="${route.arrival}"/></p>
                                 </td>
 
                                 <td>
@@ -80,17 +87,18 @@
                                 </td>
 
                                 <td styles = "text-align:center">
-                                F1  <c:out value="${route.firstClassSeats}"/>
+                                F1 <c:out value="${route.firstClassSeats}"/>
 									<c:if test="${route.firstClassSeats != 0}">
                                 <a href="customer-ticket-form.command<c:out value="${route.redirectLink}"/>&class=FIRST&price=<c:out value="${route.firstClassTotalPrice}"/>"
-                                    class="btn btn-dark" >select</a>
-                                    </c:if>
-                                <br><br>
-                                S2  <c:out value="${route.secondClassSeats}"/>
+                                    class="btn btn-dark" ><fmt:message key="user.page.book.info.select"/></a>
+                                </c:if>
+                                <br>
+                                <br>
+                                S2 <c:out value="${route.secondClassSeats}"/>
                                    <c:if test="${route.secondClassSeats != 0}">
                                 <a href="customer-ticket-form.command<c:out value="${route.redirectLink}"/>&class=SECOND&price=<c:out value="${route.secondClassTotalPrice}"/>"
-                                    class="btn btn-dark" >select</a>
-                                    </c:if>
+                                    class="btn btn-dark" ><fmt:message key="user.page.book.info.select"/></a>
+                               </c:if>
                                </td>
 
                                <td>
@@ -101,14 +109,11 @@
                                 </tr>
                                 </c:forEach>
                 </tbody>
-				<span style ="text-align: left; color:red; font-family:courier; font-size:79%;">
-				*Only registered users can buy tickets. Login or you will be redirected accordingly
+				<span style ="text-align: left; color:black; font-family:courier; font-size:79%;">
+				*<fmt:message key="user.page.book.info.span"/>
 				</span>
 				</table>
 				</c:if>
-                </form>
-                </div>
-        </body>
-</html>
+		</div>
 </body>
 </html>

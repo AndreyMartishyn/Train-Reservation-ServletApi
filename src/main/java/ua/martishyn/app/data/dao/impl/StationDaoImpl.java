@@ -82,8 +82,8 @@ public class StationDaoImpl implements StationDao {
             while (stationFromResultSet.next()) {
                 stationFromDb = getStationFromResultSet(stationFromResultSet);
             }
-        } catch (SQLException exception) {
-            System.out.println("Unable to get station from db" + exception);
+        } catch (SQLException e) {
+            log.error("Unable to get station {}", e.toString());
         }
         return Optional.ofNullable(stationFromDb);
     }

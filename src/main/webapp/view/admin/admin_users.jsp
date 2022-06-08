@@ -5,9 +5,9 @@
 </head>
 <body>
 <%@ include file="/view/static/header.jsp" %>
-<br><br>
- <div align="center">
-		<form>
+<br>
+				<div class="wrapper">
+     		    <div id="formContent-table">
 		 <h2><fmt:message key="admin.page.users"/></h2>
 		 		  <span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${noUsers}</span>
         <table class="table table-striped table-responsive-md btn-table" >
@@ -62,7 +62,7 @@
         <c:if test="${currentPage lt noOfPages}">
         <td><a href="users-page.command?page=${currentPage + 1}">Next</a></td>
         </c:if>
-         </form>
+        </div>
          </div>
        </html>
        </body>

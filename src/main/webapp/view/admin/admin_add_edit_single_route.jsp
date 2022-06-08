@@ -4,9 +4,10 @@
 </head>
 <body>
 <%@ include file="/view/static/header.jsp" %>
-<br><br>
-    <div align="center">
-            <c:if test="${singleRoute != null}">
+<br>
+<div class="wrapper">
+<div id="formContent">
+              <c:if test="${singleRoute != null}">
                 <form action="route-edit-post.command" method="post">
                 </c:if>
                     <c:if test="${singleRoute == null}">
@@ -70,10 +71,8 @@
              </table>
               <span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${errorValidation}</span>
               <br>
-             <div class="form-group">
-                 	<input type="submit" class="btn btn-dark" value="<fmt:message key="admin.page.action.save"/>"/>
-              </div>
-             </div>
+             	<input type="submit" class="btn btn-dark" value="<fmt:message key="admin.page.action.save"/>"/>
+               </div>
 </form>
 </body>
 </html>

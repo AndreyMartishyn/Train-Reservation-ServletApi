@@ -47,7 +47,7 @@ INSERT INTO stations (name, code) VALUES
 --
 DROP TABLE IF EXISTS `train_models`;
 CREATE TABLE `train_models` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT
   `model` varchar(55) NOT NULL,
   PRIMARY KEY (`id`)
 )
@@ -63,8 +63,7 @@ CREATE TABLE `trains` (
   `id` int NOT NULL ,
   `model_id` int NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `model_id` (`model_id`),
-  FOREIGN KEY (`model_id`) REFERENCES `train_models` (`id`)
+   FOREIGN KEY (`model_id`) REFERENCES `train_models` (`id`)
 )
 INSERT INTO trains (id, model_id) VALUES
 (200, 1),
@@ -110,7 +109,7 @@ INSERT INTO users (id, first_name, last_name, pass_encoded, email, role) VALUES
 -- Table structure for table `tickets`
 --
 create table tickets(
-id INT NOT NULL,
+id INT NOT NULL AUTO_INCREMENT,
 user_id INT NOT NULL,
 train_id INT NOT NULL,
 first_name varchar(55) NOT NULL,

@@ -26,7 +26,6 @@ public class StationService {
         return stationDao.getAllStationsPaginated(offSet, entriesPerPage).orElse(Collections.emptyList());
     }
 
-
     public List<Station> getAllStations() {
         return stationDao.getAllStations().orElse(Collections.emptyList());
     }
@@ -53,13 +52,12 @@ public class StationService {
         return stationDao.createStation(newStation);
     }
 
-
     public boolean updateStationFromRequest(HttpServletRequest request) {
         Station updatedStation = getStationForUpdate(request);
         return stationDao.update(updatedStation);
     }
 
-    private Station getStationForCreate(HttpServletRequest request) {
+    public Station getStationForCreate(HttpServletRequest request) {
         String name = request.getParameter("name");
         String code = request.getParameter("code");
         return Station.builder()
@@ -68,8 +66,7 @@ public class StationService {
                 .build();
     }
 
-
-    private Station getStationForUpdate(HttpServletRequest request) {
+    public Station getStationForUpdate(HttpServletRequest request) {
         int stationId = Integer.parseInt(request.getParameter("id"));
         String name = request.getParameter("name");
         String code = request.getParameter("code");

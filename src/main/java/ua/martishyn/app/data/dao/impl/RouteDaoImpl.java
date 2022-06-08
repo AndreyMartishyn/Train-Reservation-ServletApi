@@ -23,6 +23,7 @@ import java.util.Optional;
 
 public class RouteDaoImpl implements RouteDao {
     private static final Logger log = LogManager.getLogger(RouteDaoImpl.class);
+    private static final String GET_ALL_ROUTES = "SELECT * FROM route_stations";
     private static final String GET_ALL_ROUTEPOINTS = "SELECT * FROM route_stations limit %d, %d";
     private static final String GET_ROUTEPOINT = "SELECT * FROM route_stations where id = ? and station_id = ?;";
     private static final String ADD_ROUTEPOINT = "INSERT INTO route_stations VALUES (?, ?, ?, ? , ?);";
@@ -31,7 +32,7 @@ public class RouteDaoImpl implements RouteDao {
             "station_id = ?, arrival = ?, departure = ? WHERE id= ? AND station_id =?;";
 
     @Override
-    public Optional<List<RoutePoint>> getAllRoutePoints(int offset, int limit) {
+    public Optional<List<RoutePoint>> getAllRoutePointsPaginated(int offset, int limit) {
         List<RoutePoint> routeParts = new ArrayList<>();
         String paginatedSql = String.format(GET_ALL_ROUTEPOINTS, offset, limit);
         try (Connection connection = DataBasePoolManager.getInstance().getConnection();
@@ -70,7 +71,7 @@ public class RouteDaoImpl implements RouteDao {
         Route route;
         int routeId;
         try (Connection connection = DataBasePoolManager.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_ROUTEPOINTS)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_ROUTES)) {
             ResultSet routeResultSet = preparedStatement.executeQuery();
             while (routeResultSet.next()) {
                 routeId = routeResultSet.getInt(1);

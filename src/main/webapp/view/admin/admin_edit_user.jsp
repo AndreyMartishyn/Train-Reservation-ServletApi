@@ -9,8 +9,9 @@
 </head>
 <body>
 <%@ include file="/view/static/header.jsp" %>
-<br><br>
-<div align="center">
+<br>
+<div class="wrapper fadeInDown">
+    <div id="formContent">
         <form action="user-edit-post.command" method="post">
         <h2><fmt:message key="admin.page.user.edit"/></h2>
         <table style="margin-left:auto;margin-right:auto;">
@@ -31,6 +32,6 @@
                  	    <input type="submit" class="btn btn-dark" value="<fmt:message key="admin.page.action.save"/>"/>
                          </div>
                          </div>
-</form>
+                         </div>
 </body>
 </html>

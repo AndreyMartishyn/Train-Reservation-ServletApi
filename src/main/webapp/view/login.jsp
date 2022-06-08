@@ -5,7 +5,8 @@
 <body>
 <%@ include file="/view/static/header.jsp"%>
 <br>
-<div class="col-md-5 offset-4">
+<div class="wrapper fadeInDown">
+    <div id="formContent">
 <form action="login.command" method="post">
 <h3 class="mb-4 text-center"><fmt:message key="login.form"/></h3>
 <div class="form-group">
@@ -22,7 +23,11 @@
     <button type="submit" class="btn btn-dark"><fmt:message key="login.user"/></button>
     </div>
 </form>
+<div id="formFooter">
+<a class="underlineHover" href="register-page.command">Register</a>
 </div>
- </div>
-  </body>
- </html>
+       </div>
+       </div>
+       </div>
+       </body>
+       </html>

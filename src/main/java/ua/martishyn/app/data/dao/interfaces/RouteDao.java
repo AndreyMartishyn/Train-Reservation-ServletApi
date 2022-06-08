@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface RouteDao {
 
-    Optional<List<RoutePoint>> getAllRoutePoints(int offset, int limit);
+    Optional<List<RoutePoint>> getAllRoutePointsPaginated(int offset, int limit);
 
     Optional<RoutePoint> getRoutePoint(int id, int stationId);
 

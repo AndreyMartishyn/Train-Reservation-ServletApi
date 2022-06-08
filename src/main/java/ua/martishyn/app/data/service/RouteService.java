@@ -36,15 +36,11 @@ public class RouteService {
     }
 
     public Optional<List<RoutePoint>> getRoutePointsPaginated(int offset, int limit) {
-        return routeDao.getAllRoutePoints(offset, limit);
+        return routeDao.getAllRoutePointsPaginated(offset, limit);
     }
 
     public Optional<RoutePoint> getRoutePointByRouteAndStation(int routeId, int stationId) {
         return routeDao.getRoutePoint(routeId, stationId);
-    }
-
-    public boolean updateRoutePoint(RoutePoint newRoutePoint) {
-        return routeDao.updateRoutePoint(newRoutePoint);
     }
 
     public Optional<List<Route>> getAllRoutes() {

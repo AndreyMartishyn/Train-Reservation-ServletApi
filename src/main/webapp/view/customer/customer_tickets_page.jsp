@@ -12,20 +12,20 @@
  		<table class="table table-striped table-bordered" >
                 <thead>
                                   <tr>
-                                  <th scope="col">Ticket#</th>
-                                  <th scope="col">Train#</th>
-                                  <th scope="col">Name</th>
-                                  <th scope="col">Surname</th>
-                                  <th scope="col">From</th>
-                                  <th scope="col">Departure</th>
-                                  <th scope="col">To</th>
-                                  <th scope="col">Arrival</th>
-                                  <th scope="col">Wagon#</th>
-                                  <th scope="col">Place#</th>
-                                  <th scope="col">Duration</th>
-                                  <th scope="col">Class</th>
-                                  <th scope="col">Price</th>
-                                  <th scope="col">Status</th>
+                                  <th scope="col"><fmt:message key="user.page.book.ticket"/>#</th>
+                                  <th scope="col"><fmt:message key="user.page.book.train"/>#</th>
+                                  <th scope="col"><fmt:message key="admin.page.user.first.name"/></th>
+                                  <th scope="col"><fmt:message key="admin.page.user.last.name"/></th>
+                                  <th scope="col"><fmt:message key="user.page.book.from"/></th>
+                                  <th scope="col"><fmt:message key="user.page.book.info.departure"/></th>
+                                  <th scope="col"><fmt:message key="user.page.book.to"/></th>
+                                  <th scope="col"><fmt:message key="user.page.book.info.arrival"/></th>
+                                  <th scope="col"><fmt:message key="user.page.ticket.wagon"/>#</th>
+                                  <th scope="col"><fmt:message key="user.page.ticket.place"/>#</th>
+                                  <th scope="col"><fmt:message key="user.page.book.duration"/></th>
+                                  <th scope="col"><fmt:message key="user.page.ticket.class"/></th>
+                                  <th scope="col"><fmt:message key="user.page.book.price"/></th>
+                                  <th scope="col"><fmt:message key="user.page.ticket.status"/></th>
                                   </tr>
                 </thead>
                 <tbody>
@@ -59,7 +59,7 @@
 
                                 <td style="text-align:center">
                                 <strong>
-                                <c:out value="${ticket.departureStation.name}"/>
+                                <fmt:message key="${ticket.departureStation.name}"/>
                                 </strong>
                                 </td>
 
@@ -71,7 +71,7 @@
 
                                 <td style="text-align:center">
                                 <strong>
-                                <c:out value="${ticket.arrivalStation.name}"/>
+                                <fmt:message key="${ticket.arrivalStation.name}"/>
                                 </strong>
                                 </td>
 
@@ -94,7 +94,7 @@
                                 </td>
 
                                  <td>
-                                <c:out value="${ticket.type}"/>
+                                <fmt:message key="${ticket.type}"/>
                                 </td>
 
                                  <td>
@@ -105,10 +105,10 @@
 							  <c:choose>
                              <c:when test = "${ticket.paid == false}">
                               <a href="customer-ticket-pay.command?ticketId=<c:out value="${ticket.id}"/>"
-                              input type="submit" class="btn btn-dark" >MAKE PAYMENT</a>
+                             class="btn btn-dark" ><fmt:message key="user.page.ticket.pay"/></a>
                              </c:when>
                              <c:otherwise>
-                              Paid
+                              <a href="download" class="btn btn-dark" ><fmt:message key="user.page.ticket.download"/></a>
                              </c:otherwise>
                              </c:choose>
                              </td>
