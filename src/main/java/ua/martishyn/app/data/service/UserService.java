@@ -13,6 +13,7 @@ import ua.martishyn.app.data.utils.validator.DataInputValidator;
 import ua.martishyn.app.data.utils.validator.DataInputValidatorImpl;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,8 +31,8 @@ public class UserService {
         return userDao.getByEmail(email);
     }
 
-    public Optional<List<User>> getUsersPaginated(int offSet, int entriesPerPage) {
-        return userDao.getUsersPaginated(offSet, entriesPerPage);
+    public List<User> makeEntriesSubList(int offSet, int entriesPerPage) {
+        return userDao.getUsersPaginated(offSet, entriesPerPage).orElse(Collections.emptyList());
     }
 
     public boolean deleteUserById(int id) {

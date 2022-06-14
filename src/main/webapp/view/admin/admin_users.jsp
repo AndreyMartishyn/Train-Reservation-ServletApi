@@ -9,7 +9,7 @@
 				<div class="wrapper">
      		    <div id="formContent-table">
 		 <h2><fmt:message key="admin.page.users"/></h2>
-		 		  <span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${noUsers}</span>
+		 		  <span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${noEntries}</span>
         <table class="table table-striped table-responsive-md btn-table" >
         <thead>
                         <tr>

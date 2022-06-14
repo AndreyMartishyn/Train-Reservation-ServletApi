@@ -18,7 +18,7 @@
                 <a class="navbar-brand" href="index.command"><fmt:message key="welcome.guest"/></a>
             </c:when>
             <c:otherwise>
-                <a class="navbar-brand" href="index.command"><fmt:message key="welcome"/>, ${user.role}</a>
+                <a class="navbar-brand" href="index.command"><fmt:message key="welcome"/>, ${user.firstName}</a>
             </c:otherwise>
         </c:choose>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"

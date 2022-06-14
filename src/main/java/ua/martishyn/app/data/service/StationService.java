@@ -22,7 +22,7 @@ public class StationService {
         dataInputValidator = new DataInputValidatorImpl();
     }
 
-    public List<Station> getAllStationsPaginated(int offSet, int entriesPerPage) {
+    public List<Station> makeEntriesSubList(int offSet, int entriesPerPage) {
         return stationDao.getAllStationsPaginated(offSet, entriesPerPage).orElse(Collections.emptyList());
     }
 

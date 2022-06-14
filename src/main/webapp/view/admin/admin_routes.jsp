@@ -9,7 +9,7 @@
 <div class="wrapper">
  		    <div id="formContent-table">
         <h2><fmt:message key="admin.page.route-stations"/></h2>
-        <span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${noRoutes}</span>
+        <span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${noEntries}</span>
 
         <table class="table table-striped table-responsive-md btn-table" class="m-5">
         <thead>

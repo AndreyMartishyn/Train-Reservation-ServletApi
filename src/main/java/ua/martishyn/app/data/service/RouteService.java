@@ -12,11 +12,12 @@ import ua.martishyn.app.data.utils.validator.DataInputValidatorImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class RouteService {
+public class RouteService  {
     private final RouteDao routeDao;
     private final TrainService trainService;
     private final StationService stationService;
@@ -30,13 +31,14 @@ public class RouteService {
         dataInputValidator = new DataInputValidatorImpl();
     }
 
-
-    public boolean deleteRoutePointByIdAndStation(int routeId, int stationId) {
-        return routeDao.deleteSingleRoute(routeId, stationId);
+    public List<RoutePoint> makeEntriesSubList(int offSet, int limit) {
+        return routeDao.getAllRoutePointsPaginated(offSet , limit).orElse(Collections.emptyList());
     }
 
-    public Optional<List<RoutePoint>> getRoutePointsPaginated(int offset, int limit) {
-        return routeDao.getAllRoutePointsPaginated(offset, limit);
+    public boolean deleteRoutePointByIdAndStation(HttpServletRequest request) {
+        int routeId = Integer.parseInt(request.getParameter("id"));
+        int stationId = Integer.parseInt(request.getParameter("stationId"));
+        return routeDao.deleteSingleRoute(routeId, stationId);
     }
 
     public Optional<RoutePoint> getRoutePointByRouteAndStation(int routeId, int stationId) {
@@ -119,7 +121,6 @@ public class RouteService {
         }
         return true;
     }
-
 
 
 }
