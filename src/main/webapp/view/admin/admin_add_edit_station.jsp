@@ -25,12 +25,16 @@
                 <div class="input-group">
                 <span class="input-group-text"><fmt:message key="admin.page.station.station-name-code"/></span>
                 <input type="text" class="form-control" name="name" value="<c:out value='${station.name}' />"
-                pattern="^[\p{L}']*(?:[\s-]\p{L}*)$" title="Station name should contain cyryllic/latic 2 words with hyphen (may include apostrophe)" required>
+                title="Station name should contain cyryllic/latic 2 words with hyphen (may include apostrophe)" required>
                 <input type="text" class="form-control" name="code"  value="<c:out value='${station.code}' />"
-                pattern="^([\p{Lu}]{1,3})$" title="Station code must contain 3 capitalized letters cyrillic / latic" required>
+                 title="Station code must contain 3 capitalized letters cyrillic / latic" required>
               	</div>
-               <span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${errorValidation}</span>
-               <span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${errorLogic}</span>
+              	 <c:if test="${requestScope.wrongName != null}">
+                      <span style ="text-align: center; color:red; font-family:courier; font-size:70%;"><fmt:message key="station.wrong.name"/></span>
+                                </c:if>
+                 <c:if test="${requestScope.wrongCode != null}">
+                      <span style ="text-align: center; color:red; font-family:courier; font-size:70%;"><fmt:message key="station.wrong.code"/></span>
+                                </c:if>
                 <br>
                <div class="form-group">
                <input type="submit" class="btn btn-dark" value="<fmt:message key="admin.page.action.save"/>"/>

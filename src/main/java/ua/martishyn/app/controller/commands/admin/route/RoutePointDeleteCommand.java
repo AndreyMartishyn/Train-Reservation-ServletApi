@@ -25,7 +25,7 @@ public class RoutePointDeleteCommand implements ICommand {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (deleteRoutePoint(request)) {
+        if (routeService.deleteRoutePointByIdAndStation(request)) {
             log.info("Deleting route done");
             response.sendRedirect("routes-page.command");
             return;
@@ -34,9 +34,4 @@ public class RoutePointDeleteCommand implements ICommand {
         requestDispatcher.forward(request, response);
     }
 
-    private boolean deleteRoutePoint(HttpServletRequest request) {
-        int routeId = Integer.parseInt(request.getParameter("id"));
-        int stationId = Integer.parseInt(request.getParameter("stationId"));
-        return routeService.deleteRoutePointByIdAndStation(routeId, stationId);
-    }
 }

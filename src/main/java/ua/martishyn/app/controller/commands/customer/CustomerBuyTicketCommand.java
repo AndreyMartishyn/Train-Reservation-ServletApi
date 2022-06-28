@@ -6,6 +6,7 @@ import ua.martishyn.app.controller.commands.ICommand;
 import ua.martishyn.app.controller.filters.HasRole;
 import ua.martishyn.app.data.entities.enums.Role;
 import ua.martishyn.app.data.service.TicketService;
+import ua.martishyn.app.data.utils.constants.ViewConstants;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -29,7 +30,7 @@ public class CustomerBuyTicketCommand implements ICommand {
             response.sendRedirect("customer-tickets-page.command");
             return;
         }
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("index.command");
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher(ViewConstants.CUSTOMER_TICKETS_FORM_ERROR);
         requestDispatcher.forward(request, response);
     }
 }

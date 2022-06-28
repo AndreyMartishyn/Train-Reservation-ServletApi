@@ -77,11 +77,12 @@ public class BookingSearcher {
                 }
                 if (fromId < toId) {
                     int totalStationInRoute = toId - fromId;
-                    long duration = Duration.between((depDate), arrDate).toMillis();
-                    String durationFormatted = routePattern.format(new Date(duration));
+                    Duration duration = Duration.between
+                            (depDate, arrDate);
+                    String formattedDuration = String.format("%d:%02d", duration.toHours(), duration.toMinutes() % 60);
                     redirectLink.append("&duration=")
-                                .append(durationFormatted);
-                    personalRoute.setRoadTime(durationFormatted);
+                                .append(formattedDuration);
+                    personalRoute.setRoadTime(formattedDuration);
                     List<Wagon> trainWagons = wagons.stream()
                             .filter(wagon -> wagon.getRouteId() == route.getId())
                             .collect(Collectors.toList());

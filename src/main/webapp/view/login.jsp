@@ -18,13 +18,22 @@
  pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" title="Password must contain 8-16 chars without symbols and at least 1 digit" required>
 <small><fmt:message key="small.id"/></small>
 </div>
-  <span style ="text-align: center; color:red; font-family:courier; font-size:70%;">${errorValidation}</span>
+
+               <c:if test="${requestScope.noLogin !=null}">
+  <span style ="text-align: center; color:red; font-family:courier; font-size:70%;"><fmt:message key="login.not.found"/></span>
+            </c:if>
+      <c:if test="${requestScope.noPass != null}">
+    <span style ="text-align: center; color:red; font-family:courier; font-size:70%;"><fmt:message key="login.wrong.password"/></span>
+              </c:if>
+        <c:if test="${requestScope.noInput != null}">
+      <span style ="text-align: center; color:red; font-family:courier; font-size:70%;"><fmt:message key="login.not.correct.input"/></span>
+                </c:if>
  <div class="form-group">
     <button type="submit" class="btn btn-dark"><fmt:message key="login.user"/></button>
     </div>
 </form>
 <div id="formFooter">
-<a class="underlineHover" href="register-page.command">Register</a>
+<a class="underlineHover" href="register-page.command"><fmt:message key="register.form"/></a>
 </div>
        </div>
        </div>

@@ -9,7 +9,7 @@
 				<div class="wrapper">
      		    <div id="formContent-table">
 		 <h2><fmt:message key="admin.page.users"/></h2>
-		 		  <span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${noUsers}</span>
+		 		  <span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${noEntries}</span>
         <table class="table table-striped table-responsive-md btn-table" >
         <thead>
                         <tr>
@@ -29,7 +29,7 @@
         <td><c:out value="${user.firstName}"/> </td>
         <td><c:out value="${user.lastName}"/> </td>
         <td><c:out value="${user.email}"/> </td>
-        <td><c:out value="${user.role}"/> </td>
+        <td><fmt:message key="${user.role}"/> </td>
         <td>
            <a href="user-edit.command?id=<c:out value='${user.id}' />" class="btn btn-dark"><fmt:message key="admin.page.edit"/></a>
            <a href="user-delete.command?id=<c:out value='${user.id}' />" class="btn btn-dark"><fmt:message key="admin.page.delete"/></a>
@@ -39,8 +39,8 @@
         </tbody>
         </table>
          <%--For displaying Previous link except for the 1st page --%>
-         <c:if test="${currentPage != 1}">
-             <td><a href="users-page.command?page=${currentPage - 1}">Previous</a></td>
+         <c:if test="${currentPage > 1}">
+             <td><a href="users-page.command?currentPage=${currentPage - 1}">Previous</a></td>
          </c:if>
                     <table style = "border:1px solid black;margin-left:auto;margin-right:auto;" cellpadding="5" cellspacing="5" >
                     <tr>
@@ -50,7 +50,7 @@
                      <td>${i}</td>
                                                  </c:when>
                                                  <c:otherwise>
-                                                     <td><a href="users-page.command?page=${i}">${i}</a></td>
+                                                     <td><a href="users-page.command?currentPage=${i}">${i}</a></td>
                                                  </c:otherwise>
                                              </c:choose>
                                          </c:forEach>
@@ -60,7 +60,7 @@
                                  <%--For displaying Next link --%>
 
         <c:if test="${currentPage lt noOfPages}">
-        <td><a href="users-page.command?page=${currentPage + 1}">Next</a></td>
+        <td><a href="users-page.command?currentPage=${currentPage + 1}">Next</a></td>
         </c:if>
         </div>
          </div>

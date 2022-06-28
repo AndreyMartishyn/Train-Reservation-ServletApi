@@ -24,7 +24,6 @@ public class StationDaoImpl implements StationDao {
     private static final String UPDATE_STATION = "UPDATE stations SET name = ?, code = ? WHERE id = ?;";
     private static final String DELETE_STATION = "DELETE FROM stations WHERE id =?";
 
-
     @Override
     public Optional<List<Station>> getAllStationsPaginated(int offset, int limit) {
         List<Station> stations = new ArrayList<>();

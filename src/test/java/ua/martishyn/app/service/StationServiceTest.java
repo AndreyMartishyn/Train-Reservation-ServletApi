@@ -39,7 +39,7 @@ public class StationServiceTest {
         when(mockedRequest.getParameter("name")).thenReturn("Kyiv-#$%&4sdg");
 
         stationService.isStationDataValid(mockedRequest);
-        verify(mockedRequest).setAttribute(ViewConstants.ERROR_VALIDATION, StationServiceConstants.STATION_NAME_INVALID_MESS);
+        verify(mockedRequest).setAttribute("wrongName", true);
 
     }
 
@@ -49,7 +49,7 @@ public class StationServiceTest {
         when(mockedRequest.getParameter("code")).thenReturn("123");
 
         stationService.isStationDataValid(mockedRequest);
-        verify(mockedRequest).setAttribute(ViewConstants.ERROR_VALIDATION, StationServiceConstants.STATION_CODE_INVALID_MESS);
+        verify(mockedRequest).setAttribute("wrongCode", true);
     }
 
     @Test

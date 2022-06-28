@@ -32,7 +32,7 @@ public class RoutePointAddPostCommand implements ICommand {
             return;
         }
         log.error("Unfortunately, route not added");
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher(ViewConstants.ADMIN_ROUTE_ADD_EDIT);
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("route-add.command");
         requestDispatcher.forward(request, response);
     }
 }

@@ -27,7 +27,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Optional<User> getByEmail(String email) {
-        User userFromDb = new User();
+        User userFromDb = null;
         try (Connection connection = DataBasePoolManager.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_BY_EMAIL)) {
             preparedStatement.setString(1, email);

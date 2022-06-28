@@ -6,6 +6,7 @@ import ua.martishyn.app.controller.commands.admin.user.AdminUserDeleteCommand;
 import ua.martishyn.app.controller.commands.admin.user.AdminUserEditCommand;
 import ua.martishyn.app.controller.commands.admin.user.AdminUserEditPostCommand;
 import ua.martishyn.app.controller.commands.admin.user.AdminUsersPageCommand;
+import ua.martishyn.app.controller.commands.admin.wagon.*;
 import ua.martishyn.app.controller.commands.common.AboutUsCommand;
 import ua.martishyn.app.controller.commands.common.SearchTicketsCommand;
 import ua.martishyn.app.controller.commands.common.ShowRouteCommand;
@@ -39,6 +40,13 @@ public class CommandContainer {
         commands.put("/station-edit.command", new StationEditCommand());
         commands.put("/station-edit-post.command", new StationEditPOSTCommand());
         commands.put("/station-delete.command", new StationDeleteCommand());
+        //wagons admin crud
+        commands.put("/wagons-page.command", new WagonsPageCommand());
+        commands.put("/wagon-edit.command", new WagonEditCommand());
+        commands.put("/wagon-add.command", new WagonAddCommand());
+        commands.put("/wagon-add-post.command", new WagonAddPostCommand());
+        commands.put("/wagon-edit-post.command", new WagonEditPostCommand());
+        commands.put("/wagon-delete.command", new WagonDeleteCommand());
         //users admin crud
         commands.put("/users-page.command", new AdminUsersPageCommand());
         commands.put("/user-edit.command", new AdminUserEditCommand());

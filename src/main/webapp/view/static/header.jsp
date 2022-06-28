@@ -18,7 +18,7 @@
                 <a class="navbar-brand" href="index.command"><fmt:message key="welcome.guest"/></a>
             </c:when>
             <c:otherwise>
-                <a class="navbar-brand" href="index.command"><fmt:message key="welcome"/>, ${user.role}</a>
+                <a class="navbar-brand" href="index.command"><fmt:message key="welcome"/>, ${user.firstName}</a>
             </c:otherwise>
         </c:choose>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
@@ -31,10 +31,7 @@
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="index.command"><fmt:message key="home"/></a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="about-us.command"><fmt:message key="about.us"/></a>
-                </li>
-                <c:if test="${sessionScope.user.role == 'CUSTOMER'}">
+               <c:if test="${sessionScope.user.role == 'CUSTOMER'}">
                 <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="customer-tickets-page.command"><fmt:message key="main.page.tickets"/></a>
                 </li>
@@ -44,6 +41,9 @@
 				<a class="nav-link active" aria-current="page" href="routes-page.command"><fmt:message key="routes"/></a>
                 </li>
                 <li class="nav-item"><a class="nav-link active" aria-current="page" href="stations-page.command"><fmt:message key="stations"/></a>
+                </li>
+                </li>
+                <li class="nav-item"><a class="nav-link active" aria-current="page" href="wagons-page.command"><fmt:message key="admin.page.wagons"/></a>
                 </li>
                 </li>
                 <li class="nav-item"><a class="nav-link active" aria-current="page" href="users-page.command"><fmt:message key="users"/></a>

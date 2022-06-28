@@ -13,6 +13,7 @@ import ua.martishyn.app.data.utils.validator.DataInputValidator;
 import ua.martishyn.app.data.utils.validator.DataInputValidatorImpl;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,8 +31,8 @@ public class UserService {
         return userDao.getByEmail(email);
     }
 
-    public Optional<List<User>> getUsersPaginated(int offSet, int entriesPerPage) {
-        return userDao.getUsersPaginated(offSet, entriesPerPage);
+    public List<User> makeEntriesSubList(int offSet, int entriesPerPage) {
+        return userDao.getUsersPaginated(offSet, entriesPerPage).orElse(Collections.emptyList());
     }
 
     public boolean deleteUserById(int id) {
@@ -44,7 +45,7 @@ public class UserService {
         if (isLoginCredentialsInputValid(email, password)) {
             Optional<User> optionalUser = authenticateUserByEmail(email);
             if (!optionalUser.isPresent()) {
-                request.setAttribute(ViewConstants.ERROR_VALIDATION, UserServiceConstants.USER_NOT_FOUND);
+                request.setAttribute("noLogin", true);
                 log.error("No user found with email --> {}", email);
             } else {
                 User loggedUser = optionalUser.get();
@@ -54,11 +55,11 @@ public class UserService {
                     request.getSession().setAttribute("role", loggedUser.getRole());
                     return true;
                 } else {
-                    request.setAttribute(ViewConstants.ERROR_VALIDATION, UserServiceConstants.PASSWORD_INCORRECT);
+                    request.setAttribute("noPass", true);
                 }
             }
         } else {
-            request.setAttribute(ViewConstants.ERROR_VALIDATION, UserServiceConstants.INVALID_INPUT);
+            request.setAttribute("noInput", true);
         }
         return false;
     }
@@ -74,56 +75,45 @@ public class UserService {
         userDao.updateUserRole(role, id);
     }
 
-    public boolean createUser(HttpServletRequest request) {
-        User userFromRequest = getUserFromRequest(request);
-        User createdUser = User.builder()
-                .firstName(userFromRequest.getFirstName())
-                .lastName(userFromRequest.getLastName())
-                .email(userFromRequest.getEmail())
-                .password(userFromRequest.getPassword())
-                .role(userFromRequest.getRole())
-                .build();
-        return userDao.createUser(createdUser);
-    }
-
-    public User getUserFromRequest(HttpServletRequest request) {
-        int userId = Integer.parseInt(request.getParameter("id"));
+    public boolean registerUserFromRequest(HttpServletRequest request) {
         String firstName = request.getParameter("firstName");
         String lastName = request.getParameter("lastName");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String hashPass = PasswordEncodingService.makeHash(password);
-        Role role = Role.valueOf(request.getParameter("role"));
-
-        return User.builder()
-                .id(userId)
+        final Optional<User> maybeRegistered = authenticateUserByEmail(email);
+        if (maybeRegistered.isPresent()) {
+            request.setAttribute("alreadyExists", true);
+            return false;
+        }
+        return userDao.createUser(User.builder()
                 .firstName(firstName)
                 .lastName(lastName)
                 .email(email)
                 .password(hashPass)
-                .role(role)
-                .build();
+                .role(Role.CUSTOMER)
+                .build());
     }
 
     public boolean isUserInputIsValid(HttpServletRequest request) {
         String firstName = request.getParameter(UserServiceConstants.FIRST_NAME).trim();
         if (!dataInputValidator.isValidNameField(firstName)) {
-            request.setAttribute(ViewConstants.ERROR_VALIDATION, UserServiceConstants.FIRST_NAME_INVALID_MESS);
+            request.setAttribute("wrongFirstName", true);
             return false;
         }
         String lastName = request.getParameter(UserServiceConstants.LAST_NAME).trim();
         if (!dataInputValidator.isValidNameField(lastName)) {
-            request.setAttribute(ViewConstants.ERROR_VALIDATION, UserServiceConstants.LAST_NAME_INVALID_MESS);
+            request.setAttribute("wrongLastName", true);
             return false;
         }
         String email = request.getParameter(UserServiceConstants.EMAIL).trim();
         if (!dataInputValidator.isValidEmailField(email)) {
-            request.setAttribute(ViewConstants.ERROR_VALIDATION, UserServiceConstants.EMAIL_INVALID_MESS);
+            request.setAttribute("wrongEmail", true);
             return false;
         }
         String password = request.getParameter(UserServiceConstants.PASSWORD).trim();
         if (!dataInputValidator.isValidPasswordField(password)) {
-            request.setAttribute(ViewConstants.ERROR_VALIDATION, UserServiceConstants.PASSWORD_INVALID_MESS);
+            request.setAttribute("wrongPass", true);
             return false;
         }
         return true;

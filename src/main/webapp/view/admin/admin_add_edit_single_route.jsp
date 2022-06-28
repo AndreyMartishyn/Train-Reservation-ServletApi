@@ -26,37 +26,44 @@
             <tr>
                 <th><fmt:message key="admin.page.route.id"/>:</th>
                 <td>
+
                     <c:if test="${singleRoute != null}">
                     <input type="text" name="id" size="30"
                     value="<c:out value='${singleRoute.id}' />" readonly="readonly"/>
+                  <input type="hidden" name="id" value="<c:out value='${singleRoute.id}' />" />
                     </c:if>
                     <c:if test="${singleRoute == null}">
                     <input type="text" name="id" size="30"
-                    value="<c:out value='${singleRoute.id}' />" />
+                     value="<c:out value='${singleRoute.id}' />" required />
                     </c:if>
                 </td>
             <tr>
-                <th><fmt:message key="admin.page.train.id"/>:</th>
-                <td>
-                    <input type="text" name="trainId" size="30"
-                    pattern="^\d{1,10}$"
-                    title="Input for number should be only number up to 10 digits" required>
-                </td>
+                <th><fmt:message key="admin.page.train"/>:</th>
+                 <td>
+                                						<select class="browser-default custom-select" name="trainId"  required>
+                                                            <c:forEach items="${trains}" var="train" >
+                                                                          <option value="${train.id}" selected="selected"> ${train.model.name}</option>
+                                                                      </c:forEach>
+                                                        </select>
+                                                        </td>
             </tr>
             <tr>
-                <th><fmt:message key="admin.page.station.id"/>:</th>
+                <th><fmt:message key="admin.page.station"/>:</th>
                 <td>
-                    <input type="text" name="stationId" size="30"
-                    pattern="^\d{1,10}$"
-                   title="Input for number should be only number up to 10 digits" required>
-                </td>
+                                      						<select class="browser-default custom-select" name="stationId"  required>
+                                                             <c:forEach items="${stations}" var="station" >
+                                                                           <option value="${station.id}" selected="selected"> <fmt:message key="${station.name}"/></option>
+                                                                       </c:forEach>
+                                                         </select>
+                                                         </td>
             </tr>
+
             <tr>
                 <th><fmt:message key="admin.page.arrival"/>:</th>
                 <td>
                     <input type="datetime-local" name="arrival" size="30"
                              value="<c:out value='${singleRoute.arrival}' />"
-                             title="Dates should be within 1 months and year" required/>
+                            required/>
                 </td>
             </tr>
             <tr>
@@ -64,13 +71,18 @@
                 <td>
                     <input type="datetime-local" name="departure" size="30"
                            value="<c:out value='${singleRoute.departure}' />"
-                            title="Dates should be within 1 months and year" required/>
+                           required/>
                 </td>
             </tr>
 
              </table>
-              <span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${errorValidation}</span>
-              <br>
+                <c:if test="${requestScope.wrongId !=null}">
+                   <span style ="text-align: center; color:red; font-family:courier; font-size:70%;"><fmt:message key="route.wrong.id"/></span>
+                                                  </c:if>
+                   <c:if test="${requestScope.wrongDates !=null}">
+                                   <span style ="text-align: center; color:red; font-family:courier; font-size:70%;"><fmt:message key="route.wrong.dates"/></span>
+                                                  </c:if>
+                                                  <br>
              	<input type="submit" class="btn btn-dark" value="<fmt:message key="admin.page.action.save"/>"/>
                </div>
 </form>

@@ -50,7 +50,7 @@ public class TrainSearcherTest {
         when(mockRequest.getParameter("stationFrom")).thenReturn(String.valueOf(1));
         when(mockRequest.getParameter("stationTo")).thenReturn(String.valueOf(1));
         customerSearchTicketsCommand.execute(mockRequest, mockResponse);
-        verify(mockRequest).setAttribute("sameStations", "Departure and arrival stations are same");
+        verify(mockRequest).setAttribute("sameStations", true);
         verify(mockRequest, times(1)).getRequestDispatcher("index.command");
         verify(mockDispatcher).forward(mockRequest, mockResponse);
     }

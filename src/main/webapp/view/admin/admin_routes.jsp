@@ -9,14 +9,16 @@
 <div class="wrapper">
  		    <div id="formContent-table">
         <h2><fmt:message key="admin.page.route-stations"/></h2>
-        <span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${noRoutes}</span>
+        <c:if test="${requestScope.noEntries !=null}">
+                    <span style ="text-align: center; color:red; font-family:courier; font-size:70%;"><fmt:message key="admin.no.routes"/></span>
+                    </c:if>
 
         <table class="table table-striped table-responsive-md btn-table" class="m-5">
         <thead>
                         <tr>
                           <th scope="col"><fmt:message key="admin.page.route.id"/></th>
-                          <th scope="col"><fmt:message key="admin.page.train.id"/></th>
-                          <th scope="col"><fmt:message key="admin.page.station.id"/></th>
+                          <th scope="col"><fmt:message key="admin.page.train"/></th>
+                          <th scope="col"><fmt:message key="admin.page.station"/></th>
                           <th scope="col"><fmt:message key="admin.page.arrival"/></th>
                           <th scope="col"><fmt:message key="admin.page.departure"/></th>
                           <th scope="col"><fmt:message key="admin.page.action"/></th>
@@ -41,7 +43,7 @@
                         <a href="route-add.command"  class="btn btn-dark"><fmt:message key="admin.page.route.add"/></a>
 <br><br>
 <%--For displaying Previous link except for the 1st page --%>
-  <c:if test="${currentPage != 1}">
+  <c:if test="${currentPage > 1}">
       <td><a href="routes-page.command?page=${currentPage - 1}">Previous</a></td>
   </c:if>
              <table style = "border:1px solid black;margin-left:auto;margin-right:auto;" cellpadding="5" cellspacing="5" >
@@ -52,7 +54,7 @@
               <td>${i}</td>
                                           </c:when>
                                           <c:otherwise>
-                                              <td><a href="routes-page.command?page=${i}">${i}</a></td>
+                                              <td><a href="routes-page.command?currentPage=${i}">${i}</a></td>
                                           </c:otherwise>
                                       </c:choose>
                                   </c:forEach>
@@ -62,7 +64,7 @@
                           <%--For displaying Next link --%>
 
                           <c:if test="${currentPage lt noOfPages}">
-                              <td><a href="routes-page.command?page=${currentPage + 1}">Next</a></td>
+                              <td><a href="routes-page.command?currentPage=${currentPage + 1}">Next</a></td>
                           </c:if>
   </div>
 </div>

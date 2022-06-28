@@ -5,8 +5,6 @@ import org.apache.logging.log4j.Logger;
 import ua.martishyn.app.data.dao.interfaces.TrainAndModelDao;
 import ua.martishyn.app.data.entities.Train;
 import ua.martishyn.app.data.entities.TrainModel;
-import ua.martishyn.app.data.entities.Wagon;
-import ua.martishyn.app.data.entities.enums.ComfortClass;
 import ua.martishyn.app.data.utils.db_pool.DataBasePoolManager;
 
 import java.sql.Connection;
@@ -20,11 +18,8 @@ import java.util.Optional;
 public class TrainModelDaoImpl implements TrainAndModelDao {
     private static final Logger log = LogManager.getLogger(TrainModelDaoImpl.class);
     private static final String GET_TRAIN_MODEL_BY_ID = "SELECT * FROM train_models WHERE id = ?;";
+    private static final String GET_ALL_TRAINS = "SELECT * FROM trains;";
     private static final String GET_TRAIN_BY_ID = "SELECT * FROM trains WHERE id = ?;";
-    private static final String GET_WAGONS_BY_CLASS = "SELECT * FROM train_wagons WHERE comfort_class = ?;";
-    private static final String GET_WAGON_BY_ID = "SELECT * FROM train_wagons WHERE wagon_id = ?;";
-    private static final String GET_ALL_WAGONS = "SELECT * FROM train_wagons;";
-    private static final String UPDATE_WAGON_PLACES = "UPDATE train_wagons SET seats = ? WHERE wagon_id = ?";
 
     @Override
     public Optional<Train> getTrain(int id) {
@@ -59,79 +54,18 @@ public class TrainModelDaoImpl implements TrainAndModelDao {
     }
 
     @Override
-    public List<Wagon> getAllWagons() {
-        List<Wagon> wagons = new ArrayList<>();
+    public Optional<List<Train>> getAllTrains() {
+        List<Train> trains = new ArrayList<>();
         try (Connection connection = DataBasePoolManager.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_WAGONS)) {
-            ResultSet coachesFromResultSet = preparedStatement.executeQuery();
-            while (coachesFromResultSet.next()) {
-                wagons.add(getCoachesFromResultSet(coachesFromResultSet));
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_TRAINS)) {
+            ResultSet trainsFromRS = preparedStatement.executeQuery();
+            while (trainsFromRS.next()) {
+                trains.add(getTrainFromResultSet(trainsFromRS));
             }
         } catch (SQLException e) {
-            log.error("Problems with getting all train_wagons {}", e.toString());
+            log.error("Problems with getting all trains {}", e.toString());
         }
-        return wagons;
-    }
-
-    @Override
-    public Optional<List<Wagon>> getWagonsByClass(String comfortClass) {
-        List<Wagon> wagons = new ArrayList<>();
-        try (Connection connection = DataBasePoolManager.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_WAGONS_BY_CLASS)) {
-            preparedStatement.setString(1, comfortClass);
-            ResultSet coachesFromResultSet = preparedStatement.executeQuery();
-            while (coachesFromResultSet.next()) {
-                wagons.add(getCoachesFromResultSet(coachesFromResultSet));
-            }
-        } catch (SQLException e) {
-            log.error("Problems with getting all train_wagons by class {}", e.toString());
-        }
-        return Optional.of(wagons);
-    }
-
-    @Override
-    public Optional<Wagon> getWagonById(int id) {
-        Wagon wagon = null;
-        try (Connection connection = DataBasePoolManager.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_WAGON_BY_ID)) {
-            preparedStatement.setInt(1, id);
-            ResultSet coachesFromResultSet = preparedStatement.executeQuery();
-            if (coachesFromResultSet.next()) {
-                wagon = getCoachesFromResultSet(coachesFromResultSet);
-            }
-        } catch (SQLException e) {
-            log.error("Problems with getting wagon by id {}", e.toString());
-        }
-        return Optional.ofNullable(wagon);
-    }
-
-    @Override
-    public boolean updateCoach(Wagon wagon) {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        try {
-            connection = DataBasePoolManager.getInstance().getConnection();
-            preparedStatement = connection.prepareStatement(UPDATE_WAGON_PLACES);
-            connection.setAutoCommit(false);
-            preparedStatement.setInt(1, wagon.getNumOfSeats());
-            preparedStatement.setInt(2, wagon.getId());
-            preparedStatement.executeUpdate();
-            connection.commit();
-        } catch (SQLException e) {
-            log.error("Problems with updating train_wagons {}", e.toString());
-            if (connection != null) {
-                try {
-                    connection.rollback();
-                    return false;
-                } catch (SQLException exception) {
-                    log.error("Problems with transaction {}", e.toString());
-                }
-            }
-        } finally {
-            close(connection);
-            close(preparedStatement);
-        }
-        return true;
+        return Optional.of(trains);
     }
 
     private TrainModel getTrainModelFromResultSet(ResultSet trainModelRs) throws SQLException {
@@ -147,16 +81,6 @@ public class TrainModelDaoImpl implements TrainAndModelDao {
         Optional<TrainModel> model = getTrainModel(trainFromResultSet.getInt("model_id"));
         model.ifPresent(train::setModel);
         return train;
-    }
-
-    private Wagon getCoachesFromResultSet(ResultSet resultSet) throws SQLException {
-        return Wagon.builder()
-                .id(resultSet.getInt("wagon_id"))
-                .routeId(resultSet.getInt("route_id"))
-                .type(ComfortClass.valueOf(resultSet.getString("comfort_class")))
-                .numOfSeats(resultSet.getInt("seats"))
-                .price(resultSet.getInt("price"))
-                .build();
     }
 
     private static void close(AutoCloseable ac) {

@@ -30,7 +30,7 @@ public class CustomerTicketsPageCommand implements ICommand {
         List<Ticket> ticketsFromDb = ticketService.getAllTickets(request);
         if (ticketsFromDb.isEmpty()) {
             log.info("Tickets not found");
-            request.setAttribute("noTickets", "No tickets found for customer");
+            request.setAttribute("noTickets", true);
         } else {
             log.info("Appropriate tickets found. Size : {}", ticketsFromDb.size());
             request.setAttribute("userTickets", ticketsFromDb);

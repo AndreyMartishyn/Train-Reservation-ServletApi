@@ -15,7 +15,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -134,11 +133,11 @@ public class RouteDaoImpl implements RouteDao {
             con = DataBasePoolManager.getInstance().getConnection();
             preparedStatement = con.prepareStatement(UPDATE_ROUTEPOINT);
             con.setAutoCommit(false);
-            createRouteStatement(preparedStatement, routePoint);
+            updateRoutePointStatement(preparedStatement, routePoint);
             preparedStatement.executeUpdate();
             con.commit();
         } catch (SQLException e) {
-            log.error("Problems with creating single route {}", e.toString());
+            log.error("Problems with updating single route {}", e.toString());
             if (con != null) {
                 try {
                     con.rollback();
@@ -154,13 +153,22 @@ public class RouteDaoImpl implements RouteDao {
         return true;
     }
 
-    private void createRouteStatement(PreparedStatement preparedStatement, RoutePoint routePoint) throws SQLException {
+    private void updateRoutePointStatement(PreparedStatement preparedStatement, RoutePoint routePoint) throws SQLException {
         preparedStatement.setInt(1, routePoint.getTrainId());
         preparedStatement.setInt(2, routePoint.getStationId());
         preparedStatement.setObject(3, routePoint.getArrival());
         preparedStatement.setObject(4, routePoint.getDeparture());
         preparedStatement.setInt(5, routePoint.getId());
         preparedStatement.setInt(6, routePoint.getStationId());
+
+    }
+
+    private void createRouteStatement(PreparedStatement preparedStatement, RoutePoint routePoint) throws SQLException {
+        preparedStatement.setInt(1, routePoint.getId());
+        preparedStatement.setInt(2, routePoint.getTrainId());
+        preparedStatement.setInt(3, routePoint.getStationId());
+        preparedStatement.setObject(4, routePoint.getArrival());
+        preparedStatement.setObject(5, routePoint.getDeparture());
     }
 
     @Override
