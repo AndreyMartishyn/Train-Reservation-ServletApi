@@ -3,8 +3,6 @@ package ua.martishyn.app.data.service;
 import ua.martishyn.app.data.dao.impl.StationDaoImpl;
 import ua.martishyn.app.data.dao.interfaces.StationDao;
 import ua.martishyn.app.data.entities.Station;
-import ua.martishyn.app.data.utils.constants.StationServiceConstants;
-import ua.martishyn.app.data.utils.constants.ViewConstants;
 import ua.martishyn.app.data.utils.validator.DataInputValidator;
 import ua.martishyn.app.data.utils.validator.DataInputValidatorImpl;
 
@@ -80,12 +78,12 @@ public class StationService {
     public boolean isStationDataValid(HttpServletRequest request) {
         String name = request.getParameter("name").trim();
         if (!dataInputValidator.isValidStationNameInput(name)) {
-            request.setAttribute(ViewConstants.ERROR_VALIDATION, StationServiceConstants.STATION_NAME_INVALID_MESS);
+            request.setAttribute("wrongName", true);
             return false;
         }
         String code = request.getParameter("code").trim();
         if (!dataInputValidator.isValidStationCodeInput(code)) {
-            request.setAttribute(ViewConstants.ERROR_VALIDATION, StationServiceConstants.STATION_CODE_INVALID_MESS);
+            request.setAttribute("wrongCode", true);
             return false;
         }
         return true;

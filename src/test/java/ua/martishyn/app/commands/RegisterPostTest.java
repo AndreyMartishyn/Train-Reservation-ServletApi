@@ -49,7 +49,7 @@ public class RegisterPostTest extends RegisterCommand{
         when(mockRequest.getParameter("email")).thenReturn("gmail@gmail.com");
         when(mockRequest.getParameter("password")).thenReturn("password2");
         registerCommand.execute(mockRequest, mockResponse);
-        verify(mockRequest).setAttribute(ViewConstants.ERROR_VALIDATION, UserServiceConstants.FIRST_NAME_INVALID_MESS);
+        verify(mockRequest).setAttribute("wrongFirstName",true);
         verify(mockDispatcher).forward(mockRequest, mockResponse);
         verify(mockRequest, times(1)).getRequestDispatcher(ViewConstants.REGISTER_PAGE);
     }
@@ -60,7 +60,7 @@ public class RegisterPostTest extends RegisterCommand{
         when(mockRequest.getParameter("email")).thenReturn("gmail@gmail1.com   11");
         when(mockRequest.getParameter("password")).thenReturn("password1");
         registerCommand.execute(mockRequest, mockResponse);
-        verify(mockRequest).setAttribute(ViewConstants.ERROR_VALIDATION, UserServiceConstants.EMAIL_INVALID_MESS);
+        verify(mockRequest).setAttribute("wrongEmail",true);
         verify(mockDispatcher).forward(mockRequest, mockResponse);
         verify(mockRequest, times(1)).getRequestDispatcher(ViewConstants.REGISTER_PAGE);
     }
@@ -71,7 +71,7 @@ public class RegisterPostTest extends RegisterCommand{
         when(mockRequest.getParameter("email")).thenReturn("gmail@gmail.com");
         when(mockRequest.getParameter("password")).thenReturn("password    ");
         registerCommand.execute(mockRequest, mockResponse);
-        verify(mockRequest).setAttribute(ViewConstants.ERROR_VALIDATION, UserServiceConstants.PASSWORD_INVALID_MESS);
+        verify(mockRequest).setAttribute("wrongPass",true);
         verify(mockDispatcher).forward(mockRequest, mockResponse);
         verify(mockRequest, times(1)).getRequestDispatcher(ViewConstants.REGISTER_PAGE);
     }

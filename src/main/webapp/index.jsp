@@ -33,13 +33,25 @@
         <option value="${station.id}"><fmt:message key="${station.name}"/></option>
         </c:forEach>
         </select>
+
          <span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${busyPlace}</span>
-         <span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${noRoutes}</span>
-         <span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${noStations}</span>
-         <span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${errorValidation}</span>
-         <span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${sameStations}</span>
-       </div>
+
+               <c:if test="${requestScope.noStations != null}">
+         <span style ="text-align: center; color:red; font-family:courier; font-size:80%;"><fmt:message key="no.stations"/></span>
+         </c:if>
+
+               <c:if test="${requestScope.sameStations != null}">
+         <span style ="text-align: center; color:red; font-family:courier; font-size:80%;"><fmt:message key="same.stations"/></span>
+         </c:if>
+
+               <c:if test="${requestScope.noRoutes != null}">
+         <span style ="text-align: center; color:red; font-family:courier; font-size:80%;"><fmt:message key="no.routes"/></span>
+         </c:if>
+                </div>
+                      <c:if test="${requestScope.noStations == null}">
             <button type="submit" class="btn btn-dark" ><fmt:message key="user.page.book.search"/></button>
+                     </c:if>
+
         </form>
         </div>
         </div>
@@ -71,9 +83,9 @@
                                 </td>
 
                                 <td>
-                                <c:out value="${route.departureStation}"/>
+                                <fmt:message key="${route.departureStation}"/>
 								-
-                                <c:out value="${route.arrivalStation}"/>
+                                <fmt:message key="${route.arrivalStation}"/>
 						        </td>
 
                                 <td>
@@ -87,27 +99,48 @@
                                 </td>
 
                                 <td styles = "text-align:center">
+                                <c:choose>
+                                <c:when test="${route.firstClassSeats != 0}">
                                 F1 <c:out value="${route.firstClassSeats}"/>
-									<c:if test="${route.firstClassSeats != 0}">
-                                <a href="customer-ticket-form.command<c:out value="${route.redirectLink}"/>&class=FIRST&price=<c:out value="${route.firstClassTotalPrice}"/>"
+						           <a href="customer-ticket-form.command<c:out value="${route.redirectLink}"/>&class=FIRST&price=<c:out value="${route.firstClassTotalPrice}"/>"
                                     class="btn btn-dark" ><fmt:message key="user.page.book.info.select"/></a>
-                                </c:if>
+                                </c:when>
+                                 <c:otherwise>
+                                <a href="customer-ticket-form.command<c:out value="${route.redirectLink}"/>&class=FIRST&price=<c:out value="${route.firstClassTotalPrice}"/>"
+                                                                    class="btn btn-dark disabled" aria-disabled="true" ><fmt:message key="user.page.book.info.select"/></a>
+                                 </c:otherwise>
+                                 </c:choose>
                                 <br>
-                                <br>
+
+                                <c:choose>
+                                <c:when test="${route.secondClassSeats != 0}">
                                 S2 <c:out value="${route.secondClassSeats}"/>
-                                   <c:if test="${route.secondClassSeats != 0}">
                                 <a href="customer-ticket-form.command<c:out value="${route.redirectLink}"/>&class=SECOND&price=<c:out value="${route.secondClassTotalPrice}"/>"
                                     class="btn btn-dark" ><fmt:message key="user.page.book.info.select"/></a>
-                               </c:if>
+                               </c:when>
+								<c:otherwise>
+								 <a href="customer-ticket-form.command<c:out value="${route.redirectLink}"/>&class=SECOND&price=<c:out value="${route.secondClassTotalPrice}"/>"
+                                                                    class="btn btn-dark disabled" aria-disabled="true"><fmt:message key="user.page.book.info.select"/></a>
+                                </c:otherwise>
+                                </c:choose>
                                </td>
 
                                <td>
+                               <c:choose>
+                               <c:when test="${route.secondClassSeats != 0 && route.firstClassSeats != 0}">
                                <p style = "text-align: center"><c:out value="${route.firstClassTotalPrice}"/></p>
                                <br>
                                <p style = "text-align: center"><c:out value="${route.secondClassTotalPrice}"/></p>
-                               </td>
-                                </tr>
+                               </c:when>
+                               <c:otherwise>
+                               <p style = "text-align: center"><fmt:message key="no.free.places"/></p>
+                               <br>
+                               <p style = "text-align: center"><fmt:message key="no.free.places"/></p>
+						       </c:otherwise>
+                                </c:choose>
                                 </c:forEach>
+                                </td>
+                               </tr>
                 </tbody>
 				<span style ="text-align: left; color:black; font-family:courier; font-size:79%;">
 				*<fmt:message key="user.page.book.info.span"/>

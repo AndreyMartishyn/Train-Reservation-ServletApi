@@ -25,8 +25,8 @@ public class ShowRouteCommand implements ICommand {
         //TODO MAKE TAKING ROUTES BY PARTICULAR ROUTE, NOT FROM DB FULLY BY STREAM
         Optional<List<Route>> routesFromDb = routeService.getAllRoutes();
         if (routesFromDb.isPresent()) {
-            List<Route.IntermediateStation> stationForRoute = routeService.getStationForRoute(request, routesFromDb.get());
-            request.setAttribute("routeInfo", stationForRoute);
+            List<Route.IntermediateStation> stationsForRoute = routeService.getStationsForRoute(request, routesFromDb.get());
+            request.setAttribute("routeInfo", stationsForRoute);
         }
         RequestDispatcher requestDispatcher = request.getRequestDispatcher(ViewConstants.CUSTOMER_ROUTE_VIEW);
         requestDispatcher.forward(request, response);

@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 import ua.martishyn.app.data.service.RouteService;
 import ua.martishyn.app.data.utils.constants.RouteServiceConstants;
 import ua.martishyn.app.data.utils.constants.ViewConstants;
@@ -33,26 +34,7 @@ public class RouteServiceTest {
         when(mockedRequest.getParameter("id")).thenReturn("XXX");
 
         routeService.isInputForRouteValid(mockedRequest);
-        verify(mockedRequest).setAttribute(ViewConstants.ERROR_VALIDATION, RouteServiceConstants.ROUTE_ID_INVALID_MESS);
-    }
-
-    @Test
-    public void shouldReturnFalseWithInvalidTrainIdInputWhenCreateRoute() {
-        when(mockedRequest.getParameter("id")).thenReturn("1");
-        when(mockedRequest.getParameter("trainId")).thenReturn("XXX");
-
-        routeService.isInputForRouteValid(mockedRequest);
-        verify(mockedRequest).setAttribute(ViewConstants.ERROR_VALIDATION, RouteServiceConstants.ROUTE_TRAIN_ID_INVALID_MESS);
-    }
-
-    @Test
-    public void shouldReturnFalseWithInvalidStationIdInputWhenCreateRoute() {
-        when(mockedRequest.getParameter("id")).thenReturn("146");
-        when(mockedRequest.getParameter("trainId")).thenReturn("222");
-        when(mockedRequest.getParameter("stationId")).thenReturn("XXX");
-
-        routeService.isInputForRouteValid(mockedRequest);
-        verify(mockedRequest).setAttribute(ViewConstants.ERROR_VALIDATION, RouteServiceConstants.ROUTE_STATION_INVALID_MESS);
+        verify(mockedRequest).setAttribute("wrongId", true);
     }
 
     @Test
@@ -64,7 +46,7 @@ public class RouteServiceTest {
         when(mockedRequest.getParameter("arrival")).thenReturn("2222-12-12T04:55");
 
         routeService.isInputForRouteValid(mockedRequest);
-        verify(mockedRequest).setAttribute(ViewConstants.ERROR_VALIDATION, RouteServiceConstants.ROUTE_DATES_INVALID_MESS);
+        verify(mockedRequest).setAttribute("wrongDates", true);
     }
 
     @Test
@@ -72,7 +54,7 @@ public class RouteServiceTest {
         when(mockedRequest.getParameter("id")).thenReturn("146");
         when(mockedRequest.getParameter("trainId")).thenReturn("222");
         when(mockedRequest.getParameter("stationId")).thenReturn("4");
-        when(mockedRequest.getParameter("departure")).thenReturn("2222-12-12T05:55");
+        when(mockedRequest.getParameter("departure")).thenReturn("2222-12-12T05:56");
         when(mockedRequest.getParameter("arrival")).thenReturn("2222-12-12T05:55");
 
         Assert.assertTrue(routeService.isInputForRouteValid(mockedRequest));

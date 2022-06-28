@@ -19,13 +19,16 @@
               <label class="order-form-label"><fmt:message key="admin.page.user.first.name"/>*</label>
             </div>
             <div class="col-12">
-              <input class="order-form-input" placeholder="<fmt:message key="placeholder.name"/>" name="firstName" required/>
+              <input class="order-form-input" placeholder="<fmt:message key="placeholder.name"/>" name="firstName"
+                title="Name must be from 8 to 16 latin/cyrillic letters"
+             required/>
             </div>
               <div class="col-12">
              <label class="order-form-label"><fmt:message key="admin.page.user.last.name"/>*</label>
              </div>
             <div class="col-12">
-           <input class="order-form-input" placeholder="<fmt:message key="placeholder.surname"/>" name="lastName" required/>
+           <input class="order-form-input" placeholder="<fmt:message key="placeholder.surname"/>" name="lastName"
+            title="Name must be from 8 to 16 latin/cyrillic letters" required/>
            </div>
             </div>
 
@@ -58,7 +61,7 @@
 			<div align="center">
             <div class="col-6">
               <label class="order-form-label"><fmt:message key="user.page.order.wagon"/>*</label>
-               <select class="browser-default custom-select" name="wagon">
+               <select class="browser-default custom-select" name="wagon" required>
                <c:forEach items="${bookingDTO.coachesNumbers}" var="coaches">
                <option value="${coaches}">${coaches}</option>
                </c:forEach>
@@ -70,7 +73,8 @@
              <label class="order-form-label" for="date-picker-example"><fmt:message key="user.page.order.place"/>*</label>
              </div>
              <div class="col-12">
-             <input class="order-form-input" name="place" placeholder="<fmt:message key="placeholder.choose.place"/>" required>
+             <input class="order-form-input" name="place" placeholder="<fmt:message key="placeholder.choose.place"/>"
+              pattern="^\d{1,2}$" required>
             </div>
 			<br>
             <div class="col-12">

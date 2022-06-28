@@ -1,6 +1,5 @@
 package ua.martishyn.app.data.dao.interfaces;
 
-import ua.martishyn.app.data.entities.RoutePoint;
 import ua.martishyn.app.data.entities.User;
 import ua.martishyn.app.data.entities.enums.Role;
 
@@ -19,7 +18,7 @@ public interface UserDao {
 
     boolean delete(int id);
 
-    public void updateUserRole(Role role, int userId);
+    void updateUserRole(Role role, int userId);
 
 
 }

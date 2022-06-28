@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
  */
 
 public class DataInputValidatorImpl implements DataInputValidator {
-    private static final String LOGIN_NAME_REGEX = "^[A-Za-z\\u0400-\\u04ff]{1,16}$";
+    private static final String LOGIN_NAME_REGEX = "^[A-Za-z\\p{L}]{1,16}$";
     private static final String STATION_NAME_REGEX = "^[\\p{L}']*(?:[\\s-]\\p{L}*)$";
     private static final String STATION_CODE_REGEX = "^[\\p{Lu}]{3}$";
     private static final String NUM_REGEX = "^\\d{1,10}$";
@@ -120,21 +120,23 @@ public class DataInputValidatorImpl implements DataInputValidator {
      * Checks date for correct input
      * with correct pattern validation
      *
-     * @param departure, arrival
+     * @param departure
+     * @param arrival
      * @return true or false
      */
 
     @Override
     public boolean isValidDateInput(String departure, String arrival) {
-        if (departure == null || departure.isEmpty() ||
-                arrival == null || arrival.isEmpty()) {
+        if (isNullAndEmpty(departure) ||
+                isNullAndEmpty(arrival)) {
             return false;
         }
         try {
             final LocalDateTime departureDate = LocalDateTime.parse(departure, DateConstants.formatterForLocalDate);
             final LocalDateTime arrivalDate = LocalDateTime.parse(arrival, DateConstants.formatterForLocalDate);
             if (departureDate.isBefore(arrivalDate) || arrivalDate.isBefore(LocalDateTime.now()) || departureDate.isEqual(LocalDateTime.now())
-                    || departureDate.getYear() != arrivalDate.getYear() || departureDate.getMonthValue() != arrivalDate.getMonthValue()) {
+                    || departureDate.getYear() != arrivalDate.getYear() || departureDate.getMonthValue() != arrivalDate.getMonthValue()
+            || departureDate.isEqual(arrivalDate)) {
                 return false;
             }
         } catch (Exception e) {

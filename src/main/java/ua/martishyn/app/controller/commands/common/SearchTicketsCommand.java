@@ -26,12 +26,12 @@ public class SearchTicketsCommand implements ICommand {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (bookingService.areStationsEqual(request)) {
             log.error("Same stations chosen by user");
-            request.setAttribute("sameStations", "Departure and arrival stations are same");
+            request.setAttribute("sameStations", true);
         } else {
             List<PersonalRoute> suitableRoutesFound = bookingService.findSuitableRoutes(request);
             if (suitableRoutesFound.isEmpty()) {
                 log.error("Unfortunately, routes not found");
-                request.setAttribute("noRoutes", "There are no routes with such destination and departure");
+                request.setAttribute("noRoutes", true);
             } else {
                 log.info("Appropriate routes found. Size : {}", suitableRoutesFound.size());
                 request.setAttribute("suitableRoutes", suitableRoutesFound);

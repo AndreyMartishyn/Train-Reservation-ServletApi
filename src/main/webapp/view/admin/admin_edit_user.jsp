@@ -22,7 +22,7 @@
 						   <select class="browser-default custom-select"  name="role">
                            <% List<Role> roles = Arrays.asList(Role.values());
                            for (Role role: roles) {%>
-                           <option  value="<%=role.toString()%>"><%=role.toString()%></option><% }%></select>
+                           <option  value="<%=role.toString()%>"><fmt:message key="<%=role.toString()%>"/></option><% }%></select>
                           </div>
                           </td>
                          </tr>

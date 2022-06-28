@@ -31,7 +31,7 @@ public class IndexPageCommand implements ICommand {
     private void prepareStationsForSearch(HttpServletRequest request) {
         List<Station> stations = stationService.getAllStations();
         if (stations.isEmpty()) {
-            request.setAttribute("noStations", "No stations found");
+            request.setAttribute("noStations", true);
             return;
         }
         log.info("Loading stations from db. Stations quantity : {}", stations.size());

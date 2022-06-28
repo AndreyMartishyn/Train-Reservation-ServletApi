@@ -13,6 +13,4 @@ public interface DaoPaginationHelper {
      * @return value > 0 or 0, if now rows found
      */
     Integer getRowsQuantityFromTable(String tableName);
-
-
 }

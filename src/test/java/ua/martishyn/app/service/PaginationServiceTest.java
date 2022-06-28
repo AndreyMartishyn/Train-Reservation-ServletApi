@@ -32,13 +32,13 @@ public class PaginationServiceTest {
 
     @Test
     public void shouldReturnPageNumberWhenParameterPagePassed() {
-        when(mockedRequest.getParameter("page")).thenReturn(PAGE_NUMBER);
+        when(mockedRequest.getParameter("currentPage")).thenReturn(PAGE_NUMBER);
         Assert.assertEquals(Integer.parseInt("4"), paginationService.getCurrentPage(mockedRequest));
     }
 
     @Test
     public void shouldReturnFirstPageWhenPageParameterIsNull() {
-        when(mockedRequest.getParameter("page")).thenReturn(null);
+        when(mockedRequest.getParameter("currentPage")).thenReturn(null);
         Assert.assertEquals(Integer.parseInt("1"), paginationService.getCurrentPage(mockedRequest));
     }
 
@@ -48,7 +48,7 @@ public class PaginationServiceTest {
     }
 
     @Test
-    public void shouldReturnNotReturnServiceClassWhenCommandNotSupported() {
+    public void shouldNotReturnServiceClassWhenCommandNotSupported() {
         String expected = "Not supported";
         Assert.assertEquals(expected, paginationService.getServiceClassBasedOnCommand(loginCommand));
     }
@@ -57,5 +57,6 @@ public class PaginationServiceTest {
     public void tearDown() {
         paginationService = null;
         loginCommand = null;
+        mockedRequest = null;
     }
 }

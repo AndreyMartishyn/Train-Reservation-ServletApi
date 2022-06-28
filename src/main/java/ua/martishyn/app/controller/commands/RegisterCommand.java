@@ -21,7 +21,7 @@ public class RegisterCommand implements ICommand {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        if (userService.isUserInputIsValid(request) && userService.createUser(request)) {
+        if (userService.isUserInputIsValid(request) && userService.registerUserFromRequest(request)) {
             log.info("User created successfully!");
             response.sendRedirect("index.command");
             return;

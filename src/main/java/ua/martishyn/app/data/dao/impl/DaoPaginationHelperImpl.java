@@ -20,7 +20,8 @@ public class DaoPaginationHelperImpl implements DaoPaginationHelper {
 
     /**
      * @param tableName
-     * @return value>0 or 0, if now rows found
+     * @return value > 0.
+     * @return 0, if now rows found
      */
     @Override
     public Integer getRowsQuantityFromTable(String tableName) {

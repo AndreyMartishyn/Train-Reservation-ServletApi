@@ -3,7 +3,6 @@ package ua.martishyn.app.data.service;
 import ua.martishyn.app.data.dao.impl.TicketDaoImpl;
 import ua.martishyn.app.data.dao.interfaces.TicketDao;
 import ua.martishyn.app.data.entities.*;
-import ua.martishyn.app.data.utils.constants.ViewConstants;
 import ua.martishyn.app.data.utils.validator.DataInputValidator;
 import ua.martishyn.app.data.utils.validator.DataInputValidatorImpl;
 
@@ -17,6 +16,7 @@ import java.util.stream.Collectors;
 public class TicketService {
     private final TicketDao ticketDao;
     private final TrainService trainService;
+    private final WagonService wagonService;
     private final StationService stationService;
     private final DataInputValidator dataInputValidator;
 
@@ -24,6 +24,7 @@ public class TicketService {
         ticketDao = new TicketDaoImpl();
         trainService = new TrainService();
         stationService = new StationService();
+        wagonService = new WagonService();
         dataInputValidator = new DataInputValidatorImpl();
     }
 
@@ -38,7 +39,14 @@ public class TicketService {
         return ticketDao.updateTicketToPaid(ticketId);
     }
 
-    public List<Integer> getCoachesNumbers(List<Wagon> coachesByClass) {
+    /**
+     * Collects ids from list of wagons for ticket form
+     *
+     * @param coachesByClass list with wagons
+     * @return Integer List
+     */
+
+    public List<Integer> getWagonsIds(List<Wagon> coachesByClass) {
         return coachesByClass.stream()
                 .filter(wagon -> wagon.getNumOfSeats() != 0)
                 .map(Wagon::getId)
@@ -46,10 +54,10 @@ public class TicketService {
     }
 
 
-    private void updateCoach(Wagon bookedWagon) {
+    private void updateWagon(Wagon bookedWagon) {
         int availableSeatsNum = bookedWagon.getNumOfSeats();
         bookedWagon.setNumOfSeats(--availableSeatsNum);
-        trainService.updateWagon(bookedWagon);
+        wagonService.updateWagon(bookedWagon);
     }
 
     public boolean createTicket(HttpServletRequest request) {
@@ -68,7 +76,7 @@ public class TicketService {
         Random random = new Random();
         Ticket userTicket = new Ticket();
         Optional<Train> trainFromBooking = trainService.getTrainById(Integer.parseInt(trainId));
-        Optional<Wagon> wagonBooked = trainService.getWagonById(wagon);
+        Optional<Wagon> wagonBooked = wagonService.getWagonById(wagon);
         Optional<Station> departureStation = stationService.getStationByName(fromStation);
         Optional<Station> arrivalStation = stationService.getStationByName(toStation);
 
@@ -90,7 +98,7 @@ public class TicketService {
             userTicket.setArrivalTime(arrivalTime);
             userTicket.setWagon(wagonBooked.get());
             userTicket.setPlace(place);
-            updateCoach(wagonBooked.get());
+            updateWagon(wagonBooked.get());
             userTicket.setPaid(false);
             userTicket.setPrice(cost);
             userTicket.setDuration(duration);
@@ -136,33 +144,33 @@ public class TicketService {
     private boolean hasAvailablePlace(HttpServletRequest request, String wagon, String place) {
         int selectedWagon = Integer.parseInt(wagon);
         int selectedPlace = Integer.parseInt(place);
-        Optional<Wagon> wagonBooked = trainService.getWagonById(selectedWagon);
+        Optional<Wagon> wagonBooked = wagonService.getWagonById(selectedWagon);
         if (!wagonBooked.isPresent()) {
             return false;
         }
         int numOfPlaces = wagonBooked.get().getNumOfSeats();
-        if (selectedPlace <= numOfPlaces && selectedPlace > 0) {
+        if (numOfPlaces > 0 && selectedPlace > 0) {
             return true;
         }
-        String result = "Enter valid place between 1 and " + numOfPlaces;
-        request.setAttribute(ViewConstants.ERROR_VALIDATION, result);
+        request.setAttribute("notValidPlaceRange", true);
+        request.setAttribute("numOfPlaces", "numOfPlaces");
         return false;
     }
 
     public boolean isTickerDataValid(HttpServletRequest request) {
         String firstName = request.getParameter("firstName").trim();
         if (!dataInputValidator.isValidNameField(firstName)) {
-            request.setAttribute(ViewConstants.ERROR_VALIDATION, "Wrong first name input");
+            request.setAttribute("wrongName", true);
             return false;
         }
         String lastName = request.getParameter("lastName").trim();
         if (!dataInputValidator.isValidNameField(lastName)) {
-            request.setAttribute(ViewConstants.ERROR_VALIDATION, "Wrong last name input");
+            request.setAttribute("wrongSurname", true);
             return false;
         }
         String place = request.getParameter("place").trim();
         if (!dataInputValidator.isValidNumInput(place)) {
-            request.setAttribute(ViewConstants.ERROR_VALIDATION, "Enter valid place");
+            request.setAttribute("wrongPlace", true);
             return false;
         }
         String wagon = request.getParameter("wagon").trim();
@@ -170,7 +178,7 @@ public class TicketService {
             return false;
         }
         if (isSelectedPlaceOccupied(wagon, place)) {
-            request.setAttribute(ViewConstants.ERROR_VALIDATION, "Selected place is occupied");
+            request.setAttribute("occupiedPlace", true);
             return false;
         }
         return true;

@@ -47,7 +47,7 @@ public class PaginationService {
             log.error("Something happened when getting method ");
         }
         if (entriesPaginated.isEmpty()) {
-            request.setAttribute("noEntries", "No stations found at the moment");
+            request.setAttribute("noEntries", true);
         } else {
             int numOfEntries = getNumberOfRows(command);
             int numOfPages = (int) Math.ceil(numOfEntries * 1.0
@@ -65,7 +65,7 @@ public class PaginationService {
      * @return integer value. If null - return 1.
      */
     public int getCurrentPage(HttpServletRequest request) {
-        return Optional.ofNullable(request.getParameter("page"))
+        return Optional.ofNullable(request.getParameter("currentPage"))
                 .map(String::toString)
                 .map(Integer::parseInt)
                 .orElse(1);
@@ -87,6 +87,8 @@ public class PaginationService {
                 return paginationHelper.getRowsQuantityFromTable("users");
             case "StationsPageCommand":
                 return paginationHelper.getRowsQuantityFromTable("stations");
+            case "WagonsPageCommand":
+                return paginationHelper.getRowsQuantityFromTable("train_wagons");
             default:
                 return 0;
         }
@@ -109,6 +111,8 @@ public class PaginationService {
                 return new UserService();
             case "StationsPageCommand":
                 return new StationService();
+            case "WagonsPageCommand":
+                return new WagonService();
             default:
                 return "Not supported";
         }

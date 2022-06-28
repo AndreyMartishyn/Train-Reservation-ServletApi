@@ -46,7 +46,7 @@ public class LoginPostTest {
         when(mockRequest.getParameter("email")).thenReturn("1@gmail.com");
         when(mockRequest.getParameter("password")).thenReturn("pass");
         loginCommand.execute(mockRequest, mockResponse);
-        verify(mockRequest).setAttribute(ViewConstants.ERROR_VALIDATION, UserServiceConstants.INVALID_INPUT);
+        verify(mockRequest).setAttribute("noInput", true);
         verify(mockRequest, times(1)).getRequestDispatcher(ViewConstants.LOGIN_PAGE);
         verify(mockDispatcher).forward(mockRequest, mockResponse);
     }

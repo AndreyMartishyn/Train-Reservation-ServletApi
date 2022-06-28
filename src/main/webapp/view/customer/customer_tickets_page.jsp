@@ -7,7 +7,10 @@
 <br><br>
  		<div align="center">
  		<div class="bg-white text-dark">
- 		<span style ="text-align: center; color:red; font-family:courier; font-size:80%;">${noTickets}</span>
+
+               <c:if test="${requestScope.noTickets !=null}">
+            <span style ="text-align: center; color:red; font-family:courier; font-size:70%;"><fmt:message key="user.no.tickets"/></span>
+            </c:if>
  		<c:if test="${requestScope.userTickets != null}">
  		<table class="table table-striped table-bordered" >
                 <thead>
@@ -108,7 +111,7 @@
                              class="btn btn-dark" ><fmt:message key="user.page.ticket.pay"/></a>
                              </c:when>
                              <c:otherwise>
-                              <a href="download" class="btn btn-dark" ><fmt:message key="user.page.ticket.download"/></a>
+                             Already paid
                              </c:otherwise>
                              </c:choose>
                              </td>

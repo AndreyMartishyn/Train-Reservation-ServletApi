@@ -16,20 +16,20 @@ import java.util.Optional;
 
 public class BookingService {
     private final RouteService routeService;
-    private final TrainService trainService;
+    private final WagonService wagonService;
     private final StationService stationService;
 
 
     public BookingService() {
         routeService = new RouteService();
-        trainService = new TrainService();
+        wagonService = new WagonService();
         stationService = new StationService();
     }
 
     public List<PersonalRoute> findSuitableRoutes(HttpServletRequest request) {
         Optional<List<Route>> routeList = routeService.getAllRoutes();
         if (routeList.isPresent()) {
-            List<Wagon> wagons = trainService.getAllWagons();
+            List<Wagon> wagons = wagonService.getAllWagons();
             Station fromStation = getStation(request, "stationFrom");
             Station toStation = getStation(request, "stationTo");
             BookingSearcher trainSearcher = new BookingSearcher(routeList.get(), fromStation, toStation, wagons);

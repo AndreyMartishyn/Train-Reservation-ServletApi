@@ -17,5 +17,4 @@ public class UserServiceConstants {
 
     public static final String USER_NOT_FOUND = "Such user not registered yet";
     public static final String PASSWORD_INCORRECT = "Enter correct password";
-
 }

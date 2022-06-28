@@ -9,6 +9,7 @@ import ua.martishyn.app.data.entities.Station;
 import ua.martishyn.app.data.entities.Ticket;
 import ua.martishyn.app.data.entities.Train;
 import ua.martishyn.app.data.entities.Wagon;
+import ua.martishyn.app.data.service.WagonService;
 import ua.martishyn.app.data.utils.db_pool.DataBasePoolManager;
 
 import java.sql.Connection;
@@ -122,12 +123,13 @@ public class TicketDaoImpl implements TicketDao {
 
     private Ticket getTicketFromResultSet(ResultSet resultSet) throws SQLException {
         TrainAndModelDao trainAndModelDao = new TrainModelDaoImpl();
+        WagonService wagonService = new WagonService();
         StationDao stationDao = new StationDaoImpl();
         Optional<Train> train = trainAndModelDao.getTrain(resultSet.getInt(3));
         Ticket ticketFromDb = new Ticket();
         Optional<Station> departureStation = stationDao.getById(resultSet.getInt(6));
         Optional<Station> arrivalStation = stationDao.getById(resultSet.getInt(8));
-        Optional<Wagon> wagonFromDb = trainAndModelDao.getWagonById(resultSet.getInt(11));
+        Optional<Wagon> wagonFromDb = wagonService.getWagonById(resultSet.getInt(11));
         ticketFromDb.setId(resultSet.getInt(1));
         ticketFromDb.setUserId(resultSet.getInt(2));
         train.ifPresent(ticketFromDb::setTrain);
