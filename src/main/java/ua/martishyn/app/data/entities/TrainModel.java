@@ -1,8 +1,11 @@
 package ua.martishyn.app.data.entities;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class TrainModel implements Entity {
+public class TrainModel implements Serializable {
+    private static final long serialVersionUID = 2443487475707750213L;
+
     private int id;
     private String name;
 

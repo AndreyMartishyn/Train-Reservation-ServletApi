@@ -5,11 +5,7 @@ import ua.martishyn.app.data.entities.Route;
 import ua.martishyn.app.data.entities.Station;
 import ua.martishyn.app.data.entities.Wagon;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -30,8 +26,8 @@ public class BookingService {
         Optional<List<Route>> routeList = routeService.getAllRoutes();
         if (routeList.isPresent()) {
             List<Wagon> wagons = wagonService.getAllWagons();
-            Station fromStation = getStation(request, "stationFrom");
-            Station toStation = getStation(request, "stationTo");
+            Station fromStation = stationService.getStationFromRequest(request, "stationFrom");
+            Station toStation = stationService.getStationFromRequest(request, "stationTo");
             BookingSearcher trainSearcher = new BookingSearcher(routeList.get(), fromStation, toStation, wagons);
             return trainSearcher.getSuitableRoutes();
         }
@@ -42,11 +38,5 @@ public class BookingService {
         int departureStationId = Integer.parseInt(request.getParameter("stationFrom"));
         int arrivalStationId = Integer.parseInt(request.getParameter("stationTo"));
         return departureStationId == arrivalStationId;
-    }
-
-    private Station getStation(HttpServletRequest request, String parameter) {
-        int station = Integer.parseInt(request.getParameter(parameter));
-        Optional<Station> foundStation = stationService.getStationById(station);
-        return foundStation.get();
     }
 }

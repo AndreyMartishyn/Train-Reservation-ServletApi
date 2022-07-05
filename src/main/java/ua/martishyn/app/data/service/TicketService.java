@@ -28,10 +28,14 @@ public class TicketService {
         dataInputValidator = new DataInputValidatorImpl();
     }
 
-    public List<Ticket> getAllTickets(HttpServletRequest request) {
+    public List<Ticket> getUsersTickets(HttpServletRequest request) {
         User currentUser = (User) request.getSession().getAttribute("user");
-        final Optional<List<Ticket>> allTicketsById = ticketDao.getAllTicketsById(currentUser.getId());
+        final Optional<List<Ticket>> allTicketsById = ticketDao.getUsersTickets(currentUser.getId());
         return allTicketsById.orElse(Collections.emptyList());
+    }
+
+    public List<Ticket> getAllTickets(){
+        return ticketDao.getAllTickets().orElse(Collections.emptyList());
     }
 
     public boolean isTicketPaid(HttpServletRequest request) {
@@ -52,7 +56,6 @@ public class TicketService {
                 .map(Wagon::getId)
                 .collect(Collectors.toList());
     }
-
 
     private void updateWagon(Wagon bookedWagon) {
         int availableSeatsNum = bookedWagon.getNumOfSeats();
@@ -107,7 +110,6 @@ public class TicketService {
         }
         return ticketDao.createTicket(userTicket);
     }
-
 
     public TicketFormDto ticketInfoPreFill(HttpServletRequest request) {
         String train = request.getParameter("train");

@@ -82,19 +82,18 @@ public class WagonService {
     }
 
     public boolean isWagonInputValid(HttpServletRequest request) {
-        String seats = request.getParameter("seats").trim();
+        String seats = request.getParameter("seats");
         if (!dataInputValidator.isValidNumInput(seats)) {
             request.setAttribute("wrongSeats", true);
             return false;
         }
-        String price = request.getParameter("price").trim();
+        String price = request.getParameter("price");
         if (!dataInputValidator.isValidNumInput(price)) {
             request.setAttribute("wrongPrice", true);
             return false;
         }
         return true;
     }
-
 }
 
 

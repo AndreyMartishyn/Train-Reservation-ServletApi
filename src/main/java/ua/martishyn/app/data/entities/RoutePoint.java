@@ -1,9 +1,12 @@
 package ua.martishyn.app.data.entities;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class RoutePoint implements Entity {
+public class RoutePoint implements Serializable {
+    private static final long serialVersionUID = -1734181885552500858L;
+
     private int id;
     private int trainId;
     private int stationId;

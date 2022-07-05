@@ -24,6 +24,12 @@ public class StationService {
         return stationDao.getAllStationsPaginated(offSet, entriesPerPage).orElse(Collections.emptyList());
     }
 
+    public Station getStationFromRequest(HttpServletRequest request, String parameter) {
+        int station = Integer.parseInt(request.getParameter(parameter));
+        Optional<Station> foundStation = stationDao.getById(station);
+        return foundStation.get();
+    }
+
     public List<Station> getAllStations() {
         return stationDao.getAllStations().orElse(Collections.emptyList());
     }

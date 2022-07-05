@@ -5,7 +5,9 @@ import ua.martishyn.app.data.entities.enums.Role;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class User implements Entity {
+public class User implements Serializable {
+    private static final long serialVersionUID = 3723010824083958828L;
+
     private int id;
     private String firstName;
     private String lastName;

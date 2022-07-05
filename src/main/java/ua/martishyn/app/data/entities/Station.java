@@ -3,7 +3,9 @@ package ua.martishyn.app.data.entities;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class Station implements Entity {
+public class Station implements Serializable {
+    private static final long serialVersionUID = 5362664696845149409L;
+
     private int id;
     private String name;
     private String code;

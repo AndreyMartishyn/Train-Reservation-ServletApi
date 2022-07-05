@@ -2,7 +2,11 @@ package ua.martishyn.app.data.entities;
 
 import ua.martishyn.app.data.entities.enums.ComfortClass;
 
-public class Ticket implements Entity {
+import java.io.Serializable;
+
+public class Ticket implements Serializable {
+    private static final long serialVersionUID = -5413669933729265929L;
+
     private int id;
     private Train train;
     private int userId;

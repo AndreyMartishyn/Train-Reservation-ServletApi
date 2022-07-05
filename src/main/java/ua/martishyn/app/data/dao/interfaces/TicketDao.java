@@ -9,7 +9,7 @@ public interface TicketDao {
 
     boolean createTicket(Ticket ticket);
 
-    Optional<List<Ticket>> getAllTicketsById(int id);
+    Optional<List<Ticket>> getUsersTickets(int id);
 
     Optional<List<Ticket>> getAllTickets();
 
