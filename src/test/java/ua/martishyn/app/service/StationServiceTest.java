@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import ua.martishyn.app.data.dao.impl.StationDaoImpl;
 import ua.martishyn.app.data.entities.Station;
 import ua.martishyn.app.data.service.StationService;
 import ua.martishyn.app.data.utils.constants.StationServiceConstants;
@@ -81,6 +82,7 @@ public class StationServiceTest {
         Assert.assertEquals("Київ-Пас", stationForUpdate.getName());
         Assert.assertEquals("КПР", stationForUpdate.getCode());
     }
+
 
     @After
     public void tearDown(){

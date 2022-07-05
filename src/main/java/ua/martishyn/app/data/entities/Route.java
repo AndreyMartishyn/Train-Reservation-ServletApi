@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Route implements Entity {
+public class Route implements Serializable {
+    private static final long serialVersionUID = -1719747856423655953L;
+
     private int id;
     private Train train;
     private List<IntermediateStation> intermediateStations = new ArrayList<>();

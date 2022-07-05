@@ -60,7 +60,7 @@ public class TicketDaoImpl implements TicketDao {
     }
 
     @Override
-    public Optional<List<Ticket>> getAllTicketsById(int id) {
+    public Optional<List<Ticket>> getUsersTickets(int id) {
         List<Ticket> ticketsFromDb = new ArrayList<>();
         try (Connection connection = DataBasePoolManager.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_TICKETS_BY_USER_ID)) {

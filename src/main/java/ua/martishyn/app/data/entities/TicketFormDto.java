@@ -1,9 +1,12 @@
 package ua.martishyn.app.data.entities;
 
 
+import java.io.Serializable;
 import java.util.List;
 
-public class TicketFormDto implements Entity {
+public class TicketFormDto implements Serializable {
+    private static final long serialVersionUID = 8469144548685470294L;
+
     private int trainId;
     private String departureStation;
     private String arrivalStation;

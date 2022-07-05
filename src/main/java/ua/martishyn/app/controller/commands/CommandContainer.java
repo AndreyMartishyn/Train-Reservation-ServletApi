@@ -2,6 +2,7 @@ package ua.martishyn.app.controller.commands;
 
 import ua.martishyn.app.controller.commands.admin.route.*;
 import ua.martishyn.app.controller.commands.admin.station.*;
+import ua.martishyn.app.controller.commands.admin.status.CustomerTicketsStatusPageCommand;
 import ua.martishyn.app.controller.commands.admin.user.AdminUserDeleteCommand;
 import ua.martishyn.app.controller.commands.admin.user.AdminUserEditCommand;
 import ua.martishyn.app.controller.commands.admin.user.AdminUserEditPostCommand;
@@ -59,6 +60,8 @@ public class CommandContainer {
         commands.put("/route-delete.command", new RoutePointDeleteCommand());
         commands.put("/route-add.command", new RoutePointAddCommand());
         commands.put("/route-add-post.command", new RoutePointAddPostCommand());
+        //admin report
+        commands.put("/customer-ticket-status.command", new CustomerTicketsStatusPageCommand());
         //users booking
         commands.put("/search-tickets.command", new SearchTicketsCommand());
         commands.put("/customer-ticket-form.command", new CustomerTicketFormCommand());

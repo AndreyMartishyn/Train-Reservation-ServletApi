@@ -22,15 +22,10 @@ public class ViewConstants {
     public static final String ADMIN_EDIT_WAGON= JSP_LOC + "admin/admin_edit_wagon.jsp";
     public static final String ADMIN_ADD_WAGON= JSP_LOC + "admin/admin_add_wagon.jsp";
 
-
     public static final String CUSTOMER_TICKETS_PAGE = JSP_LOC + "customer/customer_tickets_page.jsp";
     public static final String CUSTOMER_TICKETS_FORM = JSP_LOC + "customer/customer_ticket_buy.jsp";
     public static final String CUSTOMER_TICKETS_FORM_ERROR = JSP_LOC + "customer/customer_ticket_buy_error_page.jsp";
 
     public static final String CUSTOMER_ROUTE_VIEW = JSP_LOC + "customer/customer_route_view.jsp";
-
-    ////////////////////////////////////////////////////////////////////////////////
-    public static final String ERROR_VALIDATION = "errorValidation";
-
 
 }

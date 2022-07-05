@@ -1,6 +1,10 @@
 package ua.martishyn.app.data.entities;
 
-public class PersonalRoute implements Entity {
+import java.io.Serializable;
+
+public class PersonalRoute implements Serializable {
+    private static final long serialVersionUID = 107271590484957707L;
+
     private int routeId;
     private Train train;
     private String departure;

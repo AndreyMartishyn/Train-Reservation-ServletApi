@@ -2,7 +2,11 @@ package ua.martishyn.app.data.entities;
 
 import ua.martishyn.app.data.entities.enums.ComfortClass;
 
-public class Wagon implements Entity {
+import java.io.Serializable;
+
+public class Wagon implements Serializable {
+    private static final long serialVersionUID = -7202372539152290851L;
+
     private int id;
     private int routeId;
     private ComfortClass type;

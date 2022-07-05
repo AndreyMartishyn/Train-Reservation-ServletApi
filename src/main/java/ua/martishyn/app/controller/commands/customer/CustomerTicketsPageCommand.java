@@ -27,7 +27,7 @@ public class CustomerTicketsPageCommand implements ICommand {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<Ticket> ticketsFromDb = ticketService.getAllTickets(request);
+        List<Ticket> ticketsFromDb = ticketService.getUsersTickets(request);
         if (ticketsFromDb.isEmpty()) {
             log.info("Tickets not found");
             request.setAttribute("noTickets", true);

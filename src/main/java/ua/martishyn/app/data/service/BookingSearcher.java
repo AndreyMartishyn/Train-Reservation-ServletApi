@@ -6,8 +6,6 @@ import ua.martishyn.app.data.entities.Station;
 import ua.martishyn.app.data.entities.Wagon;
 import ua.martishyn.app.data.entities.enums.ComfortClass;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -33,7 +31,6 @@ public class BookingSearcher {
 
     private void findSuitableRoots() {
         DateTimeFormatter formatPattern = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-        DateFormat routePattern = new SimpleDateFormat("HH:mm");
 
         for (Route route : routeList) {
             List<Route.IntermediateStation> stations = route.getIntermediateStations();

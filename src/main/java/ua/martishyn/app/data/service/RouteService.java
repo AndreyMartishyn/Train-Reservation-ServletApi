@@ -18,15 +18,12 @@ import java.util.stream.Collectors;
 
 public class RouteService {
     private final RouteDao routeDao;
-    private final TrainService trainService;
-    private final StationService stationService;
+
     private final DataInputValidator dataInputValidator;
 
 
     public RouteService() {
         routeDao = new RouteDaoImpl();
-        trainService = new TrainService();
-        stationService = new StationService();
         dataInputValidator = new DataInputValidatorImpl();
     }
 
@@ -66,7 +63,7 @@ public class RouteService {
         return routeDao.updateRoutePoint(updatedRoutePoint);
     }
 
-    private RoutePoint getRoutePointFromRequest(HttpServletRequest request) {
+    public RoutePoint getRoutePointFromRequest(HttpServletRequest request) {
         int id = Integer.parseInt(request.getParameter(RouteServiceConstants.ID).trim());
         int trainId = Integer.parseInt(request.getParameter(RouteServiceConstants.TRAIN_ID));
         int stationId = Integer.parseInt(request.getParameter(RouteServiceConstants.STATION_ID));

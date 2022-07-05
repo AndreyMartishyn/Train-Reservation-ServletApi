@@ -10,17 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TrainSearcherContainer {
-    private static List<Route> routes = new ArrayList<>();
-    private static List<Wagon> wagons = new ArrayList<>();
+    private static final List<Route> routes = new ArrayList<>();
+    private static final List<Wagon> wagons = new ArrayList<>();
     private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     static {
-        try {
-            fillRoutes();
-            fillWagons();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        fillRoutes();
+        fillWagons();
     }
 
     static void fillWagons() {
@@ -40,7 +36,7 @@ public class TrainSearcherContainer {
         wagons.add(secondWagon);
     }
 
-    static void fillRoutes() throws ParseException {
+    static void fillRoutes()  {
         Station stationFirst = Station.builder().id(1)
                 .name("First")
                 .code("FRST")
@@ -93,6 +89,5 @@ public class TrainSearcherContainer {
     public List<Route> getComplexRoutes() {
         return routes;
     }
-
 
 }
