@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 
 public class DataInputValidatorImpl implements DataInputValidator {
     private static final String LOGIN_NAME_REGEX = "^[A-Za-z\\p{L}]{1,16}$";
-    private static final String STATION_NAME_REGEX = "^[\\p{L}']*(?:[\\s-]\\p{L}*)$";
+    private static final String STATION_NAME_REGEX = "^([\\p{L}'-]*(\\p{L}*))$";
     private static final String STATION_CODE_REGEX = "^[\\p{Lu}]{3}$";
     private static final String NUM_REGEX = "^\\d{1,10}$";
     private static final String PASSWORD_REGEX = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,16}$";

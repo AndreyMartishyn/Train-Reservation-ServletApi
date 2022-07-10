@@ -49,7 +49,7 @@
                 <li class="nav-item"><a class="nav-link active" aria-current="page" href="users-page.command"><fmt:message key="users"/></a>
                 </li>
                </li>
-               <li class="nav-item"><a class="nav-link active" aria-current="page" href="customer-ticket-status.command">tickets report</a>
+               <li class="nav-item"><a class="nav-link active" aria-current="page" href="customer-ticket-status.command"><fmt:message key="main.page.reports"/></a>
                </li>
 
 

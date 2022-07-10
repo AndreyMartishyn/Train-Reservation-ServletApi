@@ -25,7 +25,8 @@ public class StationNameValidationTest {
     public static List<Object[]> stationNameInput() {
         return Arrays.asList(new Object[][]{
                 {"Station1111"},
-                {"Станція1"},
+                {"Станція "},
+                {"Simple-Station1"},
                 {"Такая%собі1Станція"},
                 {"Станція-нація1"},
                 {"Кам'янець-Подільский1"},

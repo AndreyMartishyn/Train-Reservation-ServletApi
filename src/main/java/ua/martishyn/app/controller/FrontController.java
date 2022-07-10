@@ -19,6 +19,7 @@ import java.lang.annotation.Annotation;
 public class FrontController extends HttpServlet {
     private static final Logger log = LogManager.getLogger(FrontController.class);
 
+
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         log.info("doGet working");

@@ -1,8 +1,22 @@
-
 # Train-reservation project
 
-Administrator is able to create/delete/edit list of Stations and Routes between them. Route has following information:
+## Table of Contents
 
+- [Introduction](#introduction)
+- [Task](#task)
+- [Technologies](#technologies)
+- [Brief-info](#brief-info)
+- [Requirements](#requirements)
+
+# Introduction
+
+Train reservation project made for booking available train-rides.
+
+# Task
+
+Bellow is a functionality that was given in task. Additional functionalities were made also.
+
+Administrator is able to create/delete/edit list of Stations and Routes between them. Route has the following information:
 - departure station and time of departure 
 - arrival station and time of arrival
 
@@ -16,24 +30,7 @@ User is able to search routes between stations. Result of search is a list of tr
 - link to check route schedule
 If User is not registered or is Administrator - he is not able to proceed buying procedure.
 
-
-## Installation
-
-Install my-project with npm
-
-```bash
- some install guide in future
-```
-    
-## Deployment
-
-To deploy this project run
-
-```
-  some deploy info in future
-```
-
-## Technologies used
+## Technologies
 
 - Java 8+ as Backend
 - Servlet API / JSTL 
@@ -44,7 +41,7 @@ To deploy this project run
 - Log4j logging aspect
 - Maven as building project tool
 
-## Project brief info
+## Brief-info
 
 - User has 2 roles. Customer and Admin
 - Non-registered user is able to check certain resouces without authorization (by filter)
@@ -59,7 +56,7 @@ To deploy this project run
 - Admin is able to make crud operations with stations and routes.
 - Admin is able to edit users info.
 
-## Project implemented requirements
+## Requirements
 
 - All requests are passing through Front-Controller.
 - Command pattern implemented for servlets separation 

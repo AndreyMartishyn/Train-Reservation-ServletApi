@@ -42,7 +42,7 @@
                  <td>
                                 						<select class="browser-default custom-select" name="trainId"  required>
                                                             <c:forEach items="${trains}" var="train" >
-                                                                          <option value="${train.id}" selected="selected"> ${train.model.name}</option>
+                                                                          <option value="${train.id}" selected="selected"> ${train.id}</option>
                                                                       </c:forEach>
                                                         </select>
                                                         </td>
@@ -52,7 +52,7 @@
                 <td>
                                       						<select class="browser-default custom-select" name="stationId"  required>
                                                              <c:forEach items="${stations}" var="station" >
-                                                                           <option value="${station.id}" selected="selected"> <fmt:message key="${station.name}"/></option>
+                                                                           <option value="${station.id}" selected="selected"> ${station.id}</option>
                                                                        </c:forEach>
                                                          </select>
                                                          </td>
