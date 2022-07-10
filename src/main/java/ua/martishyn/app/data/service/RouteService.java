@@ -64,7 +64,7 @@ public class RouteService {
     }
 
     public RoutePoint getRoutePointFromRequest(HttpServletRequest request) {
-        int id = Integer.parseInt(request.getParameter(RouteServiceConstants.ID).trim());
+        int id = Integer.parseInt(request.getParameter(RouteServiceConstants.ID));
         int trainId = Integer.parseInt(request.getParameter(RouteServiceConstants.TRAIN_ID));
         int stationId = Integer.parseInt(request.getParameter(RouteServiceConstants.STATION_ID));
 

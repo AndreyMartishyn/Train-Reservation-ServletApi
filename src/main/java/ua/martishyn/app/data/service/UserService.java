@@ -7,7 +7,6 @@ import ua.martishyn.app.data.dao.interfaces.UserDao;
 import ua.martishyn.app.data.entities.User;
 import ua.martishyn.app.data.entities.enums.Role;
 import ua.martishyn.app.data.utils.constants.UserServiceConstants;
-import ua.martishyn.app.data.utils.constants.ViewConstants;
 import ua.martishyn.app.data.utils.password_encoding.PasswordEncodingService;
 import ua.martishyn.app.data.utils.validator.DataInputValidator;
 import ua.martishyn.app.data.utils.validator.DataInputValidatorImpl;
@@ -96,22 +95,22 @@ public class UserService {
     }
 
     public boolean isUserInputIsValid(HttpServletRequest request) {
-        String firstName = request.getParameter(UserServiceConstants.FIRST_NAME).trim();
+        String firstName = request.getParameter(UserServiceConstants.FIRST_NAME);
         if (!dataInputValidator.isValidNameField(firstName)) {
             request.setAttribute("wrongFirstName", true);
             return false;
         }
-        String lastName = request.getParameter(UserServiceConstants.LAST_NAME).trim();
+        String lastName = request.getParameter(UserServiceConstants.LAST_NAME);
         if (!dataInputValidator.isValidNameField(lastName)) {
             request.setAttribute("wrongLastName", true);
             return false;
         }
-        String email = request.getParameter(UserServiceConstants.EMAIL).trim();
+        String email = request.getParameter(UserServiceConstants.EMAIL);
         if (!dataInputValidator.isValidEmailField(email)) {
             request.setAttribute("wrongEmail", true);
             return false;
         }
-        String password = request.getParameter(UserServiceConstants.PASSWORD).trim();
+        String password = request.getParameter(UserServiceConstants.PASSWORD);
         if (!dataInputValidator.isValidPasswordField(password)) {
             request.setAttribute("wrongPass", true);
             return false;

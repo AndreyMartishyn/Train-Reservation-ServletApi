@@ -105,20 +105,22 @@
 						           <a href="customer-ticket-form.command<c:out value="${route.redirectLink}"/>&class=FIRST&price=<c:out value="${route.firstClassTotalPrice}"/>"
                                     class="btn btn-dark" ><fmt:message key="user.page.book.info.select"/></a>
                                 </c:when>
+
                                  <c:otherwise>
                                 <a href="customer-ticket-form.command<c:out value="${route.redirectLink}"/>&class=FIRST&price=<c:out value="${route.firstClassTotalPrice}"/>"
                                                                     class="btn btn-dark disabled" aria-disabled="true" ><fmt:message key="user.page.book.info.select"/></a>
                                  </c:otherwise>
                                  </c:choose>
-                                <br>
-
+                                <br><br>
                                 <c:choose>
                                 <c:when test="${route.secondClassSeats != 0}">
                                 S2 <c:out value="${route.secondClassSeats}"/>
                                 <a href="customer-ticket-form.command<c:out value="${route.redirectLink}"/>&class=SECOND&price=<c:out value="${route.secondClassTotalPrice}"/>"
                                     class="btn btn-dark" ><fmt:message key="user.page.book.info.select"/></a>
                                </c:when>
+
 								<c:otherwise>
+								<br>
 								 <a href="customer-ticket-form.command<c:out value="${route.redirectLink}"/>&class=SECOND&price=<c:out value="${route.secondClassTotalPrice}"/>"
                                                                     class="btn btn-dark disabled" aria-disabled="true"><fmt:message key="user.page.book.info.select"/></a>
                                 </c:otherwise>
@@ -127,18 +129,23 @@
 
                                <td>
                                <c:choose>
-                               <c:when test="${route.secondClassSeats != 0 && route.firstClassSeats != 0}">
+                               <c:when test="${route.firstClassSeats != 0}">
                                <p style = "text-align: center"><c:out value="${route.firstClassTotalPrice}"/></p>
-                               <br>
+                               </c:when>
+                               <c:otherwise>
+                               <p style = "text-align: center"><fmt:message key="no.free.places"/></p>
+                                   </c:otherwise>
+                                   </c:choose>
+                                   <br>
+								<c:choose>
+                               <c:when test="${route.secondClassSeats != 0}">
                                <p style = "text-align: center"><c:out value="${route.secondClassTotalPrice}"/></p>
                                </c:when>
                                <c:otherwise>
                                <p style = "text-align: center"><fmt:message key="no.free.places"/></p>
-                               <br>
-                               <p style = "text-align: center"><fmt:message key="no.free.places"/></p>
-						       </c:otherwise>
-                                </c:choose>
-                                </c:forEach>
+                                   </c:otherwise>
+                                   </c:choose>
+                                 </c:forEach>
                                 </td>
                                </tr>
                 </tbody>

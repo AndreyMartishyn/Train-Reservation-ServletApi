@@ -26,7 +26,6 @@ public class WagonDaoImpl implements WagonDao {
             " comfort_class= ?, seats = ?, price =?  WHERE id = ?";
     private static final String DELETE_WAGON = "DELETE FROM train_wagons  WHERE id = ?";
 
-
     @Override
     public Optional<List<Wagon>> getAllWagonsPaginated(int offset, int limit) {
         List<Wagon> stations = new ArrayList<>();
@@ -38,7 +37,7 @@ public class WagonDaoImpl implements WagonDao {
                 stations.add(getWagonFromResultSet(wagonResultSet));
             }
         } catch (SQLException e) {
-            log.error("Problems with getting all stations {}", e.toString());
+            log.error("Problems with getting all wagons {}", e.toString());
         }
         return Optional.of(stations);
     }
@@ -152,11 +151,11 @@ public class WagonDaoImpl implements WagonDao {
 
     private Wagon getWagonFromResultSet(ResultSet resultSet) throws SQLException {
         return Wagon.builder()
-                .id(resultSet.getInt("id"))
-                .routeId(resultSet.getInt("route_id"))
-                .type(ComfortClass.valueOf(resultSet.getString("comfort_class")))
-                .numOfSeats(resultSet.getInt("seats"))
-                .price(resultSet.getInt("price"))
+                .id(resultSet.getInt(1))
+                .routeId(resultSet.getInt(2))
+                .type(ComfortClass.valueOf(resultSet.getString(3)))
+                .numOfSeats(resultSet.getInt(4))
+                .price(resultSet.getInt(5))
                 .build();
     }
 
